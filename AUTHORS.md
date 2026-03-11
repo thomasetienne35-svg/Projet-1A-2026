@@ -1,6 +1,6 @@
 Clément Valot
 Jules Frulli
-Ilan Guedj ?/20
+Ilan Guedj 
 Thomas ETIENNE
 Alexandre Fratter-Bardy
 
