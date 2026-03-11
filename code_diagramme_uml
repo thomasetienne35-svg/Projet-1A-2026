@@ -1,0 +1,109 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrateur (Ministère)" as Admin
+actor "Arbitre / Officiel" as Arbitre
+actor "Grand Public" as Public
+
+rectangle "Système de Gestion des Résultats" {
+
+  (Authentification Sécurisée) as Auth
+  note right of Auth : Critique (vu l'historique des échecs)
+
+  package "Gestion des Événements" {
+    (Créer une Compétition) as CreateComp
+    (Gérer les Athlètes/Équipes) as ManageAthletes
+    (Définir les Épreuves) as DefineEvents
+  }
+
+  package "Gestion des Résultats" {
+    (Saisir les Résultats en direct) as InputRes
+    (Valider les Résultats) as ValidateRes
+    (Calculer les Classements) as CalcRank
+  }
+
+  package "Consultation" {
+    (Consulter le Tableau des médailles) as ViewMedals
+    (Rechercher un Athlète) as Search
+  }
+}
+
+Admin --> Auth
+Arbitre --> Auth
+
+Admin --> CreateComp
+Admin --> ManageAthletes
+Admin --> DefineEvents
+
+Arbitre --> InputRes
+Arbitre --> ValidateRes
+
+InputRes ..> CalcRank : include
+
+Public --> ViewMedals
+Public --> Search
+
+@enduml
+
+
+@startuml
+
+class "Compétition" as Competition {
+  - id : int
+  - nom : string
+  - dateDebut : Date
+  - dateFin : Date
+  - lieu : string
+  + ajouterEpreuve()
+  + genererClassementGeneral()
+}
+
+class "Épreuve" as Epreuve {
+  - id : int
+  - type : string (Indiv/Equipe)
+  - categorie : string
+  - statut : StatutEpreuve
+  + demarrer()
+  + cloturer()
+}
+
+class "Participant" as Participant {
+  - id : int
+  - nom : string
+  - nationalite : string
+}
+
+class "Athlète" as Athlete {
+  - dateNaissance : Date
+  - genre : string
+}
+
+class "Équipe" as Equipe {
+  - nomEquipe : string
+}
+
+class "Résultat" as Resultat {
+  - id : int
+  - valeur : float (Temps/Score)
+  - rang : int
+  - statut : string (Validé/Disqualifié)
+  + valider()
+}
+
+class "Officiel" as Officiel {
+  - id : int
+  - role : string
+  + saisirResultat()
+}
+
+Competition "1" *-- "*" Epreuve : contient
+Epreuve "*" -- "*" Participant : inscrit
+Participant <|-- Athlete
+Participant <|-- Equipe
+
+Epreuve "1" *-- "*" Resultat : génère
+Resultat "*" -- "1" Participant : appartient à
+Officiel "1" ..> "*" Resultat : valide
+
+@enduml
