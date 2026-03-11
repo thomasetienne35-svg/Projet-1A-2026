@@ -1,3 +1,7 @@
+Cas d'utilisation :
+-------------------
+
+
 @startuml
 left to right direction
 skinparam packageStyle rectangle
@@ -9,7 +13,6 @@ actor "Grand Public" as Public
 rectangle "Système de Gestion des Résultats" {
 
   (Authentification Sécurisée) as Auth
-  note right of Auth : Critique (vu l'historique des échecs)
 
   package "Gestion des Événements" {
     (Créer une Compétition) as CreateComp
@@ -46,6 +49,10 @@ Public --> Search
 
 @enduml
 
+--------------------
+
+Diagramme de classe :
+---------------------
 
 @startuml
 
@@ -62,8 +69,8 @@ class "Compétition" as Competition {
 class "Épreuve" as Epreuve {
   - id : int
   - type : string (Indiv/Equipe)
-  - categorie : string
-  - statut : StatutEpreuve
+  - categorie : str
+  - statut : bool
   + demarrer()
   + cloturer()
 }
@@ -107,3 +114,5 @@ Resultat "*" -- "1" Participant : appartient à
 Officiel "1" ..> "*" Resultat : valide
 
 @enduml
+
+------------------
