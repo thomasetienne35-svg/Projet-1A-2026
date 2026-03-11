@@ -116,3 +116,85 @@ Officiel "1" ..> "*" Resultat : valide
 @enduml
 
 ------------------
+code bon diagramme UML 
+@startuml
+
+enum StatutEpreuve {
+  PLANIFIEE
+  EN_COURS
+  TERMINEE
+  VALIDEE
+  ANNULEE
+}
+
+class "Compétition" as Competition {
+  - id : int
+  - nom : string
+  - dateDebut : Date
+  - dateFin : Date
+  - lieu : string
+  + ajouterEpreuve()
+  + genererClassementGeneral()
+}
+
+class "Épreuve" as Epreuve {
+  - id : int
+  - type : string (Indiv/Equipe)
+  - sport : string
+  - statut : StatutEpreuve
+  
+  + demarrer()
+  + cloturer()
+}
+
+class "Participant" as Participant {
+  - id : int
+  - nom : string
+  - nationalite : string
+}
+
+class "Athlète" as Athlete {
+  - dateNaissance : Date
+  - genre : string
+}
+
+class "Équipe" as Equipe {
+  - nomEquipe : string
+}
+ class "Résultat" as Resultat {
+  - id : int
+  - rang : int
+  - statut : string (Validé/Disqualifié)
+  + valider()
+}
+
+
+class "Classement" as Classement {
+  - id_classement : int
+  + transforme_resultat_classement()
+
+}
+class "Officiel" as Officiel {
+  - id : int
+  - role : string
+  + saisirResultat()
+}
+
+' Relations Compétition et Sport
+Competition "1" *-- "*" Epreuve : contient
+
+' Relations Participants
+Epreuve "*" -- "*" Participant : inscrit
+Equipe <|-- Athlete
+Participant <|-- Equipe
+
+' Relations Résultats
+Epreuve "1" *-- "*" Resultat : génère
+Resultat "*" -- "1" Participant : appartient à
+Officiel "1" ..> "*" Resultat : valide
+
+'Relation Classement
+Classement "*" -- "*" Competition
+
+
+@enduml
