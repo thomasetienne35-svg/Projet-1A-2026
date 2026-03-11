@@ -1,3 +1,7 @@
+Cas d'utilisation :
+-------------------
+
+
 @startuml
 left to right direction
 skinparam packageStyle rectangle
@@ -9,7 +13,6 @@ actor "Grand Public" as Public
 rectangle "Système de Gestion des Résultats" {
 
   (Authentification Sécurisée) as Auth
-  note right of Auth : Critique (vu l'historique des échecs)
 
   package "Gestion des Événements" {
     (Créer une Compétition) as CreateComp
@@ -46,6 +49,10 @@ Public --> Search
 
 @enduml
 
+--------------------
+
+Diagramme de classe :
+---------------------
 
 @startuml
 
@@ -62,8 +69,8 @@ class "Compétition" as Competition {
 class "Épreuve" as Epreuve {
   - id : int
   - type : string (Indiv/Equipe)
-  - categorie : string
-  - statut : StatutEpreuve
+  - categorie : str
+  - statut : bool
   + demarrer()
   + cloturer()
 }
@@ -105,5 +112,89 @@ Participant <|-- Equipe
 Epreuve "1" *-- "*" Resultat : génère
 Resultat "*" -- "1" Participant : appartient à
 Officiel "1" ..> "*" Resultat : valide
+
+@enduml
+
+------------------
+code bon diagramme UML 
+@startuml
+
+enum StatutEpreuve {
+  PLANIFIEE
+  EN_COURS
+  TERMINEE
+  VALIDEE
+  ANNULEE
+}
+
+class "Compétition" as Competition {
+  - id : int
+  - nom : string
+  - dateDebut : Date
+  - dateFin : Date
+  - lieu : string
+  + ajouterEpreuve()
+  + genererClassementGeneral()
+}
+
+class "Épreuve" as Epreuve {
+  - id : int
+  - type : string (Indiv/Equipe)
+  - sport : string
+  - statut : StatutEpreuve
+  
+  + demarrer()
+  + cloturer()
+}
+
+class "Participant" as Participant {
+  - id : int
+  - nom : string
+  - nationalite : string
+}
+
+class "Athlète" as Athlete {
+  - dateNaissance : Date
+  - genre : string
+}
+
+class "Équipe" as Equipe {
+  - nomEquipe : string
+}
+ class "Résultat" as Resultat {
+  - id : int
+  - rang : int
+  - statut : string (Validé/Disqualifié)
+  + valider()
+}
+
+
+class "Classement" as Classement {
+  - id_classement : int
+  + transforme_resultat_classement()
+
+}
+class "Officiel" as Officiel {
+  - id : int
+  - role : string
+  + saisirResultat()
+}
+
+' Relations Compétition et Sport
+Competition "1" *-- "*" Epreuve : contient
+
+' Relations Participants
+Epreuve "*" -- "*" Participant : inscrit
+Equipe <|-- Athlete
+Participant <|-- Equipe
+
+' Relations Résultats
+Epreuve "1" *-- "*" Resultat : génère
+Resultat "*" -- "1" Participant : appartient à
+Officiel "1" ..> "*" Resultat : valide
+
+'Relation Classement
+Classement "*" -- "*" Competition
+
 
 @enduml
