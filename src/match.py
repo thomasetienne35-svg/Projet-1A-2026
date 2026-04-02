@@ -1,7 +1,9 @@
+from sport import Sport
+from player import Player
+
 class Match:
-    def __init__(self, match_id: int, home_team__id: int, away_team_id: int) -> None:
-        self.match_id = match_id,
-        self.home_team__id = home_team__id,
-        self.away_team_id = away_team_id
- 
- 
+    def __init__(self, id : int, sport : Sport, list_home_player : list[Player], list_away_player : list[Player]) -> None:
+        self.id = id
+        self.sport = sport
+        self.list_home_player = list_home_player
+        self.list_away_player = list_away_player
