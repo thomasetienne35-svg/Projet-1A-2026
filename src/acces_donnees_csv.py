@@ -10,4 +10,3 @@ def ajouter_donnees(nom_fichier, nouvelles_donnees):
     df_nouveau = pd.DataFrame([nouvelles_donnees])
         df_nouveau.to_csv(nom_fichier, mode='a', header=False, index=False, encoding='utf-8')
         print("Nouvelles données ajoutées avec succès.")
-
