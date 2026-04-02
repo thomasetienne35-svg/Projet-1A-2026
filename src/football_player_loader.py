@@ -18,5 +18,8 @@ class FootballPlayerLoader():
         res = []
         df_football = pd.read_csv("/home/onyxia/work/Projet-1A-2026/data/football_european_leagues_tdd/player.csv")
         for i in range (len(df_football)):
-            joueur = Player(None, None, None, None)
-            joueur df_football.loc[i,"player_name"]
+            joueur = Player(None, None, None, "H")
+            joueur.nom = df_football.loc[i,"player_name"]
+            joueur.data_naissance = df_football.loc[i,"player_name"]
+            res.append(joueur)
+        return res
