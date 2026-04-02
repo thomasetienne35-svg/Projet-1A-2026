@@ -1,6 +1,8 @@
 import csv
 import os
 import pickle
+import datetime
+
 
 import numpy as np
 import pandas as pd
@@ -13,7 +15,6 @@ df_player.head(2)
 
 df_player.isna().any(axis=0)
 
-import datetime
 
 
 class Player:
