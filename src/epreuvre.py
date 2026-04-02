@@ -1,4 +1,4 @@
-from competition import Competiton
+from .competition import Competiton
 from resultat import Resultat
 from participant import Participant
 
