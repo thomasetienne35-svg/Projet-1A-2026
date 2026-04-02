@@ -4,7 +4,7 @@ class PlayerLoader ():
     def __init__(self, sport: Sport):
         self.sport = sport
 
-    def charger_player(self, sport) -> Player:
+    def charger_player(self, sport) -> list[Player]:
         if sport.name == "football":
             return FootballPlayerLoader().load_all_players()
         if sport.name == "volley":

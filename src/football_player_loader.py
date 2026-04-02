@@ -15,4 +15,8 @@ class FootballPlayerLoader():
     def __init__():
         pass
     def load_all_player():
-
+        res = []
+        df_football = pd.read_csv("/home/onyxia/work/Projet-1A-2026/data/football_european_leagues_tdd/player.csv")
+        for i in range (len(df_football)):
+            joueur = Player(None, None, None, None)
+            joueur df_football.loc[i,"player_name"]
