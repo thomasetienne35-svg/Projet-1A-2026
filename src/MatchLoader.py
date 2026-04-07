@@ -6,10 +6,12 @@ class MatchLoader():
         if sport.name == "football":
             return FootballMatchLoader().load_all_match()
         if sport.name == "basketball":
-            return FootballMatchLoader().load_all_match()
+            return VolleyMatchLoader().load_all_match()
         if sport.name == "tennis":
-            return FootballMatchLoader().load_all_match()
+            return TennisMatchLoader().load_all_match()
         if sport.name == "LOL":
-            return FootballMatchLoader().load_all_match()
+            return LolMatchLoader().load_all_match()
+        if sport.name == "Basketball":
+            return BasketballMatchLoader().load_all_match()
         else:
             raise ValueError("Sport non valide")
