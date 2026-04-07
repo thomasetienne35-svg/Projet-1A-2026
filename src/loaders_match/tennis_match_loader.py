@@ -7,7 +7,7 @@ class TennisMatchLoaderFemme:
     def __init__(self):
         pass
 
-    def load_all_player(self):
+    def load_all_match(self):
         res = []
         df_tennis_femme = pd.read_csv(
             "/home/onyxia/work/Projet-1A-2026/data/tennis_tdd/wta_matches_2024.csv"
@@ -27,7 +27,7 @@ class TennisMatchLoaderHomme:
     def __init__(self):
         pass
 
-    def load_all_player(self):
+    def load_all_match(self):
         res = []
         df_tennis_homme = pd.read_csv(
             "/home/onyxia/work/Projet-1A-2026/data/tennis_tdd/atp_matches_2024.csv"
@@ -51,7 +51,7 @@ class TennisMatchLoader:
         chemin_wta = "/home/onyxia/work/Projet-1A-2026/data/tennis_tdd/wta_matches_2024.csv"
         chemin_atp = "/home/onyxia/work/Projet-1A-2026/data/tennis_tdd/atp_matches_2024.csv"
 
-        oader_femme = TennisMatchLoaderFemme(chemin_wta)
+        loader_femme = TennisMatchLoaderFemme(chemin_wta)
         liste_matchs_femmes = loader_femme.load_all_matches()
 
         loader_homme = TennisMatchLoaderHomme(chemin_atp)
