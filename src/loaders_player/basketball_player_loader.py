@@ -20,6 +20,7 @@ class BasketballPlayerLoader:
         for i in range(len(df_basketball)):
             joueur = Player(None, first_name, last_name, birthdate, height, weight, team_id)
             joueur.nom = df_basketball.loc[i, "player_name"]
-            joueur.data_naissance = df_football.loc[i, "player_name"]
+            joueur.data_naissance = df_basketball.loc[i, "player_name"]
+            
             res.append(joueur)
         return res
