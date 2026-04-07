@@ -16,8 +16,8 @@ class FootballPlayerLoader:
             "c:/Users/id2959/Desktop/Projet-1A-2026/data/football_european_leagues_tdd/player.csv"
         )
         for i in range(len(df_football)):
-            joueur = Player(None, None, None, "H")
-            joueur.nom = df_football.loc[i, "player_name"]
+            joueur = Player(None, None, None, "H", taille, poids, None)
+            joueur.prenom_nom = df_football.loc[i, "player_name"]
             joueur.data_naissance = df_football.loc[i, "birthday"]
             res.append(joueur)
         return res
