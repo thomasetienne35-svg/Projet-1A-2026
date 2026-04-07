@@ -1,7 +1,7 @@
 from .match import Match
 
 
-class MatchLoader:
+class MatchLoader():
     def load_all_matches(sport: Sport) -> list[Match]:
         if sport.name == "football":
             return FootballMatchLoader().load_all_match()
