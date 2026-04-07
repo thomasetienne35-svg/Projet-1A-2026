@@ -18,7 +18,7 @@ class FootballMatchLoader:
             "/home/onyxia/work/Projet-1A-2026/data/football_european_leagues_tdd/match.csv"
         )
         for i in range(len(df_football)):
-            match = Match(None, Football, None, None)
+            match = Match(None, "football", None, None)
             match.id = df_football.loc[i, "id"]
             colonnes_home = ["home_team_goal"] + [f"home_player_{i}" for i in range (1,12)]
             match.list_home_player = df.football.loc[i, colonnes_home].tolist()
