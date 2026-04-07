@@ -1,6 +1,9 @@
+from sport import Sport
+from player import Player
+from football_player_loader import load_all_players
 
 
-class PlayerLoader ():
+class PlayerLoader:
     def __init__(self, sport: Sport):
         self.sport = sport
 
@@ -16,4 +19,6 @@ class PlayerLoader ():
         if sport.name == "basketball":
             return BasketballPlayerLoader().load_all_players()
         else:
-            raise ValueError("Le sport précisé n'est pas présent dans la base de donnée")
+            raise ValueError(
+                "Le sport précisé n'est pas présent dans la base de donnée"
+            )
