@@ -1,15 +1,9 @@
-<<<<<<< HEAD:src/loaders_player/player_loder.py
 from player import Player
 from tennis_loader import TennisPlayerLoader
 from basketball_player_loader import BasketballPlayerLoader
 from league_of_legends_loader import LeagueOfLegendsLoader
 from football_player_loader import FootballPlayerLoader
-
-=======
-from sport import Sport
-from player import Player
-from football_player_loader import load_all_players
->>>>>>> 4afc8a17d8eef91bc36d3062ae95ffae9cbb771e:src/loaders_player/playerloder.py
+from volley_player_loader import VolleyPlayerLoader
 
 
 class PlayerLoader:
