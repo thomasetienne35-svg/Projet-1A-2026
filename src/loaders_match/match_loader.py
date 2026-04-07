@@ -9,9 +9,9 @@ class MatchLoader():
             return VolleyMatchLoader().load_all_match()
         if sport.name == "tennis":
             return TennisMatchLoader().load_all_match()
-        if sport.name == "LOL":
+        if sport.name == "lol":
             return LolMatchLoader().load_all_match()
-        if sport.name == "Basketball":
+        if sport.name == "basketball":
             return BasketballMatchLoader().load_all_match()
         else:
             raise ValueError("Sport non valide")

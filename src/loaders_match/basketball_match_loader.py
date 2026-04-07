@@ -21,7 +21,7 @@ class BasketballMatchLoader:
             "/home/onyxia/work/Projet-1A-2026/data/basketball/player.csv"
         )
         for i in range(len(df_basketball)):
-            match = Match(None, Basketball, None, None)
+            match = Match(None, "basketball", None, None)
             match.id = df_basketball.loc[i, "game_id"]
             id_home = df.basketball.loc[i, "team_id_home"]
             id_away = df.basketball.loc[i, "team_id_away"]

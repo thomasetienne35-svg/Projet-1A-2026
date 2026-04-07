@@ -22,7 +22,7 @@ class LolMatchLoader:
             "/home/onyxia/work/Projet-1A-2026/data/league_of_legends_tdd/player.csv"
         )
         for i in range(len(df_lol_match)):
-            match = Match(None, Lol, None, None)
+            match = Match(None, "lol", None, None)
             match.id = i + 2
             abbr_blue = df_lol_match.loc[i, "team_blue"]
             abbr_red = df_lol_match.loc[i, "team_red"]
