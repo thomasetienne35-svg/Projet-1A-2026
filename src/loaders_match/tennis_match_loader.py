@@ -14,7 +14,7 @@ class TennisMatchLoaderFemme:
         )
         for i in range(len(df_tennis_femme)):
             
-            match = Match(None, Tennis : Sport, None, None)
+            match = Match(None, "Tennis" : Sport, None, None)
             match.id = f"F{i+1}"
             match.list_home_player = df_tennis_femme[i, "winner_id"]
             match.list_away_player = df_tennis_femme[i, "loser_id"]
@@ -34,7 +34,7 @@ class TennisMatchLoaderHomme:
         )
         for i in range(len(df_tennis_homme)):
             
-            match = Match(None, Tennis : Sport, None, None)
+            match = Match(None, "Tennis" : Sport, None, None)
             match.id = f"H{i+1}"
             match.list_home_player = df_tennis_homme[i, "winner_id"]
             match.list_away_player = df_tennis_homme[i, "loser_id"]
