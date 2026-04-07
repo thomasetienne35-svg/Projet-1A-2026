@@ -18,7 +18,7 @@ class BasketballPlayerLoader:
             "/home/onyxia/work/Projet-1A-2026/data/basketball/player.csv"
         )
         for i in range(len(df_football)):
-            joueur = Player(None, None, None, "H")
+            joueur = Player(None, first_name, last_name, birthdate, height, weight, jersey, position, team_id)
             joueur.nom = df_football.loc[i, "player_name"]
             joueur.data_naissance = df_football.loc[i, "player_name"]
             res.append(joueur)
