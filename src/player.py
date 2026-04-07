@@ -10,7 +10,7 @@ pd.options.display.max_columns = 100
 
 class Player:
     def __init__(
-        self, prenom_nom, nationalite, date_naissance, genre, taille, poids, team_id
+        self, prenom_nom, nationalite, date_naissance, genre, taille, poids, team
     ) -> None:
         self.prenom_nom = prenom_nom
         self.nationalite = nationalite
@@ -18,4 +18,4 @@ class Player:
         self.genre = genre
         self.taille = taille
         self.poids = poids
-        self.team_id = team_id
+        self.team_id = team
