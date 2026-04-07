@@ -9,10 +9,10 @@ pd.options.display.max_columns = 100
 
 
 class FootballMatchLoader:
-    def __init__():
+    def __init__(self):
         pass
 
-    def load_all_match():
+    def load_all_match(self):
         res = []
         df_football = pd.read_csv(
             "/home/onyxia/work/Projet-1A-2026/data/football_european_leagues_tdd/match.csv"
