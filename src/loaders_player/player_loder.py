@@ -1,6 +1,9 @@
-from sport import Sport
 from player import Player
-from football_player_loader import load_all_players
+from tennis_loader import TennisPlayerLoader
+from basketball_player_loader import BasketballPlayerLoader
+from league_of_legends_loader import LeagueOfLegendsLoader
+from football_player_loader import FootballPlayerLoader
+from volley_player_loader import VolleyPlayerLoader
 
 
 class PlayerLoader:
@@ -15,7 +18,7 @@ class PlayerLoader:
         if sport.name == "tennis":
             return TennisPlayerLoader().load_all_players()
         if sport.name == "lol":
-            return LolPlayerLoader().load_all_players()
+            return LeagueOfLegendsLoader().load_all_players()
         if sport.name == "basketball":
             return BasketballPlayerLoader().load_all_players()
         else:

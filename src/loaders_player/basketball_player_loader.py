@@ -9,17 +9,27 @@ pd.options.display.max_columns = 100
 
 
 class BasketballPlayerLoader:
-    def __init__():
+    def __init__(self):
         pass
 
-    def load_all_player():
+    def load_all_player(self):
         res = []
-        df_football = pd.read_csv(
+        df_basketball = pd.read_csv(
             "/home/onyxia/work/Projet-1A-2026/data/basketball/player.csv"
         )
-        for i in range(len(df_football)):
-            joueur = Player(None, first_name, last_name, birthdate, height, weight, jersey, position, team_id)
-            joueur.nom = df_football.loc[i, "player_name"]
-            joueur.data_naissance = df_football.loc[i, "player_name"]
+        for i in range(len(df_basketball)):
+            prenom = df_basketball.loc[i, "first_name"]
+            nom = df_basketball.loc[i, "last_name"]
+            nom_complet = f"{prenom} {nom}"
+
+            joueur = Player(
+                prenom_nom = nom_complet,
+                nationalite = None,
+                date_naissance = df_basketball.loc[i, "birthdate"],
+                genre = None,  
+                taille = df_basketball.loc[i, "height"],
+                poids = df_basketball.loc[i, "weight"],
+                team_id = df_basketball.loc[i, "team_id"]
+            )
+            
             res.append(joueur)
-        return res
