@@ -1,12 +1,18 @@
+<<<<<<< HEAD:src/loaders_player/player_loder.py
 from player import Player
 from tennis_loader import TennisPlayerLoader
 from basketball_player_loader import BasketballPlayerLoader
 from league_of_legends_loader import LeagueOfLegendsLoader
 from football_player_loader import FootballPlayerLoader
 
+=======
+from sport import Sport
+from player import Player
+from football_player_loader import load_all_players
+>>>>>>> 4afc8a17d8eef91bc36d3062ae95ffae9cbb771e:src/loaders_player/playerloder.py
 
 
-class PlayerLoader ():
+class PlayerLoader:
     def __init__(self, sport: Sport):
         self.sport = sport
 
@@ -22,4 +28,6 @@ class PlayerLoader ():
         if sport.name == "basketball":
             return BasketballPlayerLoader().load_all_players()
         else:
-            raise ValueError("Le sport précisé n'est pas présent dans la base de donnée")
+            raise ValueError(
+                "Le sport précisé n'est pas présent dans la base de donnée"
+            )
