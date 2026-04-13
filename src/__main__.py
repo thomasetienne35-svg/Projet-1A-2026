@@ -40,7 +40,7 @@ def main():
         return
 
     print(f"\n=== Match ID: {match.id} ===")
-    print(f"Sport : {match.sport.name}")
+    print(f"Sport : {match.sport}")
     print(f"Joueurs domicile : {[str(j) for j in match.list_home_player]}")
     print(f"Joueurs extérieur : {[str(j) for j in match.list_away_player]}")
 
