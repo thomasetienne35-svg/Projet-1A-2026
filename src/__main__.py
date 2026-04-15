@@ -28,10 +28,6 @@ def main():
         print(f"Erreur lors du chargement : {e}")
         return
 
-    print(f"\n=== Matchs disponibles ({sport.name}) ===")
-    for i, match in enumerate(matchs, 1):
-        print(f"{i}. Match ID: {match.id}")
-
     choix_match = input("\nEntrez le numéro du match : ")
     try:
         match = matchs[int(choix_match) - 1]
