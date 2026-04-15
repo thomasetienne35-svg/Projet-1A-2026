@@ -9,7 +9,7 @@ from loaders_match.match_loader import MatchLoader
 
 def main():
     sports_disponibles = ["football", "tennis", "volley", "basketball", "lol"]
-    
+    # il reste à charger les données de player et team
     print("Chargement initial de toutes les données en cours... Veuillez patienter.")
     
     # 1. On charge TOUS les matchs de TOUS les sports dès le début
