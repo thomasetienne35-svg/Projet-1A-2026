@@ -34,12 +34,16 @@ class ChampionshipPointsCalculator:
             raise ValueError(f"Statistiques non implémentées pour le sport : {self.sport_name}")
 
     def _calculate_football_points(self):
-        
-        df = self.matches_df.copy()
-        
+        """Renvoie le nombre de points en championnat (victoire = 3 pts, nul = 1 pt, défaite = 0 pt), le nombre de victoire à domicile et à l'extérieur.
+
+        Returns
+        -------
+        dict
+            contient les informations 
+
+        """
         team_id = None
-    
-        for equipe in df_equipes_foot:
+        for equipe in liste_equipes_foot:
             if equipe.name.lower() == nom_equipe.lower(): 
                 team_id = equipe.id
                 break
@@ -47,30 +51,75 @@ class ChampionshipPointsCalculator:
         if team_id is None:
             return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
 
-        matchs_domicile = df_matches_foot[df_matches_foot['home_team_api_id'] == team_id]
-        matchs_exterieur = df_matches_foot[df_matches_foot['away_team_api_id'] == team_id]
-
-        victoires_dom = (matchs_domicile['home_team_goal'] > matchs_domicile['away_team_goal']).sum()
-        nuls_dom = (matchs_domicile['home_team_goal'] == matchs_domicile['away_team_goal']).sum()
-    
-        victoires_ext = (matchs_exterieur['away_team_goal'] > matchs_exterieur['home_team_goal']).sum()
-        nuls_ext = (matchs_exterieur['home_team_goal'] == matchs_exterieur['away_team_goal']).sum()
-
-        points_totaux = ((victoires_dom + victoires_ext) * 3) + ((nuls_dom + nuls_ext) * 1)
-    
-        return points_totaux
-
-        # --- TON CODE ICI ---
+        victoires_dom = 0
+        victoires_ext = 0
+        nuls = 0
         
-        raise NotImplementedError("Le calcul pour le football n'est pas encore codé !")
+        for match in liste_matchs_foot:
+            
+            if match.home_team_api_id == team_id:
+                if match.home_team_goal > match.away_team_goal:
+                    victoires_dom += 1
+                elif match.home_team_goal == match.away_team_goal:
+                    nuls += 1
+                    
+            elif match.away_team_api_id == team_id:
+                if match.away_team_goal > match.home_team_goal:
+                    victoires_ext += 1
+                elif match.away_team_goal == match.home_team_goal:
+                    nuls += 1
+
+        points_totaux = ((victoires_dom + victoires_ext) * 3) + (nuls * 1)
+    
+        return {
+            "points": points_totaux,
+            "victoires_domicile": victoires_dom,
+            "victoires_exterieur": victoires_ext
+        }
 
     def _calculate_basketball_points(self):
-        # RAPPEL : Au basket, il n'y a généralement pas de match nul. Victoire = x pts, Défaite = y pts (selon ton barème).
-        df = self.matches_df.copy()
+        """Renvoie le nombre de points en championnat (victoire = 3 pts, nul = 1 pt, défaite = 0 pt), le nombre de victoire à domicile et à l'extérieur.
+
+        Returns
+        -------
+        dict
+            contient les informations 
+
+        """
+        team_id = None
+        for equipe in liste_equipes_foot:
+            if equipe.name.lower() == nom_equipe.lower(): 
+                team_id = equipe.id
+                break
+    
+        if team_id is None:
+            return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
+
+        victoires_dom = 0
+        victoires_ext = 0
+        nuls = 0
         
-        # --- TON CODE ICI ---
-        
-        raise NotImplementedError("Le calcul pour le basketball n'est pas encore codé !")
+        for match in liste_matchs_foot:
+            
+            if match.home_team_api_id == team_id:
+                if match.home_team_goal > match.away_team_goal:
+                    victoires_dom += 1
+                elif match.home_team_goal == match.away_team_goal:
+                    nuls += 1
+                    
+            elif match.away_team_api_id == team_id:
+                if match.away_team_goal > match.home_team_goal:
+                    victoires_ext += 1
+                elif match.away_team_goal == match.home_team_goal:
+                    nuls += 1
+
+        points_totaux = ((victoires_dom + victoires_ext) * 3) + (nuls * 1)
+    
+        return {
+            "points": points_totaux,
+            "victoires_domicile": victoires_dom,
+            "victoires_exterieur": victoires_ext
+        }
 
     def _calculate_tennis_points(self):
         # RAPPEL : Le tennis est un sport individuel. Tu peux compter le nombre de victoires par joueur.
