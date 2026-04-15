@@ -1,69 +1,67 @@
 from match import Match
 import pandas as pd
+from pathlib import Path
 
 pd.options.display.max_columns = 100
 
-
 class FootballMatchLoader:
     def __init__(self):
-        pass
+        # 1. On charge les DataFrames UNE SEULE FOIS lors de l'instanciation de la classe
+        chemin_data = Path(__file__).parents[2] / "data" / "football_european_leagues_tdd"
+        
+        self.df_football = pd.read_csv(chemin_data / "match.csv")
+        df_joueur = pd.read_csv(chemin_data / "player.csv")
+        
+        # On passe l'ID du match en index pour que la recherche d'un match précis soit instantanée
+        self.df_football.set_index("id", inplace=True)
+        
+        # 2. OPTIMISATION MAJEURE : On transforme le dataframe des joueurs en dictionnaire
+        # Format : {id_joueur: "nom_du_joueur"}
+        # Cela permet de trouver un nom instantanément au lieu de parcourir le tableau 22 fois par match
+        self.dict_joueurs = df_joueur.set_index("player_api_id")["player_name"].to_dict()
+
+    def get_match(self, match_id):
+        """
+        Charge et retourne un objet Match spécifique à partir de son ID.
+        """
+        # On vérifie si le match existe dans nos données
+        if match_id not in self.df_football.index:
+            print(f"Match {match_id} introuvable.")
+            return None
+
+        # On isole uniquement la ligne du match qui nous intéresse
+        row = self.df_football.loc[match_id]
+
+        match = Match(None, "football", [], [])
+        match.id = int(match_id)
+
+        # --------Joueurs à domicile------------
+        colonnes_home = [f"home_player_{j}" for j in range(1, 12)]
+        for col in colonnes_home:
+            id_joueur = row[col]
+            if pd.notna(id_joueur):
+                # .get() cherche l'ID dans le dico. S'il n'existe pas, ça renvoie None sans planter
+                nom_joueur = self.dict_joueurs.get(int(id_joueur))
+                if nom_joueur:
+                    match.list_home_player.append(nom_joueur)
+
+        # --------Joueurs à l'extérieur--------------
+        colonnes_away = [f"away_player_{j}" for j in range(1, 12)]
+        for col in colonnes_away:
+            id_joueur = row[col]
+            if pd.notna(id_joueur):
+                nom_joueur = self.dict_joueurs.get(int(id_joueur))
+                if nom_joueur:
+                    match.list_away_player.append(nom_joueur)
+
+        return match
 
     def load_all_match(self):
+        """
+        Optionnel : Si tu as quand même besoin de charger TOUS les matchs d'un coup, 
+        tu peux réutiliser la fonction get_match pour que le code reste propre.
+        """
         res = []
-        df_football = pd.read_csv(
-            r"./data/football_european_leagues_tdd/match.csv"
-        )  # Il faut trouver une solution pour cette ligne car l'emplacement de notre fichier de donnée va changer en
-        # en fonction de là où on clone le repo
-        df_joueur = pd.read_csv(
-            r"./data/football_european_leagues_tdd/player.csv"
-        )
-        for i in range(len(df_football)):
-            match = Match(
-                None, "football", [], []
-            )  # On initialise les listes de joueurs à [] et non None pour pouvoir utiliser .append()
-            match.id = int(df_football.loc[i, "id"])
-
-            # --------Joueur à domicile------------
-            colonnes_home = [
-                f"home_player_{j}" for j in range(1, 12)
-            ]
-            liste_id_joueur_home = df_football.loc[
-                i, colonnes_home
-            ].tolist()  # On met tous les ID des joueurs dans une liste
-            for id_joueur_home in range(
-                len(liste_id_joueur_home)
-            ):  # On récupère ensuite ces ID pour aller chercher le nom des joueurs dans le dataframe des joueurs et l'ajouter au match
-                if not pd.isna(
-                    liste_id_joueur_home[id_joueur_home]
-                ):  # pd.isna() permet de filtrer les NaN (valeurs manquantes pandas), contrairement à "is not None" qui ne les détecte pas
-                    nom_joueur_home = df_joueur.loc[
-                        df_joueur["player_api_id"]
-                        == liste_id_joueur_home[id_joueur_home],
-                        "player_name",
-                    ]  # .loc renvoie une Series pandas, on vérifie donc qu'elle n'est pas vide avant d'extraire la valeur avec .values[0]
-                    if not nom_joueur_home.empty:
-                        match.list_home_player.append(nom_joueur_home.values[0])
-
-            # --------Joueur à l'extérieur--------------
-            colonnes_away = [
-                f"away_player_{j}" for j in range(1, 12)
-            ]
-            liste_id_joueur_away = df_football.loc[
-                i, colonnes_away
-            ].tolist()  # On met tous les ID des joueurs dans une liste
-            for id_joueur_away in range(
-                len(liste_id_joueur_away)
-            ):  # On récupère ensuite ces ID pour aller chercher le nom des joueurs dans le dataframe des joueurs et l'ajouter au match
-                if not pd.isna(
-                    liste_id_joueur_away[id_joueur_away]
-                ):  # pd.isna() permet de filtrer les NaN (valeurs manquantes pandas), contrairement à "is not None" qui ne les détecte pas
-                    nom_joueur_away = df_joueur.loc[
-                        df_joueur["player_api_id"]
-                        == liste_id_joueur_away[id_joueur_away],
-                        "player_name",
-                    ]  # .loc renvoie une Series pandas, on vérifie donc qu'elle n'est pas vide avant d'extraire la valeur avec .values[0]
-                    if not nom_joueur_away.empty:
-                        match.list_away_player.append(nom_joueur_away.values[0])
-
-            res.append(match)
+        for match_id in self.df_football.index:
+            res.append(self.get_match(match_id))
         return res
