@@ -11,11 +11,11 @@ class FootballMatchLoader:
     def load_all_match(self):
         res = []
         df_football = pd.read_csv(
-            r"D:\Projet-1A-2026\data\football_european_leagues_tdd\match.csv"
+            r"./data/football_european_leagues_tdd/match.csv"
         )  # Il faut trouver une solution pour cette ligne car l'emplacement de notre fichier de donnée va changer en
         # en fonction de là où on clone le repo
         df_joueur = pd.read_csv(
-            r"D:\Projet-1A-2026\data\football_european_leagues_tdd\player.csv"
+            r"./data/football_european_leagues_tdd/player.csv"
         )
         for i in range(len(df_football)):
             match = Match(
