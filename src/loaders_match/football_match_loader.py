@@ -24,7 +24,7 @@ class FootballMatchLoader:
             match.id = int(df_football.loc[i, "id"])
 
             # --------Joueur à domicile------------
-            colonnes_home = ["home_team_goal"] + [
+            colonnes_home = [
                 f"home_player_{j}" for j in range(1, 12)
             ]
             liste_id_joueur_home = df_football.loc[
@@ -45,7 +45,7 @@ class FootballMatchLoader:
                         match.list_home_player.append(nom_joueur_home.values[0])
 
             # --------Joueur à l'extérieur--------------
-            colonnes_away = ["away_team_goal"] + [
+            colonnes_away = [
                 f"away_player_{j}" for j in range(1, 12)
             ]
             liste_id_joueur_away = df_football.loc[
