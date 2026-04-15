@@ -1,23 +1,23 @@
 from match import Match
 import pandas as pd
-from pathlib import Path
 
 pd.options.display.max_columns = 100
 
 class FootballMatchLoader:
     def __init__(self):
         # 1. On charge les DataFrames UNE SEULE FOIS lors de l'instanciation de la classe
-        chemin_data = Path(__file__).parents[2] / "data" / "football_european_leagues_tdd"
+        # Les chemins sont relatifs au dossier depuis lequel la commande Python est lancée
+        chemin_match = "data/football_european_leagues_tdd/match.csv"
+        chemin_joueur = "data/football_european_leagues_tdd/player.csv"
         
-        self.df_football = pd.read_csv(chemin_data / "match.csv")
-        df_joueur = pd.read_csv(chemin_data / "player.csv")
+        self.df_football = pd.read_csv(chemin_match)
+        df_joueur = pd.read_csv(chemin_joueur)
         
         # On passe l'ID du match en index pour que la recherche d'un match précis soit instantanée
         self.df_football.set_index("id", inplace=True)
         
         # 2. OPTIMISATION MAJEURE : On transforme le dataframe des joueurs en dictionnaire
         # Format : {id_joueur: "nom_du_joueur"}
-        # Cela permet de trouver un nom instantanément au lieu de parcourir le tableau 22 fois par match
         self.dict_joueurs = df_joueur.set_index("player_api_id")["player_name"].to_dict()
 
     def get_match(self, match_id):
@@ -58,8 +58,7 @@ class FootballMatchLoader:
 
     def load_all_match(self):
         """
-        Optionnel : Si tu as quand même besoin de charger TOUS les matchs d'un coup, 
-        tu peux réutiliser la fonction get_match pour que le code reste propre.
+        Optionnel : Si tu as besoin de charger TOUS les matchs d'un coup.
         """
         res = []
         for match_id in self.df_football.index:
