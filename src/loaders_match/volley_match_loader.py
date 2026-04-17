@@ -11,10 +11,10 @@ class VolleyMatchLoaderFemme:
     def load_all_match(self):
         res = []
         df_match_volley_femme = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/match_women.csv"
+            "data/volleyball_tdd/match_women.csv"
         )
         df_player_femme = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/player_women.csv"
+            "data/volleyball_tdd/player_women.csv"
         )
 
         country_mapping = {
@@ -74,10 +74,10 @@ class VolleyMatchLoaderHomme:
     def load_all_match(self):
         res = []
         df_match_volley_homme = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/match_men.csv"
+            "data/volleyball_tdd/match_men.csv"
         )
         df_player_homme = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/player_men.csv"
+            "data/volleyball_tdd/player_men.csv"
         )
 
         country_mapping = {
@@ -135,17 +135,17 @@ class VolleyMatchLoader:
 
     def load_all_match(self):
         chemin_match_f = (
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/match_women.csv"
+            "data/volleyball_tdd/match_women.csv"
         )
         chemin_player_f = (
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/player_women.csv"
+            "data/volleyball_tdd/player_women.csv"
         )
 
         chemin_match_h = (
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/match_men.csv"
+            "data/volleyball_tdd/match_men.csv"
         )
         chemin_player_h = (
-            "/home/onyxia/work/Projet-1A-2026/data/volleyball_tdd/player_men.csv"
+            "data/volleyball_tdd/player_men.csv"
         )
 
         mapping_femmes = {
