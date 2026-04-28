@@ -8,3 +8,10 @@ class Match:
         self.sport = sport
         self.list_home_player = list_home_player
         self.list_away_player = list_away_player
+
+    def has_player(self, player_id: int) -> bool:
+        """
+        Vérifie si le joueur (via son ID) a participé à ce match, 
+        que ce soit à domicile ou à l'extérieur.
+        """
+        return (player_id in self.list_home_player) or (player_id in self.list_away_player)
