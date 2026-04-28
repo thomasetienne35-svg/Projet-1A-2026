@@ -11,13 +11,13 @@ class MatchLoader:
     def load_all_matches(self, sport: Sport) -> list[Match]:
         if sport.name == "football":
             return FootballMatchLoader().load_all_match()
-        if sport.name == "basketball":
+        elif sport.name == "volley":  
             return VolleyMatchLoader().load_all_match()
-        if sport.name == "tennis":
+        elif sport.name == "tennis":
             return TennisMatchLoader().load_all_match()
-        if sport.name == "lol":
+        elif sport.name == "lol":
             return LolMatchLoader().load_all_match()
-        if sport.name == "basketball":
+        elif sport.name == "basketball": 
             return BasketballMatchLoader().load_all_match()
         else:
-            raise ValueError("Sport non valide")
+            raise ValueError(f"Sport non valide : {sport.name}")
