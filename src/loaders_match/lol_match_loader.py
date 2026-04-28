@@ -13,13 +13,13 @@ class LolMatchLoader:
     def load_all_match(self):
         res = []
         df_lol_match = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/league_of_legends_tdd/match.csv"
+            "data/league_of_legends_tdd/match.csv"
         )
-        df_lol_team = pd.read.csv(
-            "/home/onyxia/work/Projet-1A-2026/data/league_of_legends_tdd/team.csv"
+        df_lol_team = pd.read_csv(
+            "data/league_of_legends_tdd/team.csv"
         )
-        df_lol_player = pd.read.csv(
-            "/home/onyxia/work/Projet-1A-2026/data/league_of_legends_tdd/player.csv"
+        df_lol_player = pd.read_csv(
+            "data/league_of_legends_tdd/player.csv"
         )
         for i in range(len(df_lol_match)):
             match = Match(None, "lol", None, None)

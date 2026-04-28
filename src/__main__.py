@@ -1,6 +1,6 @@
 import sys
 import os
-import traceback  # Ajout crucial pour afficher l'erreur complète
+import traceback  
 
 sys.path.append(os.path.dirname(__file__))
 
