@@ -15,7 +15,7 @@ class BasketballPlayerLoader:
     def load_all_player(self):
         res = []
         df_basketball = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/basketball/player.csv"
+            "data/basketball/player.csv"
         )
         for i in range(len(df_basketball)):
             prenom = df_basketball.loc[i, "first_name"]
@@ -29,7 +29,8 @@ class BasketballPlayerLoader:
                 genre = None,  
                 taille = df_basketball.loc[i, "height"],
                 poids = df_basketball.loc[i, "weight"],
-                team_id = df_basketball.loc[i, "team_id"]
+                team = df_basketball.loc[i, "team_id"]
             )
             
             res.append(joueur)
+        return res 

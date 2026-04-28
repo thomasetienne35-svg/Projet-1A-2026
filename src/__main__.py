@@ -1,34 +1,58 @@
 import sys
 import os
-import traceback  
+import traceback
 
 sys.path.append(os.path.dirname(__file__))
 
 from sport import Sport
 from loaders_match.match_loader import MatchLoader
+# J'adapte l'import selon la structure de tes dossiers vue sur tes captures d'écran
+from loaders_player.player_loader import PlayerLoader
 
 
 def main():
     sports_disponibles = ["football", "tennis", "volley", "basketball", "lol"]
-    # il reste à charger les données de player et team
+    
     print("Chargement initial de toutes les données en cours... Veuillez patienter.")
     
-    # 1. On charge TOUS les matchs de TOUS les sports dès le début
+    # 1. On prépare les dictionnaires pour stocker TOUTES les données
     tous_les_matchs = {}
-    loader = MatchLoader()
+    tous_les_joueurs = {}
+    
+    loader_match = MatchLoader()
     
     for nom_sport in sports_disponibles:
+        sport_obj = Sport(nom_sport)
+        
+        # --- A. Chargement des MATCHS ---
         try:
-            sport_obj = Sport(nom_sport)
-            tous_les_matchs[nom_sport] = loader.load_all_matches(sport_obj)
+            tous_les_matchs[nom_sport] = loader_match.load_all_matches(sport_obj)
         except Exception as e:
-            # Affichage détaillé de l'erreur pour savoir exactement où ça plante
-            print(f"\n--- ERREUR CRITIQUE SUR {nom_sport.upper()} ---")
+            print(f"\n--- ERREUR CRITIQUE SUR MATCHS {nom_sport.upper()} ---")
             traceback.print_exc() 
-            print("-----------------------------------\n")
-            tous_les_matchs[nom_sport] = [] # On initialise une liste vide si le chargement échoue
+            print("-----------------------------------------\n")
+            tous_les_matchs[nom_sport] = []
+
+        # --- B. Chargement des JOUEURS ---
+        try:
+            # On instancie le loader de joueurs (ta classe attend le sport à l'initialisation)
+            loader_player = PlayerLoader(sport_obj)
+            # Et ta méthode attend aussi le sport en argument
+            tous_les_joueurs[nom_sport] = loader_player.charger_player(sport_obj)
+        except Exception as e:
+            print(f"\n--- ERREUR CRITIQUE SUR JOUEURS {nom_sport.upper()} ---")
+            traceback.print_exc() 
+            print("------------------------------------------\n")
+            tous_les_joueurs[nom_sport] = []
 
     print("\n=== Chargement terminé ! ===")
+    
+    # Petit résumé pour t'aider à debugger visuellement
+    for s in sports_disponibles:
+        nb_matchs = len(tous_les_matchs[s])
+        nb_joueurs = len(tous_les_joueurs[s])
+        print(f"- {s.capitalize():<10} : {nb_matchs} matchs | {nb_joueurs} joueurs")
+
 
     # 2. Affichage et choix du sport par l'utilisateur
     print("\n=== Sports disponibles ===")
@@ -43,7 +67,7 @@ def main():
         print("Sport invalide.")
         return
 
-    # 3. Récupération instantanée des matchs depuis le dictionnaire (pas de nouveau chargement)
+    # 3. Récupération instantanée des matchs depuis le dictionnaire
     matchs = tous_les_matchs[nom_sport_choisi]
     
     if not matchs:
