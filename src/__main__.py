@@ -1,5 +1,6 @@
 import sys
 import os
+import traceback  
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -21,7 +22,10 @@ def main():
             sport_obj = Sport(nom_sport)
             tous_les_matchs[nom_sport] = loader.load_all_matches(sport_obj)
         except Exception as e:
-            print(f"Avertissement : Impossible de charger les données pour {nom_sport} ({e})")
+            # Affichage détaillé de l'erreur pour savoir exactement où ça plante
+            print(f"\n--- ERREUR CRITIQUE SUR {nom_sport.upper()} ---")
+            traceback.print_exc() 
+            print("-----------------------------------\n")
             tous_les_matchs[nom_sport] = [] # On initialise une liste vide si le chargement échoue
 
     print("\n=== Chargement terminé ! ===")

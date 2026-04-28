@@ -15,10 +15,10 @@ class BasketballMatchLoader:
     def load_all_match(self):
         res = []
         df_basketball = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/basketball/game.csv"
+            "data/basketball/game.csv"
         )
         df_basketball_joueurs = pd.read_csv(
-            "/home/onyxia/work/Projet-1A-2026/data/basketball/player.csv"
+            "data/basketball/player.csv"
         )
         for i in range(len(df_basketball)):
             match = Match(None, "basketball", None, None)
