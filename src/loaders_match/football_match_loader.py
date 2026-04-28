@@ -5,8 +5,7 @@ pd.options.display.max_columns = 100
 
 class FootballMatchLoader:
     def __init__(self):
-        # 1. On charge les DataFrames UNE SEULE FOIS lors de l'instanciation de la classe
-        # Les chemins sont relatifs au dossier depuis lequel la commande Python est lancée
+      
         chemin_match = "data/football_european_leagues_tdd/match.csv"
         chemin_joueur = "data/football_european_leagues_tdd/player.csv"
         
