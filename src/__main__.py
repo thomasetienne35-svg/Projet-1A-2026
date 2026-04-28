@@ -1,11 +1,11 @@
 import sys
 import os
 import traceback
-
 sys.path.append(os.path.dirname(__file__))
 
 from sport import Sport
 from loaders_match.match_loader import MatchLoader
+from statistiques.nbre_de_points import ChampionshipPointsCalculator
 # J'adapte l'import selon la structure de tes dossiers vue sur tes captures d'écran
 from loaders_player.player_loader import PlayerLoader
 
