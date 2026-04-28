@@ -29,7 +29,7 @@ class TennisPlayerLoader:
                 genre = df_tennis.loc[i, "genre"], 
                 taille = df_tennis.loc[i, "height"],
                 poids = None,
-                equipe = None
+                team = None
             )
             
             res.append(joueur)
