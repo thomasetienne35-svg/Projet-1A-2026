@@ -1,146 +1,227 @@
 import pandas as pd
-import numpy as np
 
 
 class ChampionshipPointsCalculator:
-    def __init__(self, sport_name: str, matches_df: pd.DataFrame):
+    def __init__(
+        self,
+        sport_name: str,
+        matches_df: pd.DataFrame,
+        liste_equipes_foot: list,
+        liste_matchs_foot: list,
+    ):
         """
         Initialise le calculateur avec le nom du sport et le DataFrame des matchs.
         """
+        self.liste_equipes_foot = liste_equipes_foot
+        self.liste_matchs_foot = liste_matchs_foot
         self.sport_name = sport_name.lower()
         self.matches_df = matches_df
-
-    def get_team_points(self) -> pd.DataFrame:
+ 
+    def get_team_points(self, nom_equipe: str, saison: str | None = None) -> dict:
         """
         Méthode principale qui agit comme un "aiguilleur".
         Elle redirige vers la bonne méthode de calcul selon le sport.
+ 
+        Parameters
+        ----------
+        nom_equipe : str
+            Nom de l'équipe dont on veut les statistiques.
+        saison : str, optional
+            La saison souhaitée au format "YYYY/YYYY" (ex: "2008/2009").
+            Si None, toutes les saisons sont prises en compte.
+ 
+        Returns
+        -------
+        dict
+            Statistiques de l'équipe pour la saison donnée.
         """
         if self.sport_name == "football":
-            return self._calculate_football_points()
-        
+            return self._calculate_football_points(nom_equipe, saison)
         elif self.sport_name == "basketball":
-            return self._calculate_basketball_points()
-            
+            return self._calculate_basketball_points(nom_equipe, saison)
         elif self.sport_name == "tennis":
-            return self._calculate_tennis_points()
-            
+            return self._calculate_tennis_points(nom_equipe, saison)
         elif self.sport_name in ["volley", "volleyball"]:
-            return self._calculate_volley_points()
-            
+            return self._calculate_volley_points(nom_equipe, saison)
         elif self.sport_name == "lol":
-            return self._calculate_lol_points()
-            
+            return self._calculate_lol_points(nom_equipe, saison)
         else:
-            raise ValueError(f"Statistiques non implémentées pour le sport : {self.sport_name}")
-
-    def _calculate_football_points(self):
-        """Renvoie le nombre de points en championnat (victoire = 3 pts, nul = 1 pt, défaite = 0 pt), le nombre de victoire à domicile et à l'extérieur.
-
+            raise ValueError(
+                f"Statistiques non implémentées pour le sport : {self.sport_name}"
+            )
+ 
+    # ------------------------------------------------------------------
+    # FOOTBALL
+    # ------------------------------------------------------------------
+ 
+    def _calculate_football_points(
+        self, nom_equipe: str, saison: str | None = None
+    ) -> dict:
+        """
+        Renvoie le nombre de points en championnat (victoire = 3 pts,
+        nul = 1 pt, défaite = 0 pt), le nombre de victoires à domicile
+        et à l'extérieur pour une équipe, éventuellement filtrée sur une saison.
+ 
+        Parameters
+        ----------
+        nom_equipe : str
+            Nom de l'équipe.
+        saison : str, optional
+            Format "YYYY/YYYY" (ex: "2008/2009"). None = toutes saisons.
+ 
         Returns
         -------
-        dict
-            contient les informations 
-
+        dict | str
+            Dictionnaire de stats ou message d'erreur.
         """
+        # --- Résolution de l'équipe ---
         team_id = None
-        for equipe in liste_equipes_foot:
-            if equipe.name.lower() == nom_equipe.lower(): 
+        for equipe in self.liste_equipes_foot:
+            if equipe.name.lower() == nom_equipe.lower():
                 team_id = equipe.id
                 break
-    
+ 
         if team_id is None:
             return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
-
+ 
+        # --- Filtrage des matchs par saison ---
+        matchs_filtres = self.liste_matchs_foot
+        if saison is not None:
+            matchs_filtres = [
+                m for m in self.liste_matchs_foot if m.season == saison
+            ]
+            if not matchs_filtres:
+                return (
+                    f"Erreur : Aucun match trouvé pour la saison '{saison}'. "
+                    f"Vérifiez le format (ex: '2008/2009')."
+                )
+ 
+        # --- Calcul des statistiques ---
         victoires_dom = 0
         victoires_ext = 0
         nuls = 0
-        
-        for match in liste_matchs_foot:
-            
+        defaites_dom = 0
+        defaites_ext = 0
+        buts_marques = 0
+        buts_encaisses = 0
+        nb_matchs = 0
+ 
+        for match in matchs_filtres:
             if match.home_team_api_id == team_id:
+                nb_matchs += 1
+                buts_marques += match.home_team_goal
+                buts_encaisses += match.away_team_goal
                 if match.home_team_goal > match.away_team_goal:
                     victoires_dom += 1
                 elif match.home_team_goal == match.away_team_goal:
                     nuls += 1
-                    
+                else:
+                    defaites_dom += 1
+ 
             elif match.away_team_api_id == team_id:
+                nb_matchs += 1
+                buts_marques += match.away_team_goal
+                buts_encaisses += match.home_team_goal
                 if match.away_team_goal > match.home_team_goal:
                     victoires_ext += 1
                 elif match.away_team_goal == match.home_team_goal:
                     nuls += 1
-
-        points_totaux = ((victoires_dom + victoires_ext) * 3) + (nuls * 1)
-    
+                else:
+                    defaites_ext += 1
+ 
+        victoires_total = victoires_dom + victoires_ext
+        defaites_total = defaites_dom + defaites_ext
+        points_totaux = victoires_total * 3 + nuls * 1
+ 
         return {
+            "equipe": nom_equipe,
+            "saison": saison if saison else "Toutes saisons",
+            "matchs_joues": nb_matchs,
             "points": points_totaux,
+            "victoires": victoires_total,
             "victoires_domicile": victoires_dom,
-            "victoires_exterieur": victoires_ext
+            "victoires_exterieur": victoires_ext,
+            "nuls": nuls,
+            "defaites": defaites_total,
+            "defaites_domicile": defaites_dom,
+            "defaites_exterieur": defaites_ext,
+            "buts_marques": buts_marques,
+            "buts_encaisses": buts_encaisses,
+            "difference_buts": buts_marques - buts_encaisses,
         }
-
-    def _calculate_basketball_points(self):
-        """Renvoie le nombre de points en championnat (victoire = 3 pts, nul = 1 pt, défaite = 0 pt), le nombre de victoire à domicile et à l'extérieur.
-
-        Returns
-        -------
-        dict
-            contient les informations 
-
+ 
+    # ------------------------------------------------------------------
+    # BASKETBALL  (à compléter selon la structure de vos données)
+    # ------------------------------------------------------------------
+ 
+    def _calculate_basketball_points(
+        self, nom_equipe: str, saison: str | None = None
+    ) -> dict:
         """
-        team_id = None
-        for equipe in liste_equipes_foot:
-            if equipe.name.lower() == nom_equipe.lower(): 
-                team_id = equipe.id
-                break
-    
-        if team_id is None:
-            return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
-
-        victoires_dom = 0
-        victoires_ext = 0
-        nuls = 0
-        
-        for match in liste_matchs_foot:
-            
-            if match.home_team_api_id == team_id:
-                if match.home_team_goal > match.away_team_goal:
-                    victoires_dom += 1
-                elif match.home_team_goal == match.away_team_goal:
-                    nuls += 1
-                    
-            elif match.away_team_api_id == team_id:
-                if match.away_team_goal > match.home_team_goal:
-                    victoires_ext += 1
-                elif match.away_team_goal == match.home_team_goal:
-                    nuls += 1
-
-        points_totaux = ((victoires_dom + victoires_ext) * 3) + (nuls * 1)
-    
-        return {
-            "points": points_totaux,
-            "victoires_domicile": victoires_dom,
-            "victoires_exterieur": victoires_ext
-        }
-
-    def _calculate_tennis_points(self):
-        # RAPPEL : Le tennis est un sport individuel. Tu peux compter le nombre de victoires par joueur.
-        df = self.matches_df.copy()
-        
-        # --- TON CODE ICI ---
-        
-        raise NotImplementedError("Le calcul pour le tennis n'est pas encore codé !")
-
-    def _calculate_volley_points(self):
-        # RAPPEL : Au volley, le barème peut dépendre du score final (ex: victoire 3-0/3-1 = 3pts, victoire 3-2 = 2pts, défaite 2-3 = 1pt).
-        df = self.matches_df.copy()
-        
-        # --- TON CODE ICI ---
-        
-        raise NotImplementedError("Le calcul pour le volley n'est pas encore codé !")
-
-    def _calculate_lol_points(self):
-        # RAPPEL : Calcul simple du nombre de parties gagnées par équipe.
-        df = self.matches_df.copy()
-        
-        # --- TON CODE ICI ---
-        
-        raise NotImplementedError("Le calcul pour LoL n'est pas encore codé !")
+        Calcul des points pour le basketball.
+        Victoire = 2 pts, Défaite = 1 pt (format championnat européen classique).
+        """
+        # TODO : adapter selon la structure réelle de vos objets Match basket
+        raise NotImplementedError(
+            "Le calcul pour le basketball n'est pas encore implémenté."
+        )
+ 
+    # ------------------------------------------------------------------
+    # TENNIS  (à compléter)
+    # ------------------------------------------------------------------
+ 
+    def _calculate_tennis_points(
+        self, nom_joueur: str, saison: str | None = None
+    ) -> dict:
+        """
+        Calcul des points ATP/WTA pour un joueur sur une saison.
+        """
+        raise NotImplementedError(
+            "Le calcul pour le tennis n'est pas encore implémenté."
+        )
+ 
+    # ------------------------------------------------------------------
+    # VOLLEYBALL  (à compléter)
+    # ------------------------------------------------------------------
+ 
+    def _calculate_volley_points(
+        self, nom_equipe: str, saison: str | None = None
+    ) -> dict:
+        """
+        Calcul des points pour le volleyball.
+        Victoire 3-0 / 3-1 = 3 pts, Victoire 3-2 = 2 pts,
+        Défaite 2-3 = 1 pt, Défaite 0/1-3 = 0 pt.
+        """
+        raise NotImplementedError(
+            "Le calcul pour le volleyball n'est pas encore implémenté."
+        )
+ 
+    # ------------------------------------------------------------------
+    # LOL  (à compléter)
+    # ------------------------------------------------------------------
+ 
+    def _calculate_lol_points(
+        self, nom_equipe: str, saison: str | None = None
+    ) -> dict:
+        """
+        Calcul des points pour League of Legends (victoire = 1 pt).
+        """
+        raise NotImplementedError(
+            "Le calcul pour LoL n'est pas encore implémenté."
+        )
+ 
+    # ------------------------------------------------------------------
+    # UTILITAIRE : lister les saisons disponibles
+    # ------------------------------------------------------------------
+ 
+    def get_available_seasons(self) -> list:
+        """
+        Retourne la liste des saisons disponibles dans les données.
+        Utile pour guider l'utilisateur dans son choix.
+        """
+        saisons = set()
+        for match in self.liste_matchs_foot:
+            if hasattr(match, "season") and match.season:
+                saisons.add(match.season)
+        return sorted(saisons)
+ 
