@@ -1,4 +1,4 @@
-
+import pandas as pd
 
 class match_par_joueur:
     def get_player_matches(all_matches: list[Match], player_id: int) -> list[Match]:
