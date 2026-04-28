@@ -1,7 +1,6 @@
 from sport import Sport
 from player import Player
 
-
 class Match:
     def __init__(self, id : int, sport : Sport, list_home_player : list[int], list_away_player : list[int]) -> None:
         self.id = id
