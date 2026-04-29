@@ -1,2 +1,15 @@
+from team import Team
+import pandas as pd
+
+# pd.options.display.max_columns = 100
+
 class TennisTeamLoader:
-    pass
+    def __init__(self):
+        pass
+
+    def load_all_team(self):
+        """
+        Le tennis est un sport individuel, il n'y a pas d'équipes.
+        """
+        return []
+        

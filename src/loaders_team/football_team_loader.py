@@ -18,8 +18,8 @@ class FootballTeamLoader:
             equipe = Team(None, None, None)
             
             equipe.id = df_football.loc[i, "team_api_id"]
-            equipe.nom = df_football.loc[i, "team_long_name"]
-            equipe.nom_abrege = df_football.loc[i, "team_short_name"]
+            equipe.name = df_football.loc[i, "team_long_name"]
+            equipe.short_name = df_football.loc[i, "team_short_name"]
             
             res.append(equipe)
             

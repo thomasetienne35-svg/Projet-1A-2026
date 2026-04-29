@@ -34,6 +34,12 @@ class FootballMatchLoader:
         match = Match(None, "football", [], [])
         match.id = int(match_id)
 
+        match.home_team_api_id = row["home_team_api_id"]
+        match.away_team_api_id = row["away_team_api_id"]
+        match.home_team_goal = row["home_team_goal"]
+        match.away_team_goal = row["away_team_goal"]
+        match.season = row["season"]
+        
         # --------Joueurs à domicile------------
         colonnes_home = [f"home_player_{j}" for j in range(1, 12)]
         for col in colonnes_home:

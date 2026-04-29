@@ -57,84 +57,99 @@ class ChampionshipPointsCalculator:
     def _calculate_football_points(
         self, nom_equipe: str, saison: str | None = None
     ) -> dict:
-        """
-        Renvoie le nombre de points en championnat (victoire = 3 pts,
-        nul = 1 pt, défaite = 0 pt), le nombre de victoires à domicile
-        et à l'extérieur pour une équipe, éventuellement filtrée sur une saison.
- 
-        Parameters
-        ----------
-        nom_equipe : str
-            Nom de l'équipe.
-        saison : str, optional
-            Format "YYYY/YYYY" (ex: "2008/2009"). None = toutes saisons.
- 
-        Returns
-        -------
-        dict | str
-            Dictionnaire de stats ou message d'erreur.
-        """
+        
         # --- Résolution de l'équipe ---
         team_id = None
+        nom_recherche = str(nom_equipe).strip().lower()
+        vrai_nom_equipe = nom_equipe
+
+        # 1. Recherche exacte
         for equipe in self.liste_equipes_foot:
-            if equipe.name.lower() == nom_equipe.lower():
+            if equipe.name is not None and str(equipe.name).strip().lower() == nom_recherche:
                 team_id = equipe.id
+                vrai_nom_equipe = str(equipe.name).strip()
                 break
  
+        # 2. Recherche partielle
         if team_id is None:
-            return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
- 
+            equipes_proches = [
+                eq for eq in self.liste_equipes_foot 
+                if eq.name is not None and nom_recherche in str(eq.name).strip().lower()
+            ]
+
+            if len(equipes_proches) == 1:
+                team_id = equipes_proches[0].id
+                vrai_nom_equipe = str(equipes_proches[0].name).strip()
+            elif len(equipes_proches) > 1:
+                noms = ", ".join([str(eq.name).strip() for eq in equipes_proches])
+                return f"Erreur : '{nom_equipe}' est ambigu. Voulez-vous dire : {noms} ?"
+            else:
+                return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
+
+        # VÉRIFICATION CRITIQUE : L'ID de l'équipe est-il bien là ?
+        if team_id is None:
+            return f"Erreur : L'équipe '{vrai_nom_equipe}' a été trouvée, mais son ID est manquant dans la base de données."
+
         # --- Filtrage des matchs par saison ---
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
-                m for m in self.liste_matchs_foot if m.season == saison
+                m for m in self.liste_matchs_foot 
+                if getattr(m, "season", None) == saison
             ]
             if not matchs_filtres:
-                return (
-                    f"Erreur : Aucun match trouvé pour la saison '{saison}'. "
-                    f"Vérifiez le format (ex: '2008/2009')."
-                )
+                return f"Erreur : Aucun match trouvé pour la saison '{saison}'."
  
         # --- Calcul des statistiques ---
-        victoires_dom = 0
-        victoires_ext = 0
-        nuls = 0
-        defaites_dom = 0
-        defaites_ext = 0
-        buts_marques = 0
-        buts_encaisses = 0
-        nb_matchs = 0
+        victoires_dom = victoires_ext = nuls = 0
+        defaites_dom = defaites_ext = 0
+        buts_marques = buts_encaisses = nb_matchs = 0
  
+        # On est maintenant certain que team_id n'est pas None
+        t_id = float(team_id)
+
         for match in matchs_filtres:
-            if match.home_team_api_id == team_id:
+            try:
+                # getattr permet d'éviter l'erreur si l'attribut n'existe pas
+                h_id = getattr(match, "home_team_api_id", None)
+                a_id = getattr(match, "away_team_api_id", None)
+                h_goals = getattr(match, "home_team_goal", None)
+                a_goals = getattr(match, "away_team_goal", None)
+
+                # Si l'une des données essentielles est vide (None), on ignore ce match
+                if None in (h_id, a_id, h_goals, a_goals):
+                    continue
+
+                home_id = float(h_id)
+                away_id = float(a_id)
+                home_goals = int(h_goals)
+                away_goals = int(a_goals)
+            except Exception:
+                # Toute autre erreur (texte illisible, etc.) fera ignorer le match
+                continue
+                
+            if home_id == t_id:
                 nb_matchs += 1
-                buts_marques += match.home_team_goal
-                buts_encaisses += match.away_team_goal
-                if match.home_team_goal > match.away_team_goal:
-                    victoires_dom += 1
-                elif match.home_team_goal == match.away_team_goal:
-                    nuls += 1
-                else:
-                    defaites_dom += 1
+                buts_marques += home_goals
+                buts_encaisses += away_goals
+                if home_goals > away_goals: victoires_dom += 1
+                elif home_goals == away_goals: nuls += 1
+                else: defaites_dom += 1
  
-            elif match.away_team_api_id == team_id:
+            elif away_id == t_id:
                 nb_matchs += 1
-                buts_marques += match.away_team_goal
-                buts_encaisses += match.home_team_goal
-                if match.away_team_goal > match.home_team_goal:
-                    victoires_ext += 1
-                elif match.away_team_goal == match.home_team_goal:
-                    nuls += 1
-                else:
-                    defaites_ext += 1
+                buts_marques += away_goals
+                buts_encaisses += home_goals
+                if away_goals > home_goals: victoires_ext += 1
+                elif away_goals == home_goals: nuls += 1
+                else: defaites_ext += 1
  
         victoires_total = victoires_dom + victoires_ext
         defaites_total = defaites_dom + defaites_ext
         points_totaux = victoires_total * 3 + nuls * 1
  
         return {
-            "equipe": nom_equipe,
+            "equipe": vrai_nom_equipe,
             "saison": saison if saison else "Toutes saisons",
             "matchs_joues": nb_matchs,
             "points": points_totaux,

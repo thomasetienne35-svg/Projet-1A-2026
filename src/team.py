@@ -1,7 +1,7 @@
 class Team:
     def __init__(
-        self,team_id, nom, nom_abrege
+        self,team_id, name, short_name
     ) -> None:
-        self.team_id = team_id 
-        self.nom = nom
-        self.nom_abrege = nom_abrege
+        self.id = team_id 
+        self.name = name 
+        self.short_name = short_name
