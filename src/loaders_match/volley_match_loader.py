@@ -20,12 +20,20 @@ class VolleyMatchLoaderFemme:
         for i in range(len(df_match_volley_femme)):
             match = Match(None, "volley", [], [])
             match.id = f"F{i+1}"
-            
+            match.genre = "Femme"
+
             pays_1 = df_match_volley_femme.loc[i, "country_1"]
             pays_2 = df_match_volley_femme.loc[i, "country_2"]
 
-            code_1 = country_mapping.get(pays_1)
-            code_2 = country_mapping.get(pays_2)
+            code_1 = country_mapping.get(pays_1, pays_1)
+            code_2 = country_mapping.get(pays_2, pays_2)
+
+            match.country_code_1 = code_1
+            match.country_code_2 = code_2
+            match.set_country_1 = df_match_volley_femme.loc[i, "set_country_1"]
+            match.set_country_2 = df_match_volley_femme.loc[i, "set_country_2"]
+            match.date = df_match_volley_femme.loc[i, "date"] 
+            match.stage = df_match_volley_femme.loc[i, "stage"]
 
             if code_1:
                 match.list_home_player = df_player_femme[
@@ -64,13 +72,20 @@ class VolleyMatchLoaderHomme:
         for i in range(len(df_match_volley_homme)):
             match = Match(None, "volley", [], [])
             match.id = f"H{i + 1}"
+            match.genre = "Homme"
 
             pays_1 = df_match_volley_homme.loc[i, "country_code_1"]
             pays_2 = df_match_volley_homme.loc[i, "country_code_2"]
 
-            code_1 = country_mapping.get(pays_1)
-            code_2 = country_mapping.get(pays_2)
+            code_1 = country_mapping.get(pays_1, pays_1)
+            code_2 = country_mapping.get(pays_2, pays_2)
 
+            match.country_code_1 = code_1
+            match.country_code_2 = code_2
+            match.set_country_1 = df_match_volley_homme.loc[i, "set_country_1"]
+            match.set_country_2 = df_match_volley_homme.loc[i, "set_country_2"]
+            match.date = df_match_volley_homme.loc[i, "date"]
+            match.stage = df_match_volley_homme.loc[i, "stage"]
             if code_1:
                 match.list_home_player = df_player_homme[
                     df_player_homme["country_code"] == code_1

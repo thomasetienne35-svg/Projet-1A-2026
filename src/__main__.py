@@ -74,7 +74,7 @@ def main():
         
         if choix == "0":
             print("\nMerci d'avoir utilisé le programme. À bientôt !")
-            break 
+            return # Sortie complète de la fonction main()
             
         try:
             nom_sport_choisi = sports_disponibles[int(choix) - 1]
@@ -99,16 +99,27 @@ def main():
             print("2. Consulter les statistiques d'une équipe")
             print("3. Retourner au choix des sports")
             
-            choix_action = input("\nQue voulez-vous faire (1, 2 ou 3) ? ")
+            choix_action = input("\nQue voulez-vous faire (1, 2 ou 3) ? (ou 0 pour quitter) : ")
+
+            # Quitter à l'étape du choix de l'action
+            if choix_action == "0":
+                print("\nMerci d'avoir utilisé le programme. À bientôt !")
+                return
 
             if choix_action == "3":
-                break
+                break # Casse uniquement la boucle secondaire pour revenir au menu principal
 
             # ---------------------------------------------------------
             # ACTION 1 : DÉTAILS DU MATCH
             # ---------------------------------------------------------
             elif choix_action == "1":
-                choix_match = input(f"\nEntrez le numéro du match (1 à {len(matchs)}) : ")
+                choix_match = input(f"\nEntrez le numéro du match (1 à {len(matchs)}) (ou 0 pour quitter) : ")
+                
+                # Quitter à l'étape du choix du match
+                if choix_match == "0":
+                    print("\nMerci d'avoir utilisé le programme. À bientôt !")
+                    return
+                
                 try:
                     match = matchs[int(choix_match) - 1]
                     print(f"\n=== Match ID: {match.id} ===")
@@ -122,13 +133,23 @@ def main():
             # ACTION 2 : STATISTIQUES D'UNE ÉQUIPE
             # ---------------------------------------------------------
             elif choix_action == "2":
+                
+                # 1. Choix du genre uniquement si c'est du volley
+                genre_choisi = None
+                if nom_sport_choisi == "volley":
+                    print("\n1. Hommes")
+                    print("2. Femmes")
+                    choix_genre = input("Choisissez la catégorie (1 ou 2) (ou 0 pour quitter) : ")
+                    if choix_genre == "0":
+                        print("\nMerci d'avoir utilisé le programme. À bientôt !")
+                        return
+                    genre_choisi = "Homme" if choix_genre == "1" else "Femme"
+
                 calculateur = ChampionshipPointsCalculator(
                     sport_name=nom_sport_choisi,
                     matches_df=None, 
                     liste_equipes_foot=toutes_les_equipes[nom_sport_choisi],
-                    liste_matchs_foot=matchs
-                )
-
+                    liste_matchs_foot=matchs)
                 try:
                     saisons_dispo = calculateur.get_available_seasons()
                     if saisons_dispo:
@@ -136,13 +157,24 @@ def main():
                     else:
                         print("\nAucune information de saison trouvée dans ces matchs.")
 
-                    nom_equipe = input("\nEntrez le nom de l'équipe : ")
-                    saison_choisie = input("Entrez la saison (ex: 2008/2009) ou appuyez sur Entrée pour toutes les saisons : ")
+                    nom_equipe = input("\nEntrez le nom de l'équipe (ou 0 pour quitter) : ")
+                    
+                    # Quitter à l'étape du nom de l'équipe
+                    if nom_equipe == "0":
+                        print("\nMerci d'avoir utilisé le programme. À bientôt !")
+                        return
+
+                    saison_choisie = input("Entrez la saison (ex: 2008/2009) ou appuyez sur Entrée pour toutes les saisons (ou 0 pour quitter) : ")
+                    
+                    # Quitter à l'étape du choix de la saison
+                    if saison_choisie == "0":
+                        print("\nMerci d'avoir utilisé le programme. À bientôt !")
+                        return
                     
                     if not saison_choisie.strip():
                         saison_choisie = None
 
-                    resultat = calculateur.get_team_points(nom_equipe, saison_choisie)
+                    resultat = calculateur.get_team_points(nom_equipe, saison_choisie, genre = genre_choisi)
 
                     if isinstance(resultat, str):
                         print(f"\n{resultat}")
@@ -160,6 +192,8 @@ def main():
             else:
                 print("\n/!\\ Action non reconnue. Veuillez réessayer.")
             
+            # Facultatif : on pourrait aussi permettre de quitter ici, 
+            # mais c'est généralement juste une pause pour laisser l'utilisateur lire.
             input("\nAppuyez sur Entrée pour continuer...")
 
 
