@@ -166,7 +166,7 @@ class ChampionshipPointsCalculator:
         }
  
     # ------------------------------------------------------------------
-    # BASKETBALL  (à compléter selon la structure de vos données)
+    # BASKETBALL  
     # ------------------------------------------------------------------
  
     def _calculate_basketball_points(
@@ -275,21 +275,20 @@ class ChampionshipPointsCalculator:
         }
  
     # ------------------------------------------------------------------
-    # TENNIS  (à compléter)
+    # TENNIS  
     # ------------------------------------------------------------------
  
     def _calculate_tennis_points(
-        self, nom_joueur: str, saison: str | None = None
-    ) -> dict:
+        self, nom_equipe: str, saison: str | None = None
+    ) -> str:
         """
-        Calcul des points ATP/WTA pour un joueur sur une saison.
+        Le tennis est un sport individuel.
+        Renvoie simplement un message explicatif.
         """
-        raise NotImplementedError(
-            "Le calcul pour le tennis n'est pas encore implémenté."
-        )
+        return "Le tennis est un sport individuel. Il n'y a donc pas de statistiques d'équipe disponibles pour ce sport."
  
     # ------------------------------------------------------------------
-    # VOLLEYBALL  (à compléter)
+    # VOLLEYBALL  
     # ------------------------------------------------------------------
  
     def _calculate_volley_points(
@@ -346,15 +345,6 @@ class ChampionshipPointsCalculator:
  
         t_id = str(team_id).strip().upper()
 
-        # =========================================================
-        # 🛑 SCANNER DE DIAGNOSTIC - À SUPPRIMER QUAND ÇA MARCHE
-        # =========================================================
-        print("\n" + "="*45)
-        print(" 🛑 DIAGNOSTIC DU CALCULATEUR VOLLEY 🛑")
-        print(f"1. Équipe recherchée : {nom_equipe} -> ID trouvé : {team_id}")
-        print(f"2. Genre reçu par le calculateur : {genre}")
-        print(f"3. Total des matchs de volley dans la base : {len(matchs_filtres)}")
-        
         nb_hommes = sum(1 for m in matchs_filtres if getattr(m, 'genre', None) == 'Homme')
         nb_femmes = sum(1 for m in matchs_filtres if getattr(m, 'genre', None) == 'Femme')
         nb_sans_genre = len(matchs_filtres) - nb_hommes - nb_femmes
@@ -421,12 +411,78 @@ class ChampionshipPointsCalculator:
     def _calculate_lol_points(
         self, nom_equipe: str, saison: str | None = None
     ) -> dict:
-        """
-        Calcul des points pour League of Legends (victoire = 1 pt).
-        """
-        raise NotImplementedError(
-            "Le calcul pour LoL n'est pas encore implémenté."
-        )
+        
+        team_id = None
+        vrai_nom_equipe = nom_equipe
+        nom_recherche = str(nom_equipe).strip().lower()
+
+        # 1. On cherche l'équipe (par son nom ou son abréviation)
+        for equipe in self.liste_equipes_foot:
+            nom = str(equipe.name).strip().lower() if equipe.name else ""
+            abbr = str(equipe.id).strip().lower() if equipe.id else ""
+            
+            if nom_recherche == nom or nom_recherche == abbr:
+                team_id = str(equipe.id).strip().lower() # On garde "vit" pour les calculs
+                vrai_nom_equipe = str(equipe.name).strip() # On garde "Team Vitality" pour l'affichage
+                break
+
+        if team_id is None:
+            return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
+
+        # 2. On filtre par saison
+        matchs_filtres = self.liste_matchs_foot
+        if saison is not None:
+            matchs_filtres = [m for m in self.liste_matchs_foot if getattr(m, "season", getattr(m, "date", getattr(m, "patch", None))) == saison]
+
+        # 3. On calcule les stats en utilisant team_id ("vit")
+        nb_matchs = victoires = defaites = 0
+        total_kills = total_deaths = total_assists = 0
+
+        for match in matchs_filtres:
+            try:
+                t_blue = str(getattr(match, "team_blue", "")).strip().lower()
+                t_red = str(getattr(match, "team_red", "")).strip().lower()
+                winner = str(getattr(match, "winner", "")).strip().lower()
+
+                is_blue = (t_blue == team_id)
+                is_red = (t_red == team_id)
+
+                if not is_blue and not is_red:
+                    continue 
+
+                nb_matchs += 1
+                
+                # Victoire ou Défaite ?
+                if winner == team_id or (is_blue and winner in ["blue", "team_blue"]) or (is_red and winner in ["red", "team_red"]):
+                    victoires += 1
+                else:
+                    defaites += 1
+
+                # Récupération des Kills / Deaths / Assists
+                side = "blue" if is_blue else "red"
+                total_kills += int(float(str(getattr(match, f"kills_team_{side}", 0)).strip()))
+                total_deaths += int(float(str(getattr(match, f"deaths_team_{side}", 0)).strip()))
+                total_assists += int(float(str(getattr(match, f"assists_team_{side}", 0)).strip()))
+
+            except Exception:
+                continue
+
+        # 4. Affichage
+        win_rate = round((victoires / nb_matchs) * 100, 1) if nb_matchs > 0 else 0
+        kda = round((total_kills + total_assists) / total_deaths, 2) if total_deaths > 0 else "Parfait (0 mort)"
+
+        return {
+            "equipe": vrai_nom_equipe, # Affiche "Team Vitality"
+            "periode": saison if saison else "Toutes périodes",
+            "matchs_joues": nb_matchs,
+            "victoires": victoires,
+            "defaites": defaites,
+            "win_rate": f"{win_rate}%",
+            "kda_global": kda,
+            "total_kills": total_kills,
+            "total_morts": total_deaths,
+            "total_assists": total_assists,
+        }
  
     # ------------------------------------------------------------------
     # UTILITAIRE : lister les saisons disponibles
