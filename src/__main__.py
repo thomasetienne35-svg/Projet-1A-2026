@@ -28,7 +28,8 @@ def main():
             loader_player = PlayerLoader(sport_obj)
             tous_les_joueurs[nom_sport] = loader_player.charger_player(sport_obj)
             toutes_les_equipes[nom_sport] = loader_team.load_all_teams(sport_obj)
-        except Exception:
+        except Exception as e:
+            print(f"\n--- ERREUR CRITIQUE SUR {nom_sport.upper()} : {e} ---")
             tous_les_matchs[nom_sport] = []
             tous_les_joueurs[nom_sport] = []
             toutes_les_equipes[nom_sport] = []

@@ -407,45 +407,46 @@ class ChampionshipPointsCalculator:
     # ------------------------------------------------------------------
     # LOL  (à compléter)
     # ------------------------------------------------------------------
- 
+
+    
     def _calculate_lol_points(
         self, nom_equipe: str, saison: str | None = None
-    ) -> dict:
+    ) -> dict | str:
         
-        team_id = None
-        vrai_nom_equipe = nom_equipe
         nom_recherche = str(nom_equipe).strip().lower()
+        vrai_nom_equipe = nom_equipe
+        equipe_trouvee = False
 
-        # 1. On cherche l'équipe (par son nom ou son abréviation)
+        # 1. Vérification que l'équipe existe bien avec ce nom complet
         for equipe in self.liste_equipes_foot:
-            nom = str(equipe.name).strip().lower() if equipe.name else ""
-            abbr = str(equipe.id).strip().lower() if equipe.id else ""
-            
-            if nom_recherche == nom or nom_recherche == abbr:
-                team_id = str(equipe.id).strip().lower() # On garde "vit" pour les calculs
-                vrai_nom_equipe = str(equipe.name).strip() # On garde "Team Vitality" pour l'affichage
+            if equipe.name and str(equipe.name).strip().lower() == nom_recherche:
+                vrai_nom_equipe = str(equipe.name).strip()
+                equipe_trouvee = True
                 break
 
-        if team_id is None:
-            return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
+        if not equipe_trouvee:
+            return f"Erreur : L'équipe '{nom_equipe}' est introuvable. Veuillez saisir son nom complet (ex: Fnatic, Team Vitality)."
 
-        # 2. On filtre par saison
+        # 2. Filtrage par saison
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
-            matchs_filtres = [m for m in self.liste_matchs_foot if getattr(m, "season", getattr(m, "date", getattr(m, "patch", None))) == saison]
+            matchs_filtres = [
+                m for m in self.liste_matchs_foot 
+                if getattr(m, "season", getattr(m, "date", getattr(m, "patch", None))) == saison
+            ]
 
-        # 3. On calcule les stats en utilisant team_id ("vit")
+        # 3. Calcul des statistiques
         nb_matchs = victoires = defaites = 0
         total_kills = total_deaths = total_assists = 0
 
         for match in matchs_filtres:
             try:
+                # Les matchs contiennent désormais "fnatic", pas "fnc"
                 t_blue = str(getattr(match, "team_blue", "")).strip().lower()
                 t_red = str(getattr(match, "team_red", "")).strip().lower()
-                winner = str(getattr(match, "winner", "")).strip().lower()
 
-                is_blue = (t_blue == team_id)
-                is_red = (t_red == team_id)
+                is_blue = (t_blue == nom_recherche)
+                is_red = (t_red == nom_recherche)
 
                 if not is_blue and not is_red:
                     continue 
@@ -453,12 +454,22 @@ class ChampionshipPointsCalculator:
                 nb_matchs += 1
                 
                 # Victoire ou Défaite ?
-                if winner == team_id or (is_blue and winner in ["blue", "team_blue"]) or (is_red and winner in ["red", "team_red"]):
+                winner = str(getattr(match, "winner", "")).strip().lower()
+                won = False
+                
+                if winner == nom_recherche:
+                    won = True
+                elif is_blue and winner in ["blue", "team_blue"]:
+                    won = True
+                elif is_red and winner in ["red", "team_red"]:
+                    won = True
+                
+                if won:
                     victoires += 1
                 else:
                     defaites += 1
 
-                # Récupération des Kills / Deaths / Assists
+                # Extraction KDA
                 side = "blue" if is_blue else "red"
                 total_kills += int(float(str(getattr(match, f"kills_team_{side}", 0)).strip()))
                 total_deaths += int(float(str(getattr(match, f"deaths_team_{side}", 0)).strip()))
@@ -467,12 +478,15 @@ class ChampionshipPointsCalculator:
             except Exception:
                 continue
 
-        # 4. Affichage
-        win_rate = round((victoires / nb_matchs) * 100, 1) if nb_matchs > 0 else 0
+        if nb_matchs == 0:
+            return f"Erreur : Aucune donnée de match trouvée pour l'équipe '{vrai_nom_equipe}'."
+
+        # 4. Affichage final
+        win_rate = round((victoires / nb_matchs) * 100, 1)
         kda = round((total_kills + total_assists) / total_deaths, 2) if total_deaths > 0 else "Parfait (0 mort)"
 
         return {
-            "equipe": vrai_nom_equipe, # Affiche "Team Vitality"
+            "equipe": vrai_nom_equipe,
             "periode": saison if saison else "Toutes périodes",
             "matchs_joues": nb_matchs,
             "victoires": victoires,
