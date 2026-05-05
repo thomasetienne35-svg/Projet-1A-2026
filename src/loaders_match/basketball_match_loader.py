@@ -1,5 +1,4 @@
 from match import Match
-from sport import Sport
 import pandas as pd
 
 pd.options.display.max_columns = 100
@@ -23,10 +22,30 @@ class BasketballMatchLoader:
             
             match.team_id_home = id_home
             match.team_id_away = id_away
-            match.pts_home = df_basketball.loc[i, "pts_home"]
-            match.pts_away = df_basketball.loc[i, "pts_away"]
             match.season = df_basketball.loc[i, "season"]
+
+            # =========================================================
+            # CORRECTION : On met les étiquettes universelles attendues !
+            # =========================================================
+            try:
+                # On force la conversion en nombre (float) pour éviter les bugs
+                score_h = float(df_basketball.loc[i, "pts_home"])
+                score_a = float(df_basketball.loc[i, "pts_away"])
+            except Exception:
+                # Si la case est vide dans le CSV, on met 0
+                score_h = 0.0
+                score_a = 0.0
+
+            # On utilise le nom standard compris par main.py
+            match.home_team_score = score_h
+            match.away_team_score = score_a
             
+            # (On garde quand même pts_home au cas où tu en aurais besoin ailleurs)
+            match.pts_home = score_h
+            match.pts_away = score_a
+            # =========================================================
+            
+            # --- Joueurs ---
             joueur_home_lignes = df_basketball_joueurs[df_basketball_joueurs["team_id"] == id_home]
             joueur_away_lignes = df_basketball_joueurs[df_basketball_joueurs["team_id"] == id_away]
             
