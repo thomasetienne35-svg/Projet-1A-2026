@@ -8,7 +8,9 @@ from loaders_match.match_loader import MatchLoader
 from loaders_player.player_loader import PlayerLoader
 from loaders_team.team_loader import TeamLoader
 from statistiques.nbre_de_points import ChampionshipPointsCalculator
-from statistiques.match_par_joueur import calculer_stats_joueur  # <-- NOUVEL IMPORT ICI
+from statistiques.match_par_joueur import calculer_stats_joueur  
+from statistiques.visualisation import afficher_comparateur_joueurs, afficher_comparateur_equipes
+from statistiques.details_match import MatchFormatter
 
 def main():
     sports_disponibles = ["football", "tennis", "volley", "basketball", "lol"]
@@ -65,20 +67,79 @@ def main():
             print("1. Consulter les détails d'un match précis")
             print("2. Consulter les statistiques d'une équipe")
             print("3. Consulter les statistiques d'un joueur")
-            print("4. Retourner au choix des sports")
+            print("4. Super Comparateur (Graphiques)")
+            print("5. Retourner au choix des sports")
             
-            choix_action = input("\nVotre choix (1, 2, 3 ou 4) ? (0 pour quitter) : ")
+            choix_action = input("\nVotre choix (1 à 5) ? (0 pour quitter) : ")
 
             if choix_action == "0": return
-            if choix_action == "4": break
+            if choix_action == "5": break
 
-            # --- ACTION 1 : DÉTAILS ---
+            # --- ACTION 1 : DÉTAILS D'UN MATCH (RECHERCHE PAR ÉQUIPES) ---
             if choix_action == "1":
-                choix_match = input(f"Entrez le numéro du match (1 à {len(matchs)}) : ")
                 try:
-                    m = matchs[int(choix_match) - 1]
-                    print(f"\n=== Match {m.id} ===\nSport: {m.sport}\nHome: {m.list_home_player}\nAway: {m.list_away_player}")
-                except: print("Match invalide.")
+                    # 1. Sélection de la Saison
+                    saisons_dispo = sorted(list(set(str(getattr(m, "season", "")) for m in matchs if getattr(m, "season", None))))
+                    saison_choisie = None
+                    
+                    if saisons_dispo:
+                        print("\n--- ÉTAPE 1 : CHOIX DE LA SAISON ---")
+                        for idx, s in enumerate(saisons_dispo, 1):
+                            print(f"{idx}. {s}")
+                        
+                        choix_s = input("\nChoisissez le numéro de la saison (ou Entrée pour toutes) : ")
+                        if choix_s.strip() and choix_s != "0":
+                            saison_choisie = saisons_dispo[int(choix_s) - 1]
+
+                    # 2. Saisie des Équipes
+                    print("\n--- ÉTAPE 2 : CHOIX DU DUEL ---")
+                    nom_e1 = input("Entrez le nom de la première équipe : ").strip().lower()
+                    nom_e2 = input("Entrez le nom de la deuxième équipe : ").strip().lower()
+
+                    # 3. Trouver les IDs de ces équipes (pour le Football/Basket)
+                    id_e1, id_e2 = None, None
+                    for eq in toutes_les_equipes[nom_sport_choisi]:
+                        nom_eq = str(getattr(eq, "name", "")).lower()
+                        if nom_e1 == nom_eq: id_e1 = str(eq.id)
+                        if nom_e2 == nom_eq: id_e2 = str(eq.id)
+
+                    # 4. Recherche du match correspondant
+                    matchs_trouves = []
+                    for m in matchs:
+                        # Vérification de la saison
+                        if saison_choisie and str(getattr(m, "season", "")) != saison_choisie:
+                            continue
+                        
+                        # Récupération des IDs ou Noms du match pour comparer
+                        m_h_id = str(getattr(m, "home_team_api_id", getattr(m, "team_id_home", "")))
+                        m_a_id = str(getattr(m, "away_team_api_id", getattr(m, "team_id_away", "")))
+                        m_h_name = str(getattr(m, "home_team_name", "")).lower()
+                        m_a_name = str(getattr(m, "away_team_name", "")).lower()
+
+                        # On vérifie si c'est le duel recherché (dans un sens ou dans l'autre)
+                        match_ok = False
+                        # Test par ID (Foot/Basket)
+                        if id_e1 and id_e2:
+                            if (m_h_id == id_e1 and m_a_id == id_e2) or (m_h_id == id_e2 and m_a_id == id_e1):
+                                match_ok = True
+                        # Test par Nom (LoL/Tennis)
+                        elif (nom_e1 in m_h_name and nom_e2 in m_a_name) or (nom_e2 in m_h_name and nom_e1 in m_a_name):
+                            match_ok = True
+
+                        if match_ok:
+                            matchs_trouves.append(m)
+
+                    # 5. Affichage du résultat
+                    if not matchs_trouves:
+                        print(f"\n❌ Aucun match trouvé entre ces deux équipes pour la saison {saison_choisie if saison_choisie else 'choisie'}.")
+                    else:
+                        print(f"\n✅ {len(matchs_trouves)} match(s) trouvé(s) :")
+                        for m_trouve in matchs_trouves:
+                            formateur = MatchFormatter(m_trouve, toutes_les_equipes[nom_sport_choisi])
+                            print(formateur.generer_texte_console())
+
+                except Exception as e:
+                    print(f"\nErreur lors de la recherche : {e}")
 
             # --- ACTION 2 : STATISTIQUES ÉQUIPE ---
             elif choix_action == "2":
@@ -147,6 +208,96 @@ def main():
                         print(f"Nuls : {resultat_joueur['nuls']}")
                     print(f"Défaites : {resultat_joueur['defaites']}")
                     print(f"Win Rate : {resultat_joueur['win_rate']}")
+
+            # --- ACTION 4 : SUPER COMPARATEUR ---
+            elif choix_action == "4":
+                print("\n=== SUPER COMPARATEUR ===")
+                print("1. Comparer deux joueurs")
+                print("2. Comparer deux équipes")
+                choix_comp = input("Votre choix (1 ou 2) : ")
+
+                if choix_comp == "1":
+                    nom_j1 = input("Nom exact du premier joueur : ")
+                    nom_j2 = input("Nom exact du deuxième joueur : ")
+                    
+                    saisons_brutes = set()
+                    for m in matchs:
+                        s = getattr(m, "season", None)
+                        if s is not None and str(s).strip() != "":
+                            saisons_brutes.add(str(s))
+                    saisons_dispo = sorted(list(saisons_brutes))
+                    
+                    saison_choisie = None
+                    matchs_filtres = matchs
+                    
+                    if saisons_dispo:
+                        print("\nSaisons disponibles :")
+                        for idx, s in enumerate(saisons_dispo, 1):
+                            print(f"{idx}. {s}")
+                        print("0. Toutes les saisons")
+                        
+                        choix_s = input("\nChoisissez le numéro de la saison : ")
+                        if choix_s != "0" and choix_s.strip():
+                            try:
+                                saison_choisie = saisons_dispo[int(choix_s) - 1]
+                                matchs_filtres = [m for m in matchs if str(getattr(m, "season", "")) == saison_choisie]
+                            except Exception:
+                                print("Choix invalide, calcul sur toutes les saisons.")
+                    
+                    res_j1 = calculer_stats_joueur(nom_j1, nom_sport_choisi, matchs_filtres)
+                    res_j2 = calculer_stats_joueur(nom_j2, nom_sport_choisi, matchs_filtres)
+                    
+                    if isinstance(res_j1, str): print(f"\n❌ Erreur Joueur 1 : {res_j1}")
+                    elif isinstance(res_j2, str): print(f"\n❌ Erreur Joueur 2 : {res_j2}")
+                    else:
+                        print("\nGénération du graphique... Veuillez patienter.")
+                        if saison_choisie:
+                            res_j1["sport"] += f" - {saison_choisie}"
+                        afficher_comparateur_joueurs(res_j1, res_j2)
+
+                elif choix_comp == "2":
+                    nom_e1 = input("Nom exact de la première équipe : ")
+                    nom_e2 = input("Nom exact de la deuxième équipe : ")
+
+                    genre_choisi = "Homme" if nom_sport_choisi == "volley" else None
+                    calculateur = ChampionshipPointsCalculator(
+                        sport_name=nom_sport_choisi, matches_df=None,
+                        liste_equipes_foot=toutes_les_equipes[nom_sport_choisi], liste_matchs_foot=matchs
+                    )
+                    
+                    saisons_dispo = sorted(list(calculateur.get_available_seasons()))
+                    saison_choisie = None
+                    
+                    if saisons_dispo:
+                        print("\nSaisons disponibles :")
+                        for idx, s in enumerate(saisons_dispo, 1):
+                            print(f"{idx}. {s}")
+                        print("0. Toutes les saisons")
+                        
+                        choix_s = input("\nChoisissez le numéro de la saison : ")
+                        if choix_s != "0" and choix_s.strip():
+                            try:
+                                saison_choisie = saisons_dispo[int(choix_s) - 1]
+                            except Exception:
+                                print("Choix invalide, calcul sur toutes les saisons.")
+                    
+                    try:
+                        res_e1 = calculateur.get_team_points(nom_e1, saison_choisie, genre=genre_choisi)
+                        res_e2 = calculateur.get_team_points(nom_e2, saison_choisie, genre=genre_choisi)
+                        
+                        if isinstance(res_e1, str): print(f"\n❌ Erreur Équipe 1 : {res_e1}")
+                        elif isinstance(res_e2, str): print(f"\n❌ Erreur Équipe 2 : {res_e2}")
+                        else:
+                            print("\nGénération du graphique... Veuillez patienter.")
+                            if saison_choisie:
+                                res_e1["equipe"] += f" ({saison_choisie})"
+                                res_e2["equipe"] += f" ({saison_choisie})"
+                            afficher_comparateur_equipes(res_e1, res_e2)
+                    except Exception as e:
+                        print(f"\nErreur lors du calcul : {e}")
+            else:
+                if choix_action not in ["0", "1", "2", "3", "4", "5"]:
+                    print("\n/!\\ Choix invalide.")
 
             input("\nAppuyez sur Entrée pour continuer...")
 
