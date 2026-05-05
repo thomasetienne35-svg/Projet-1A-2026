@@ -1,7 +1,6 @@
 from player import Player
 import pandas as pd
 
-
 class TennisPlayerLoader:
     def __init__(self):
         pass
@@ -22,15 +21,15 @@ class TennisPlayerLoader:
             nom = str(df_tennis.loc[i, "name_last"])
             nom_complet = f"{prenom} {nom}"
 
-            joueur = Player(
-                prenom_nom = nom_complet,
-                nationalite = df_tennis.loc[i, "ioc"], 
-                date_naissance = df_tennis.loc[i, "dob"], 
-                genre = df_tennis.loc[i, "genre"], 
-                taille = df_tennis.loc[i, "height"],
-                poids = None,
-                team = None
-            )
+            joueur = Player(None, None, None, None, None, None, None)
+            
+            joueur.prenom_nom = nom_complet
+            joueur.nationalite = df_tennis.loc[i, "ioc"] 
+            joueur.date_naissance = df_tennis.loc[i, "dob"] 
+            joueur.genre = df_tennis.loc[i, "genre"] 
+            joueur.height = df_tennis.loc[i, "height"]
+            joueur.poids = None
+            joueur.team = None
             
             res.append(joueur)
 

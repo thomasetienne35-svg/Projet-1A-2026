@@ -20,6 +20,6 @@ class FootballPlayerLoader:
             joueur.prenom_nom = df_football.loc[i, "player_name"]
             joueur.data_naissance = df_football.loc[i, "birthday"]
             joueur.poids = df_football.loc[i, "weight (kg)"]
-            joueur.taille = df_football.loc[i, "height (cm)"]
+            joueur.height = df_football.loc[i, "height (cm)"]
             res.append(joueur)
         return res

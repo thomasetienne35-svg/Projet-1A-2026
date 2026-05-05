@@ -11,6 +11,8 @@ from statistiques.nbre_de_points import ChampionshipPointsCalculator
 from statistiques.match_par_joueur import calculer_stats_joueur  
 from statistiques.visualisation import afficher_comparateur_joueurs, afficher_comparateur_equipes
 from statistiques.details_match import MatchFormatter
+from statistiques.statistiques_physiologie import AnalysePhysiologique
+
 
 def main():
     sports_disponibles = ["football", "tennis", "volley", "basketball", "lol"]
@@ -67,13 +69,14 @@ def main():
             print("1. Consulter les détails d'un match précis")
             print("2. Consulter les statistiques d'une équipe")
             print("3. Consulter les statistiques d'un joueur")
-            print("4. Super Comparateur (Graphiques)")
-            print("5. Retourner au choix des sports")
+            print("4. Comparateur graphique")
+            print("5. Statistique physiologique")
+            print("6. Retourner au choix des sports")
             
             choix_action = input("\nVotre choix (1 à 5) ? (0 pour quitter) : ")
 
             if choix_action == "0": return
-            if choix_action == "5": break
+            if choix_action == "6": break
 
             # --- ACTION 1 : DÉTAILS D'UN MATCH (RECHERCHE PAR ÉQUIPES) ---
             if choix_action == "1":
@@ -295,6 +298,26 @@ def main():
                             afficher_comparateur_equipes(res_e1, res_e2)
                     except Exception as e:
                         print(f"\nErreur lors du calcul : {e}")
+            elif choix_action == "5":
+                print(f"\nAnalyse de la morphologie des joueurs de {nom_sport_choisi.capitalize()}...")
+                
+                joueurs_du_sport = tous_les_joueurs.get(nom_sport_choisi, [])
+                
+                if not joueurs_du_sport:
+                    print("❌ Aucun joueur chargé pour ce sport.")
+                else:
+                    analyseur = AnalysePhysiologique(joueurs_du_sport, nom_sport_choisi)
+                    
+                    print("\nOptions d'analyse :")
+                    print("1. Distribution des tailles (Histogramme)")
+                    print("2. Taille vs Win Rate (Heatmap)")
+                    choix_graph = input("Votre choix (1 ou 2) : ")
+                    
+                    if choix_graph == "2":
+                        # Pour le Win Rate, la classe a besoin de la liste des matchs !
+                        analyseur.generer_heatmap_taille_victoire(matchs)
+                    else:
+                        analyseur.generer_graphique_taille()   
             else:
                 if choix_action not in ["0", "1", "2", "3", "4", "5"]:
                     print("\n/!\\ Choix invalide.")

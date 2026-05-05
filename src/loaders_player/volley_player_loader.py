@@ -20,6 +20,7 @@ class VolleyPlayerLoader:
             joueur.prenom_nom = df_volley_men.loc[i, "name"]
             joueur.nationalite = df_volley_men.loc[i, "country_code"]
             joueur.date_naissance = df_volley_men.loc[i, "birth_date"]
+            joueur.height = df_volley_men.loc[i, "height"]
             res.append(joueur)
 
         df_volley_women = pd.read_csv(
@@ -30,5 +31,7 @@ class VolleyPlayerLoader:
             joueur.prenom_nom = df_volley_women.loc[i, "name"]
             joueur.nationalite = df_volley_women.loc[i, "country_code"]
             joueur.date_naissance = df_volley_women.loc[i, "birth_date"]
+            joueur.height = df_volley_women.loc[i, "height"]
+
             res.append(joueur)
         return res
