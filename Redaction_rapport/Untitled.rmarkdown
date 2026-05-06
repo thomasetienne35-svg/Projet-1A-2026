@@ -1,0 +1,970 @@
+---
+format: 
+  pdf:
+    documentclass: report
+    mainfont: "TeX Gyre Termes"
+    header-includes: |
+      \usepackage{enumitem}
+      \setlist[itemize]{label=$\bullet$}
+      \usepackage[dvipsnames]{xcolor}
+lang: fr
+include-in-header:
+      text: |
+        \usepackage{titlesec}
+        \titleformat{\chapter}{\normalfont\huge\bfseries}{\thechapter}{20pt}{\huge}
+        \titlespacing{\chapter}{0pt}{*-5}{*2}
+fontsize: 12pt
+papersize: a4
+geometry: top=1.5cm, bottom=1.5cm, left=2.5cm, right=2.5cm
+bibliography: references.bib
+link-citations: true 
+nocite: "@*"
+number-sections: true
+---
+
+\begin{titlepage}
+\centering
+
+\includegraphics{ensai_logo_1.png}\\
+\vspace{1.0cm}
+
+{\LARGE\textsc{Rapport de projet statistique de Première Année}}\\
+\vspace{0.5cm}
+{\large Élèves 1A}
+
+\vspace{2.5cm}
+
+\rule{\textwidth}{0.5mm}\\
+\vspace{0.8cm}
+{\huge\bfseries Effet de l'engagement familial sur l'apprentissage de l'élève}\\
+\vspace{0.8cm}
+\rule{\textwidth}{0.5mm}\\
+
+\vspace{2.5cm}
+
+\begin{flushleft}
+\emph{Étudiants :}\\
+Groupe à préciser\\
+Ilan GUEDJ\\
+Jules FRULLI\\
+Thomas ETIENNE\\
+Alexandre FRATTER-BARDY\\
+\end{flushleft}
+
+\begin{flushright}
+\emph{Responsable :}\\
+Johann FAOUZI\\
+\vspace{1.0cm}
+\emph{Encadrant :}\\
+Clément VALOT\\
+\end{flushright}
+
+\vfill 
+\begin{center}
+École nationale de la statistique et de l’analyse de l’information\\
+2025--2026
+\end{center}
+\end{titlepage}
+
+\setlength{\parindent}{20pt}
+
+\color{black}
+\tableofcontents
+\thispagestyle{empty}
+
+# Introduction {.unnumbered}
+\pagenumbering{arabic}
+
+Dans l’édition 2025 du portrait social de la France réalisé par l’INSEE[^inseeinegalites], l’institut souligne le déterminisme social présent en France quant à la réussite scolaire. En effet, en 2022, le score moyen des élèves de petite section de maternelle en langage est de 238 lorsqu'iels sont issus·es de milieu social défavorisé, contre 270 lorsqu’iels proviennent d’un milieu très favorisé. Dans ces analyses, le rapport souligne le fait que l’origine sociale influence fortement les résultats scolaires. Ces conclusions ne sont pas sans rappeler les travaux de Pierre Bourdieu, qui avançait déjà cela dans *La Distinction*, publiée en 1979. Ainsi, l’environnement de vie d’un·e élève joue grandement dans sa réussite à l’école. Toutefois, nous pouvons chercher à nous intéresser aux actions réalisées par les parents, dans le cadre de la scolarité de l’élève, qui peuvent, ou non, influencer sa réussite scolaire. Pour étudier cela, nous allons nous appuyer sur les résultats de l’enquête PISA réalisée en 2022.
+
+L’enquête PISA (Programme International pour le Suivi des Acquis des élèves) est une étude mondiale menée par l’OCDE (Organisation de coopération et de développement économiques) de manière périodique tous les trois ans, réalisée dans 85 pays dont 37 issus de l’OCDE, ce qui permet d’étudier un total de presque 700 000 élèves. L’enquête se déroule en deux parties. Tout d’abord, des tests en lecture, compréhension de lecture, mathématiques et sciences, dans le but d’établir des niveaux pour chaque élève dans les différentes matières. Ensuite, les élèves, leurs parents et des écoles répondent à différents questionnaires dans le but de contextualiser plus précisément le contexte d’éducation des différents·es étudiants·es. C’est en combinant ces deux parties de l’enquête que nous pouvons établir un lien entre ce que nous pouvons appeler l’__engagement familial__ (c’est-à-dire les actions de la famille qui agissent plus ou moins directement sur la scolarité des élèves) et la réussite de celleux-ci. En effet, les questionnaires donnés aux élèves et aux parents comportent des questions qui leur demandent la régularité de certaines situations, comme le fait qu’un parent aide son enfant dans ses devoirs.
+
+L’engagement familial ne se retranscrit pas chez l’enfant uniquement dans ses résultats, d’où l’intérêt de s’intéresser à la notion d’__apprentissage__. La professeure universitaire Céline Clément dédie le premier chapitre de son ouvrage *Conditionnement, apprentissage et comportement humain* à la définition de l’apprentissage, ce qui annonce la difficulté d’étudier ce terme. Ainsi, il faut le comprendre comme un processus, qui distingue l’« appris » de l’« acquis »[^apprisacquis], dans lequel plusieurs actions sont réalisées dans le but d’agrandir son panel de savoirs et de compétences. Ces nouveaux savoirs sont, dans le cadre de l’apprentissage, à l’origine de nouveaux comportements, de changements de comportements eus précédemment par l’individu. Dans le cadre de notre étude, nous allons restreindre la définition à deux réalités plus concrètes dans la vie d’un·e élève : la performance (comme un moyen de mesurer la réussite scolaire, et, par conséquent, les « acquis ») et le sentiment d’efficacité personnelle[^sentieffiperso] (pour mesurer la perception de l’élève vis-à-vis de ses « appris » et sa capacité à fournir des efforts dans son travail scolaire dans le but de performer le mieux possible).
+
+Si l’apprentissage peut donc être vu comme un processus, ici découpé en deux étapes, il est donc intéressant de se pencher sur l’effet de l’engagement familial sur l’apprentissage des élèves en distinguant ces deux formes. **L’apprentissage des élèves est-il différemment influencé par l’engagement familial selon l’étape prise en compte dans le processus ?**
+
+Pour étudier cela, nous allons nous intéresser à ces deux formes d’apprentissage de manière distincte, et chercher à expliquer ces deux formes de l’apprentissage par l’engagement familial. Dans un premier temps, nous allons nous pencher sur le sentiment d’efficacité personnelle, en étudiant les liens entre l’engagement familial, le travail fourni par l’élève et sa perception de son travail fourni dans le cadre scolaire. Dans un deuxième temps, nous essaierons de voir s’il y a une forme de continuité de l’effet de l’engagement familial. La performance étant le point culminant de l’apprentissage scolaire, il est intéressant de voir si l’engagement familial est lié aux performances des élèves de la même manière.
+
+[^inseeinegalites]: « [Inégalités sociales dans l’enseignement scolaire](https://www.insee.fr/fr/statistiques/8612522?sommaire=8612596) », France, portrait social (Édition 2025), *INSEE*, 18 nov. 2025
+
+[^apprisacquis]: REBOUL Olivier (2010), *Qu’est-ce qu’apprendre ?*, « Chapitre II. L’apprentissage », pp. 40-75
+
+[^sentieffiperso]: @lecomtejacques2004
+
+```{r, include = FALSE}
+library(tidyverse)
+library(reshape2) # pour les tableaux de contingence
+library(ggplot2) # pour faire de beaux graphiques
+library(ggrepel) # pour que les textes se distinguent dans les graphiques
+library(dplyr)
+library(vcd) # pour le V de Cramer
+library(BioStatR) # pour le rapport de corrélation
+library(tidyr) # pour le drop_na()
+library(polycor) # pour la matrice de corrélation adaptée à tous types de combinaisons de variables
+library(corrplot) # pour faire une matrice de corrélation sur des variables quantitatives
+library(tidyverse)
+library(gt)
+library(rstatix)
+library(questionr)
+library(vcdExtra)
+library(scico)
+library(ggdensity)
+library(patchwork)
+library(FactoMineR)
+library(factoextra)
+library(ggrepel)
+library(scales)
+```
+
+```{r, include = FALSE}
+# Importation des tables
+var_sans_pa <- readRDS("var_sans_pa.rds")
+var_avec_pa <- readRDS("var_avec_pa.rds")
+
+encour_avec_pa <- readRDS("encour_avec_pa.rds")
+encour_sans_pa <- readRDS("encour_sans_pa.rds")
+
+inq_avec_pa <- readRDS("inq_avec_pa.rds")
+inq_sans_pa <- readRDS("inq_sans_pa.rds")
+
+bdd_aide <- readRDS("bdd_aide.rds")
+df_discipline_et_score <- readRDS("df_discipline_et_score.rds")
+```
+
+# Cadrage général de l’étude {.unnumbered}
+
+\begin{center}
+\begin{tabular}{|p{16cm}|}
+\hline
+\underline{\textbf{Notion de variable :}}\tabularnewline
+L'ensemble des variables mobilisées dans notre étude sont issues de trois questionnaires de l'enquête PISA disponibles sur ce \href{https://www.oecd.org/fr/data/datasets/pisa-2022-database.html#questionnaires}{lien} et d'autres variables calculées par l'OCDE. Nous utilisons les \textit{Student}, \textit{Well-Being} et \textit{Parent Questionnaires} pour nos variables d'engagement familial et d'apprentissage. Pour cela, nous nous basons sur les sous-questions disponibles dans ce questionnaire. Les questions sont nos variables quantitatives avec comme modalités les réponses proposées par le questionnaire.\tabularnewline
+\hline
+\underline{\textbf{Traitement des non-réponses (NA):}}\tabularnewline
+En très grande majorité, les non-réponses ne sont pas traitées sauf dans le cas de l'analyse factorielle. Néanmoins, plusieurs remarques à ce propos sont possibles :
+\begin{itemize}
+\item la très grande partie des variables contiennent un très grand nombre (voire plus de la majorité) de NA
+\item de manière générale, le \textit{Student Questionnaire} est le questionnaire avec le plus de réponses
+\item il est possible d'établir un échantillon d'élèves dont les parents ont répondu au \textit{Parent Questionnaire} en utilisant la variable « LANGTEST PAQ » de la base de données qui donne la langue dans laquelle ce même questionnaire a été fourni aux parents.
+\end{itemize}\tabularnewline
+\hline
+\underline{\textbf{Scores étudiés :}}\tabularnewline
+Pour faciliter les analyses, les scores étudiés sur l'ensemble des tests PISA sont des moyennes des notes. Cela s'explique par le fait que l'ensemble des élèves ont des résultats similaires sur l'ensemble des tests, avec une corrélation forte entre chaque moyennes des notes obtenues aux tests par matière. De plus, cela permet de limiter le nombre de variables de performance mobilisées dans l'étude.\tabularnewline
+\hline
+\underline{\textbf{Variables d'engagement familial étudiées :}}\tabularnewline
+Pour étudier la notion d'engagement familial, de la même manière que l'apprentissage, nous l'avons divisée en plusieurs catégories, ici trois :
+\begin{itemize}
+\item l'\textbf{aide concrète} : lorsque la famille aide l'élève dans son travail scolaire et cherche à contrôler le travail réalisé par cellui-ci
+\item l'\textbf{inquiétude} familiale : l'intérêt que porte la famille sur la scolarité présente et future de l'élève
+\item l'\textbf{encouragement} familial : discours de la famille qui vise à influencer les comportements de l'élève pour qu'iel s'en sorte mieux à l'école.
+\end{itemize}
+De manière générale, le terme de « famille » désigne les parents car c'est ce sur quoi se concentrent de nombreuses variables, de plus du fait de l'existence du \textit{Parent Questionnaire}.\tabularnewline
+\hline
+\underline{\textbf{Résultats initiaux sur les variables étudiées :}}\tabularnewline
+Sur le plan des performances, la distribution des notes se rapproche d'une distribution gaussienne avec un moyenne autour de 400.\newline
+Les variables d'engagement familial ont des répartitions assez similaires en termes de proportions, avec, dans le cas des variables catégorielles, des réponses plus courantes que d'autres. Entre elles toutefois, les variables d'engagement familial n'ont pas une corrélation prononcée (V de Cramer et rapport de corrélation à moins de 0.1).\tabularnewline
+\hline
+\end{tabular}
+\end{center}
+
+# Effets de l’engagement familial sur le travail personnel de l’élève (attitude de l’élève vis-à-vis du travail scolaire)
+
+L’apprentissage d’un·e élève ne se limite pas à sa seule présence en classe, il se concrétise également à travers son investissement personnel et son attitude face aux exigences scolaires à la maison. Dans cette première partie, nous voulons comprendre comment l’engagement familial influence cette dynamique de travail autonome.\
+\indent Pour explorer ces nuances, nous analyserons dans un premier temps l'effet moteur d'un environnement familial axé sur le soutien sur la régularité et l'investissement de l'élève. Toutefois, le soutien ne se confond pas toujours avec la contrainte. C'est pourquoi nous mettrons en évidence, dans un deuxième temps, le fait que la pression familiale pour suivre une trajectoire spécifique ne se traduit pas nécessairement par une intensité de travail équivalente de la part de l'étudiant. Enfin, nous montrerons que le besoin de contrôle parental, comme le suivi des résultats, s'intensifie bien souvent en réponse directe au manque de confiance et au sentiment d'efficacité personnelle plus faible de l'élève.
+
+## Un soutien familial élevé favorise l'investissement de l'élève vis-à-vis de son travail scolaire personnel
+
+Un premier profil d'élèves qui surgit correspond à celleux qui présentent un soutien familial important. Pour cela, l'OCDE a calculé un indice[^indices_PISA] qui se base sur l'ensemble des réponses à la question `ST300`, qui demande aux élèves la régularité à laquelle une personne de leur famille fait certaines choses en termes de soutien familial. Un indice positif indique que les élèves considèrent que leur famille les soutient plus que les autres. Nous pouvons définir le soutien comme une forme d'engagement positif dans lequel la famille à un comportement qui permet d'aider l'élève dans l'ensemble de ses besoins. Ce soutien apparaît comme un facteur favorisant le travail personnel de l'élève. En effet, les élèves affirmant bien aimer le travail demandant beaucoup d'efforts sont ceux avec l'indice familial le plus élevé. Parmi ces élèves, l'indice familial s'étend entre -0.5 et 1.75 (ce qui correspond aux premier et troisième quartiles), avec une médiane à 0.25 (la plus élevée). L'étalement des données est le plus élevé pour ces élèves, mais cela correspond aussi à l'ensemble des élèves avec le moins d'indice de soutien familial extrême par rapport à la distribution générale. Le même phénomène s'observe chez les élèves se pensant très indépendants·es dans leur travail scolaire durant la période du COVID-19, avec une distribution par modalité similaire. Ainsi, un·e élève se sentant plus à l'aise dans son travail scolaire tend à avoir un soutien familial plus important que les autres.
+
+[^indices_PISA]: L'ensemble des indices présents dans la base de données sont expliqués sur [ce site](https://www.oecd.org/en/publications/pisa-2022-results-volume-ii_a97db61c-en/full-report/component-15.html)
+
+Une forme de soutien familial très caractéristique est celle de la régularité des encouragements à avoir de bonnes notes, question comptabilisée dans le calcul de l'indice de soutien familial. Des résultats similaires resurgissent vis-à-vis de l'indice de travail scolaire personnel calculé par l'OCDE, qui compte le nombre de fois où l'élève travaille pour l'école par semaine, avant ou après les cours. Nous pouvons observer (cf. @fig-encour_studyhmw en annexe) que ce sont les élèves qui disent être régulièrement encouragés·es à avoir de bonnes notes qui sont les plus réguliers·ères dans leur travail scolaire hebdomadaire. De plus, plus de la moitié d'entre elleux travaillent une fois par jour, avec un quart d'entre elleux travaillant dix fois voire plus par semaine. Sachant que 43.1% des élèves répondant à cette question ont des encouragements quasi-quotidiens à avoir de bonnes notes, nous pouvons estimer que parmi le quart des élèves travaillant le plus régulièrement chez elleux pour l'école, quelle que soit la régularité des encouragements à avoir de bonnes notes reçues, les élèves ont 75% de chances en plus d'être régulièrement encouragés·es à ce sujet. Au premier abord, la corrélation paut appraître faible avec un rapport de corrélation à 0,3. Or, le test ANOVA est significatif, ce qui indique qu'il ne faut pas rejeter la corrélation ainsi observée.
+
+```{r, echo = FALSE, warning = FALSE}
+#| fig-cap: "Les élèves disant être plus régulièrement encouragés·es à avoir de bonnes notes travaillent plus souvent pour l'école chez elleux"
+#| label: fig-encour_studyhmw
+
+ggplot(encour_sans_pa, aes(x = STUDYHMW, y = ST300Q07JA, fill = ST300Q07JA)) +
+  geom_boxplot(width = 0.5, outliers = T, alpha = 0.75) +
+  scale_fill_manual(values = c("Tous les jours ou presque" = "#4D9BF7", "Une ou deux fois par semaine" = "#F2DBAB", "Une ou deux fois par mois" = "#C74B5C", "Une ou deux fois par an" = "darksalmon", "Jamais ou presque" = "darkolivegreen3")) +
+  theme_bw() +
+  labs(x = "Nombre de fois où l'élève \n travaille chez ellui par semaine",
+       y = "Régularité des encouragements \n familiaux à avoir de bonnes notes",
+       caption = "Source : Données PISA 2022 \n Note de lecture : Parmi les élèves qui disent être encouragés·es à avoir de bonnes notes \n par leur famille une ou deux fois par semaine, plus de la moitié \n travaille plus de cinq fois par semaine pour l'école à la maison.") +
+  theme(plot.title = element_text(hjust = 0.5, size = 11, face = "bold"), legend.position = "none",
+        axis.title.x = element_text(size = 9.5, face = "bold"),
+        axis.title.y = element_text(size = 9.5, face = "bold"))
+```
+
+Nous pourrions déjà penser que les non-réponses sont liées à des facteurs de l'environnement de l'élève, or, ce n'est pas le cas. Par exemple, l'ensemble des pays sont représentés de manière assez égale chez les élèves ayant répondu à cette question. De plus, parmi les répondants·es, nous retrouvons des distributions similaires au niveau d'autres variables d'environnement dans le questionnaire (comme le niveau de la relation avec la mère ou tutrice), ce qui laisse penser une certaine indépendance entre la réponse à cette question et des facteurs dits environnementaux.
+
+```{r, echo = FALSE, warning = FALSE}
+#| label: fig-densitejointe1
+#| fig-cap: "Un travail hebdomadaire élevé pour l'école peut être le reflet d'un soutien familial tout aussi faible qu'élevé"
+#| fig-subcap: 
+#|  - "Parmi les élèves les moins soutenus·es par leur famille"
+#|  - "Parmi les élèves les plus soutenus·es par leur famille"
+#| layout-ncol: 2
+
+ggplot(encour_sans_pa,aes(x = FAMSUP, y = STUDYHMW)) +
+  geom_hdr(aes(fill = after_stat(probs)), alpha = 1,
+           probs = c(0.99, 0.95, 0.75, 0.5, 0.25, 0.1)) +
+  scale_x_continuous(limits = c(-3.5,-0.85)) +
+  labs(caption = "Source : Données PISA 2022")
+
+ggplot(encour_sans_pa,aes(x = FAMSUP, y = STUDYHMW)) +
+  geom_hdr(aes(fill = after_stat(probs)), alpha = 1,
+           probs = c(0.99, 0.95, 0.75, 0.5, 0.25, 0.1),
+           show.legend = F) +
+  scale_x_continuous(limits = c(1.25,2.5)) +
+  labs(caption = "Source : Données PISA 2022")
+```
+
+L'indice de soutien familial n'est néanmoins pas dans sa globalité un facteur qui joue sur la régularité du travail scolaire personnel. En effet, bien que la moitié des élèves avec un soutien familial élevé travaille plus de quatre jours par semaine pour l'école chez elleux, nous pouvons observer (cf. @fig-densitejointe1) que chez les élèves avec un soutien familial très faible (un indice négatif), les résultats ne semblent pas indiquer de réelle tendance. Sur les 85 000 (environ) élèves pris·es en compte qui ont indice de soutien familial inférieur à -0,85 (qui sont à peu près autant que les élèves avec un indice de soutien familial supérieur à 1.25), l'indice de travail pour l'école reste à peu près le même, notamment pour les élèves avec indice de soutien familial à -1. Nous pouvons noter une petite polarisation parmi les élèves avec un indice de soutien familial entre -2,5 et -3, où les élèves travaillent soit plus de dix fois par semaine, soit jamais pour l'école à la maison. Cette légère polarisation n'est toutefois pas statistiquement significative, ce qui montre qu'il faut *a minima* la nuancer (la p-valeur associée s'élève à 0,36). Néanmoins, cela montre que selon la population considérée, les effets de l'engagement familial sur l'apprentissage des élèves peuvent être distincts.
+
+## Effet du contrôle parental sur l'intensité du travail personnel de l’élève 
+
+Nous allons maintenant nous intéresser à l’effet du contrôle parental sur l'intensité du travail personnel de l'élève. Pour cela, nous disposons de deux variables : une variable qui caractérise le contrôle parental perçu par l’élève sur tout ce qu’il pourrait faire, et une autre qui caractérise la fréquence avec laquelle l’élève déclare travailler. Pour étudier ces deux variables, nous utilisons un graphique à bulles (cf. @fig-intensite). Ce graphique donne la fréquence des combinaisons des deux variables observées. Il semble ainsi que la plupart des élèves ont une intensité de 2 pour ce qui est du travail personnel, ce qui signifie qu’ils déclarent avoir travaillé la veille du questionnaire PISA, l’intensité 1 correspondant au travail le jour même du questionnaire. Nous remarquons ici que, pour chaque intensité de travail personnel de l’élève, quelle que soit l’intensité du contrôle parental, le nombre d’individus est relativement constant. Cela suggère que le contrôle parental n'influence pas radicalement la structure de la fréquence de travail. Nous pouvons ajouter à ce graphique à bulles l'indice de travail scolaire. 
+
+```{r, echo = FALSE, warning = FALSE}
+#| label: fig-intensite
+#| fig-cap: "Le niveau d'intensité du travail personnel de l'élève n'est pas corrélé à l'intensité du contrôle parental"
+#| fig-width: 12
+#| fig-height: 6
+
+bdd_apprentissage <- var_avec_pa %>% 
+select(ST331Q01JA,ST331Q02JA,ST331Q03JA,WB176Q01HA,ST268Q04JA,ST268Q05JA,ST268Q06JA,ST340Q08JA,SCORE_MATH,SCORE_READ,
+         SCORE_SCIE,PERSEVAGR,STUDYHMW,GRADE)
+
+bdd_aide_2 <- bdd_aide %>% 
+  rename(acces_aide_aux_devoirs = ST352Q08JA,
+         aide_aux_devoirs = ST353Q01JA,
+         enseignements_supplementaires = ST353Q08JA,
+         aide_devoirs_maths = PA003Q18WA,
+         intensite_aide_parent = WB163Q01HA,
+         intensite_controle_parent = WB163Q06HA)
+
+bdd_totale <- cbind(bdd_aide_2,bdd_apprentissage)
+
+
+
+
+
+bdd_controle <- bdd_aide_2 %>% 
+  select(intensite_controle_parent)
+
+bdd_2 <- bdd_apprentissage %>% 
+  select(WB176Q01HA,ST340Q08JA,SCORE_MATH,STUDYHMW)
+
+bdd_controle <- cbind(bdd_controle,bdd_2)
+
+bdd_controle <- bdd_controle %>%
+  mutate(WB176Q01HA = case_when(
+    WB176Q01HA == "Aujourd'hui" ~ 1,
+    WB176Q01HA == "Hier" ~ 2,
+    WB176Q01HA == "Il y a plus de 2 jours" ~ 3,
+    WB176Q01HA == "Il y a plus de 7 jours" ~ 4,
+    WB176Q01HA == "Cela n'arrive jamais" ~ 5
+  ))
+
+bdd_controle <- bdd_controle %>%
+  mutate(ST340Q08JA = case_when(
+    ST340Q08JA == "Pas du tout d'accord" ~ 1,
+    ST340Q08JA == "Pas d'accord" ~ 2,
+    ST340Q08JA == "D'accord" ~ 3,
+    ST340Q08JA == "Très d'accord" ~ 4
+  ))
+
+bdd_controle <- bdd_controle %>%
+  mutate(intensite_controle_parent = case_when(
+    intensite_controle_parent == "Presque jamais" ~ 1,
+    intensite_controle_parent == "Parfois" ~ 2,
+    intensite_controle_parent == "Presque toujours" ~ 3
+  ))
+
+bdd_controle <- bdd_controle %>% 
+  filter(!is.na(bdd_controle$intensite_controle_parent))
+
+df_bulles <- bdd_controle %>%
+  filter(!is.na(WB176Q01HA), !is.na(intensite_controle_parent)) %>%
+  group_by(WB176Q01HA, intensite_controle_parent) %>%
+  summarise(
+    Nombre = n(),                            # Taille de la bulle
+    Moyenne_Travail = mean(STUDYHMW, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+moyenne_globale <- mean(bdd_controle$STUDYHMW, na.rm = TRUE)
+
+ggplot(df_bulles, aes(x = WB176Q01HA, y = intensite_controle_parent)) +
+  geom_point(aes(size = Nombre, color = Moyenne_Travail), alpha = 0.8) +
+  scale_size_continuous(range = c(3, 18)) +
+  scale_color_gradient2(high = "dodgerblue4",low = "lightskyblue1", mid = "dodgerblue", 
+                        midpoint = moyenne_globale, name = "Nombre moyen de fois où les élèves travaillent pour l'école à la maison") +
+  theme_minimal() +
+  labs(y = "Les parents essaient de contrôler tout ce que je fais",
+    x = "Dernière fois que l'élève a fait ses devoirs à la maison",
+    size = "Nombre d'élèves",
+    caption = "Source : Données PISA 2022 \n Note de lecture : Les élèves ayant travaillé pour la dernière fois le jour où iels ont répondu au questionnaire et avec le contrôle parental le plus élevé travaillent en moyenne un peu moins de 8 fois par semaine."
+  ) +
+  scale_y_continuous(breaks = c(1, 2, 3), labels = c("Presque jamais", "Parfois", "Presque toujours")) +
+  scale_x_continuous(labels = c("Aujourd'hui", "Hier", "Il y a plus de deux jours", "Il y a plus d'une semaine", "Cela n'arrive jamais")) +
+  theme(panel.grid.minor = element_blank(), legend.position = "bottom")
+```
+
+Nous voyons sur ce graphique que les élèves déclarant avoir travaillé récemment sont ceux travaillant le plus de fois dans la semaine. Nous remarquons également que le contrôle parental n’influence pas le nombre de fois où l’élève fait ses devoirs dans la semaine. Ainsi,  un·e élève pressé·e par ses parents de faire ses devoirs ne semble pas travailler davantage qu'un·e enfant très peu contrôlé·e par ses parents. Pour voir cela de plus près, nous nous intéressons au diagramme en barres suivant qui présente en abscisses le contrôle parental et en ordonnées l'indice de travail personnel.
+
+```{r, echo = FALSE, warning = FALSE}
+#| label: fig-controletps
+#| fig-cap: "Le temps passé sur les devoirs reste stable quel que soit le niveau de surveillance"
+#| fig-height: 3
+
+bdd_tot <- readRDS("~nathan/ENSAI/1A/BDD_ProjetStat1A.rds")
+df_infographie <- bdd_tot %>%
+  filter(!is.na(WB163Q06HA), !is.na(STUDYHMW)) %>%
+  group_by(WB163Q06HA) %>%
+  summarise(
+    Moyenne_Etude = mean(STUDYHMW, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+# Calcul de la moyenne globale pour la ligne de référence
+moyenne_globale <- mean(bdd_controle$STUDYHMW, na.rm = TRUE)
+
+# 2. Création du graphique
+ggplot(df_infographie, aes(x = WB163Q06HA, y = Moyenne_Etude)) +
+  # Barres fines pour un look "infographie" moderne
+  geom_col(fill = "#404080", width = 0.5) +
+  # Ajout d'une ligne de référence (la moyenne de tous les élèves)
+  geom_hline(yintercept = moyenne_globale, linetype = "dashed", color = "red", size = 0.8) +
+  # Ajout d'une étiquette pour la ligne
+  annotate("text", x = 1, y = moyenne_globale + 0.3, label = "Moyenne globale", color = "red", hjust = 0) +
+  # Thème épuré
+  theme_minimal() +
+  labs(
+    subtitle = "Impact du contrôle parental sur le temps d'étude",
+    x = "Les parents essaient de contrôler tout ce que je fais",
+    y = "Indice de travail personnel",
+    caption = "Source : Données PISA 2022 \n Note de lecture : En moyenne, les élèves avec des parents qui essaient de contrôler \n tout ce qu'iels font travaillent plus de six fois dans la semaine pour l'école."
+  ) + scale_x_continuous(breaks = c(1, 2, 3), labels = c("Presque jamais", "Parfois", "Presque toujours")) +
+  # Ajustement des marges et du texte pour la lisibilité
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank()
+  )
+```
+
+D'après le graphique (@fig-controletps), le travail personnel de l'élève augmente légèrement avec le niveau du contrôle parental, ce qui n'était pas visible sur le premier graphique. Les élèves avec un contrôle parental faible ont ainsi tendance à travailler une fois de moins dans la semaine que les élèves avec un fort contrôle parental. Toutefois, si le contrôle parental semble faire légèrement augmenter la quantité de travail de l'élève, celui-ci ne semble pas avoir d'influence sur la régularité du travail de l'élève comme le montre le premier graphique puisqu'un élève travaillant régulièrement ou non ne semble pas le faire sous l'influence du contrôle parental.  
+
+## Le sentiment d'efficacité personnelle et la surveillance parentale
+
+Nous allons ensuite discuter de l’effet du contrôle parental sur la confiance de l’élève.
+La confiance de l’élève se traduit ici par le sentiment d’efficacité personnelle. Cela nous est donné par la réponse à trois questions du *Student Questionnaire* où l’élève donne son avis sur la facilité des matières (mathématiques, lecture et sciences) faciles.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Répartition des réponses aux questions *La matière est facile pour moi.*"
+#| label: fig-facilites
+#| fig-width: 7
+
+# 1. Préparation des données avec renommage manuel
+matiere_longue <- inq_avec_pa %>%
+  select(ST268Q04JA, ST268Q05JA, ST268Q06JA) %>%
+  # On transforme en texte simple pour éviter les erreurs de "labelled"
+  mutate(across(everything(), as.character)) %>% 
+  pivot_longer(everything(), names_to = "Matiere", values_to = "Sentiment") %>%
+  filter(!is.na(Sentiment)) %>%
+  # --- ÉTAPE CLÉ : On donne les noms et l'ordre ---
+  mutate(Sentiment = recode(Sentiment,
+    "1" = "Tout à fait d'accord",
+    "2" = "D'accord",
+    "3" = "Pas d'accord",
+    "4" = "Pas du tout d'accord"
+  )) %>%
+  # On définit l'ordre de la gradation dans la légende
+  mutate(Sentiment = fct_relevel(Sentiment, 
+    "Pas du tout d'accord", "Pas d'accord", "D'accord", "Tout à fait d'accord"
+  ))
+
+# 2. Le graphique (Version horizontale)
+ggplot(matiere_longue, aes(y = Matiere, fill = Sentiment)) + # On place Matiere sur l'axe Y
+  geom_bar(position = "fill") +
+  # Palette divergente (Rouge pour désaccord -> Bleu pour accord)
+  scale_fill_brewer(palette = "RdBu", direction = -1) + 
+  scale_y_discrete(labels = c( # Devient scale_y_discrete
+    "ST268Q04JA" = "Mathématiques",
+    "ST268Q05JA" = "Lecture",
+    "ST268Q06JA" = "Sciences"
+  )) +
+  scale_x_continuous(labels = scales::percent) + # Devient scale_x_continuous
+  theme_minimal() +
+  theme(
+    legend.position = "bottom"
+    # L'inclinaison du texte (axis.text.x) a été supprimée, car inutile à l'horizontale
+  ) +
+  labs(
+    title = "Sentiment d'aisance par discipline",
+    y = "Discipline",  # Inversion des labels X et Y
+    x = "Proportion",
+    fill = "Réponse :",
+    caption = "Source : Données PISA 2022 \n Note de lecture : Environ 25% des élèves sont d'accord avec l'affirmation que les mathématiques sont faciles."
+  )
+```
+
+\noindent Nous observons une hiérarchie entre les trois disciplines. Il y a en effet une variation significative de la perception de la facilité selon la matière enseignée. Une structure claire se dessine : la lecture est perçue comme la discipline la plus accessible, suivie des sciences, tandis que les mathématiques cristallisent le plus fort sentiment de difficulté. Ce sont dans les mathématiques que la différence est la plus importante. En effet, dans cette discipline, le cumul des avis négatifs *Pas d’accord* et *Pas du tout d’accord* est le plus important et dépasse les 50% des réponses (hors données manquantes). De plus, la proportion d’élèves se déclarant *Très d’accord* avec la facilité des mathématiques est la plus faible des trois matières. Cela confirme donc le statut de mathématiques comme une matière perçue plus complexe que les autres.
+
+À l’inverse, la discipline *Lecture* affiche un taux de confiance plus élevé. On remarque que les modalités *D’accord* et *Pas d’accord* y sont majoritaires. Les sciences représentent une position intermédiaire. Si le sentiment de facilité y est plus présent qu'en mathématiques, il reste inférieur à celui observé pour la langue. Quant au nombre de données manquantes, il est environ le même dans chaque discipline. Cela suggère donc que l’absence de réponse est probablement liée au profil de l’élève plutôt qu'à une difficulté spécifique rencontrée dans une matière en particulier.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-cap: "Tableau de contingence en proportion entre la question *Les mathématiques sont faciles* et *Discuter des résultats scolaire de mon enfant*"
+#| label: fig-mathsres
+
+surveillance_et_maths <- inq_avec_pa %>%
+  select("PA003Q01TA","ST268Q04JA" )
+
+table_surveillance_maths <- table(surveillance_et_maths$PA003Q01TA, surveillance_et_maths$ST268Q04JA)
+
+# 1. Conversion de la table en dataframe (format long)
+df_heatmap <- as.data.frame(table(surveillance_et_maths$PA003Q01TA, surveillance_et_maths$ST268Q04JA))
+
+#On normalise les données
+df_norm <- df_heatmap %>%
+  mutate(Prop = Freq / sum(Freq))
+
+ggplot(df_norm, aes(x = Var1, y = Var2 , fill = Prop)) +
+  geom_tile() +
+  # 1. Utilisation d'une échelle de couleur plus lisible
+  scale_fill_viridis_c(option = "plasma") + 
+  
+  # 2. Rotation des étiquettes de l'axe X
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )+
+  labs(
+    x = "Savoir comment mon enfant s'en sort à l'école",             
+    y = "« Les mathématiques \n sont faciles »",             
+    fill = "Effectifs",
+    caption = "Source : Données PISA 2022 \n Note de lecture : Plus de 15% de la population étudiée n'est Pas d'accord \n avec l'affirmation « Les mathématiques sont faciles » \n et discutent de leurs notes à l'école Tous les jours ou presque."
+  )
+```
+
+Les résultats de l’étude précédente montrent que les trois disciplines ont des résultats similaires. Nous proposons donc de n’étudier ici que les mathématiques. L’analyse des données normalisées met en lumière une forte polarisation. La majorité des individus se concentre dans des schémas d’implication parentale soutenue. Ainsi, le profil le plus fréquent dans la population étudiée correspond aux parents qui suivent leur enfant quotidiennement alors que cellui-ci ne trouve pas les mathématiques faciles. En observant la colonne *Tous les jours ou presque*, nous constatons que le sentiment de facilité suit une courbe décroissante.\
+\noindent Ainsi, plus l'élève trouve la matière difficile, plus la probabilité qu'iel se trouve dans la catégorie de suivi quotidien est forte. Aussi, le succès scolaire en mathématiques sans aucun suivi parental est l’exception. L’endroit représentant le plus d’individus en proportion indique donc que le suivi parental est une norme pour les élèves en difficulté.
+
+
+# Effets de l’engagement familial sur la performance de l’élève
+
+Si la première partie a mis en lumière l'impact de l'environnement familial sur l'attitude et l'investissement personnel des élèves, il convient à présent de s'intéresser à l'aboutissement  de ce processus d'apprentissage qu’est la performance scolaire. Dans cette deuxième partie, nous cherchons à évaluer comment les différentes formes d'engagement familial se traduisent concrètement dans les scores obtenus par les élèves aux tests de l'enquête PISA.\
+\indent Pour cela, nous verrons dans un premier temps comment les résultats scolaires se comportent à mesure que l’aide familiale augmente, soulignant le caractère souvent réactif de cette aide face aux difficultés rencontrées par l’élève. Cette observation nous amènera ensuite à interroger l’impact des interactions que les enfants ont avec leurs parents, qu’il s’agisse de discussions portant sur la scolarité future ou des encouragements à obtenir de bonnes notes. L’enjeu de cette partie sera donc d’illustrer que sur le plan strict des performances académiques, le dosage et la nature de l’engagement familial peut jouer un rôle déterminant dans la réussite scolaire de l’élève.
+
+## Les résultats aux tests diminuent à mesure que l’aide réactive de la famille augmente 
+
+
+Pour cette partie, nous nous pencherons exclusivement sur les notes obtenues par les élèves aux différents tests PISA, qui concentrent un ensemble de tests en mathématiques, en sciences et lecture et compréhension de lecture. Nous nous intéressons ici à la note moyenne obtenue en mathématiques, étant transposable aux autres matières.
+
+```{r, echo = FALSE}
+#| label: fig-moynotes
+#| fig-cap: "Comparaison des scores moyens en mathématiques et en lecture et compréhension de lecture du test PISA 2022"
+
+bdd_apprentissage <- var_avec_pa %>% 
+  select(ST331Q01JA,ST331Q02JA,ST331Q03JA,WB176Q01HA,ST268Q04JA,ST268Q05JA,ST268Q06JA,ST340Q08JA,SCORE_MATH,SCORE_READ,
+         SCORE_SCIE,PERSEVAGR,STUDYHMW,GRADE)
+
+
+
+bdd_aide_2 <- bdd_aide %>% 
+  rename(acces_aide_aux_devoirs = ST352Q08JA,
+         aide_aux_devoirs = ST353Q01JA,
+         enseignements_supplementaires = ST353Q08JA,
+         aide_devoirs_maths = PA003Q18WA,
+         intensite_aide_parent = WB163Q01HA,
+         intensite_controle_parent = WB163Q06HA)
+
+
+
+bdd_totale <- cbind(bdd_aide_2,bdd_apprentissage)
+synthese_scores <- bdd_totale %>%
+  select(SCORE_MATH, intensite_aide_parent, intensite_controle_parent) %>%
+  pivot_longer(cols = -SCORE_MATH, names_to = "Variable", values_to = "Modalite") %>%
+  group_by(Variable, Modalite) %>%
+  summarise(Moyenne_Math = mean(SCORE_MATH, na.rm = TRUE), .groups = 'drop')
+
+
+df_plot <- bdd_totale %>%
+  select(SCORE_MATH, SCORE_READ, 
+         aide_aux_devoirs, enseignements_supplementaires, acces_aide_aux_devoirs) %>%
+  pivot_longer(
+    cols = c(aide_aux_devoirs, enseignements_supplementaires, acces_aide_aux_devoirs), 
+    names_to = "Variable", 
+    values_to = "Modalite"
+  ) %>%
+  filter(!is.na(Modalite)) %>%
+  group_by(Variable, Modalite) %>%
+  summarise(
+    Maths = mean(SCORE_MATH, na.rm = TRUE),
+    .groups = 'drop'
+  ) %>%
+  pivot_longer(
+    cols = c(Maths), 
+    names_to = "Matiere", 
+    values_to = "Moyenne"
+  )
+
+ggplot(df_plot, aes(x = Modalite, y = Moyenne, fill = Matiere)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.05) +
+  geom_point(aes(color = Matiere), 
+             position = position_dodge(width = 0.7), 
+             size = 4) +
+  facet_wrap(~ Variable, scales = "free_y", ncol = 1) +
+  # --- Ajout de l'échelle ici ---
+  scale_y_continuous(limits = c(400, 500), oob = scales::rescale_none) + 
+  # ------------------------------
+  scale_color_manual(values = c("Maths" = "#404080")) +
+  scale_fill_manual(values = c("Maths" = "#404080")) +
+  theme_light() +
+  coord_flip() +
+  labs(x = "Modalités",
+       y = "Score moyen",
+       caption = "Source : Données PISA 2022")
+```
+
+Dans ce premier ensemble de graphiques (cf. @fig-moynotes), nous étudions les moyennes de notes des élèves aux tests PISA 2022, selon leurs réponses à certaines questions du *Student Questionnaire*. Nous pouvons observer que les individus qui ont recours le plus à l’aide de leurs parents lorsque les établissements scolaires étaient fermés à cause de la pandémie (deuxième graphique, modalité “Tous les jours ou presque”) ont, en moyenne, une note inférieure aux individus n’ayant jamais recours à cette même aide. Cette différence est même assez importante : les premiers ont une moyenne de 500 en maths lorsque les derniers ont une moyenne de 420. Plus généralement, plus l’aide des parents est importante, plus le score en mathématiques, en moyenne, est petit. Cela se vérifie également sur le troisième graphique : les élèves ayant bénéficié, durant la période du COVID, d’enseignements de la part de leur famille de contenus scolaires non abordés en classe ont moins bien réussi en moyenne les tests de mathématiques.
+
+Le deuxième graphique est intéressant également puisqu'il appuie ce résultat. La colonne `acces_aide_aux_devoirs` répond à la question : "Lorsque l’école était fermée durant le COVID, A quelle fréquence l’élève a-t-il eu du mal à trouver quelqu’un pour l’aider dans son travail ?". Nous pouvons lire sur le graphique que ce sont les élèves n’ayant jamais eu de problème d’accès durant le COVID à une aide pour leur travail scolaire qui réussissent le mieux ces tests et, *a contrario*, celleux étant dans l’incapacité de trouver une aide qui réussissent le moins bien. Il semble donc que les élèves réussissant le mieux sont celleux ayant un accès très régulier à une possible aide dans leur travail mais qui, dans le même temps, ne la demandent jamais.
+
+Nous venonsi de voir notamment que les résultats aux tests diminuent à mesure que l'aide réactive de la famille augmente. Qu'en est-il du contrôle familial ? Comparons pour cela les effets du soutien et de l'aide de la famille, avec une variable indiquant dans quelle mesure les enfants ont l'impression que leurs parents les aident autant que possible, avec les effets du contrôle parental avec la variable du même nom précédemment utilisée. Pour cela, nous réalisons une matrice croisant les deux modalités "soutien faible" et "soutien fort" avec les modalités "contrôle faible" et "contrôle fort" et donnant la moyenne en maths des élèves appartenant à chacun des croisements des modalités.
+
+```{r, echo = FALSE}
+#| label: fig-jolitab
+#| fig-cap: "La modération de l'intensité du contrôle parental et de l'aide favorise les résultats en mathématiques"
+
+bdd <- var_avec_pa
+
+bdd <- bdd %>% 
+  select(SCORE_MATH,WB163Q01HA,WB163Q06HA)
+
+bdd <- bdd %>% 
+  mutate(aide_familial = case_when(
+    WB163Q01HA == "Presque toujours" ~ "Soutien fort",
+    WB163Q01HA == "Parfois" ~ "Soutien faible",
+    WB163Q01HA == "Presque jamais" ~ "Soutien faible"
+  ))
+
+bdd <- bdd %>% 
+  mutate(controle_familial = case_when(
+    WB163Q06HA == "Presque toujours" ~ "Contrôle fort",
+    WB163Q06HA == "Parfois" ~ "Contrôle faible",
+    WB163Q06HA == "Presque jamais" ~ "Contrôle faible"
+  ))
+
+#Création de la matrice
+
+
+df_matrice <- bdd %>%
+  filter(!is.na(aide_familial), !is.na(controle_familial)) %>%
+  group_by(aide_familial, controle_familial) %>%
+  summarise(Moyenne_Math = mean(SCORE_MATH, na.rm = TRUE), .groups = 'drop')
+
+ggplot(df_matrice, aes(x =aide_familial , y = controle_familial, fill = Moyenne_Math)) +
+  geom_tile(color = "white", size = 1) +
+  geom_text(aes(label = round(Moyenne_Math, 0)), color = "white", size = 6, fontface = "bold") +
+  scale_fill_gradient(low = "#9999CC", high = "#404080") +
+  theme_minimal() +
+  labs(
+    subtitle = "Croisement entre l'aide perçue et le contrôle parental",
+    x = "Intensité de l'aide (M'aider autant que possible)",
+    y = "Intensité du contrôle (Tout contrôler)",
+    fill = "Score Math",
+    caption = "Source : Données PISA 2022"
+  ) +
+  theme(panel.grid = element_blank())
+```
+
+D'après le graphique (@fig-jolitab), nous pouvons notamment lire que les élèves sujets à un contrôle faible et à un soutien fort de la part de leur famille sont ceux obtenant le meilleur score au test de mathématiques du test PISA en moyenne, tandis que celleux sujets à un contrôle fort et à un soutien fort sont ceux obtenant le score le plus faible en moyenne. L'augmentation du contrôle a donc tendance à faire diminuer le score moyen obtenu en mathématiques, et à l'inverse, un soutien fort de la part de la famille semble faire augmenter les résultats aux tests de mathématiques. On note toutefois qu'un contrôle fort et un soutien fort semblent être plus néfastes en ce qui concerne les résultats scolaires qu'un soutien faible et un contrôle fort.
+
+## L'enjeu de l'avenir : l'inquiétude comme levier de performance
+
+Nous nous intéressons désormais à la corrélation potentielle entre la régularité des discussions sur la scolarité future et les scores moyens obtenus aux tests PISA. En effet, ces discussions montrent que le parent s’intéresse à la scolarité de son enfant de manière active, ce qui pourrait influencer les performances de l’élève, ou du moins, les refléter.
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+#| label: fig-scofuture
+#| fig-cap: "Boxplot des scores PISA moyens selon la fréquence de discussion sur la scolarité future"
+
+moyenne_3_matieres <- var_sans_pa %>%
+  select(SCORE_READ, SCORE_MATH, SCORE_SCIE)
+
+moyenne_3_matieres <-  moyenne_3_matieres %>% mutate(moyenne= rowMeans(select(., SCORE_READ, SCORE_MATH, SCORE_SCIE)))
+
+moyenne_3_matieres <- moyenne_3_matieres %>%
+  mutate(ST300Q09JA= var_sans_pa$ST300Q09JA)
+
+ggplot(moyenne_3_matieres, aes(x = ST300Q09JA, y = moyenne, fill = ST300Q09JA)) +
+  geom_boxplot(alpha = 0.7) +           
+  theme_minimal() +                     
+  labs(
+    x = "Fréquence de discussion sur la scolarité future",
+    y = "Score PISA moyen",
+    fill = "Légende",
+    caption = "Source : Données PISA 2022 \n Note de lecture : Le score moyen médian pour les élèves qui ne parlent \n jamais ou presque de leur scolarité future avec leurs parents est de 400."
+  ) +
+  scale_y_continuous(limits = c(300, 600)) +
+  theme(legend.position = "none")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+\noindent Ce graphique (@fig-scofuture) présente une comparaison des scores moyens aux tests PISA en fonction de la fréquence à laquelle les élèves discutent de leur scolarité future avec leurs parents. Cette visualisation permet d'explorer le lien entre le soutien familial perçu et la performance académique. Nous observons une relation en cloche inversée entre la fréquence des discussions et les scores PISA.
+Ainsi, une fréquence maximale de discussions (*Tous les jours ou presque*) ne semble pas corrélée à des scores PISA plus élevés. En effet, ce graphique montre l’effet bénéfique d’un soutien régulier, mais qui n’est pas quotidien. Les scores médians progressent lorsque l’on passe de *Jamais ou presque* à une fréquence mensuelle ou hebdomadaire, passant de 400 à plus de 450. Les modalités *Une ou deux fois par mois* et *Une ou deux fois par semaine* affichent les scores PISA moyens les plus élevés, avec des médianes qui se situent aux alentours de 500 points. Nous pouvons par ailleurs noter une baisse de la performance médiane pour les élèves discutant de leur avenir *Tous les jours ou presque* avec une médiane à environ 450 points. Cela montre donc un paradoxe entre la fréquence des discussions sur l’avenir de l’élève et ses scores moyens aux tests PISA.
+
+Cette singularité peut s’expliquer par une trop grande pression parentale. Une discussion quotidienne peut être perçue comme une source de stress contre-productive pour l’élève, affectant donc son niveau de performance académique[^note_bas_page]. Toutefois, si l'élève est déjà en difficulté scolaire, les parents peuvent être amenés à discuter davantage de son avenir avec ellui.\
+\noindent Cette situation où l’élève est en difficulté peut expliquer le fait que les élèves ayant ces discussions quasi-quotidiennement ont les scores les plus bas. En revanche, l’ensemble des élèves qui n’ont jamais ou presque ces discussions présente la médiane la plus basse (hors données manquantes). Cela souligne ainsi l’importance d’un minimum d’échange familial sur la scolarité future. Néanmoins, la dispersion des scores est similaire d’un groupe à l’autre, ce qui indique que le milieu familial influence le niveau moyen mais n’élimine pas la diversité des profils au sein de chaque groupe.\
+\noindent Nous retrouvons également pour chaque modalité des valeurs extrêmes où des élèves échouent lourdement ou réussissent brillamment indépendamment de la fréquence des discussions familiales. Il existe donc une corrélation positive entre l'implication parentale et les résultats PISA, mais celle-ci ne peut pas être linéaire. L'équilibre optimal semble se situer autour d'une discussion hebdomadaire. Un manque de communication ou, à l'inverse, une omniprésence du sujet de l'avenir semblent associés·es à des scores plus faibles.
+
+[^note_bas_page]: @dumonttrautwein2012
+
+## L'intérêt parental : de l'intention à la perception
+
+L’engagement familial se traduisant par l’intérêt parental pour les enfants est souvent présenté comme un marqueur majeur de la réussite scolaire de l’élève. Cependant, la variable qui discute de l’intérêt porté par les parents à ce que l’élève apprend nous permet d’interroger la nature réelle de ce lien. En croisant la perception de l’enfant avec ses résultats aux tests PISA, nous cherchons ainsi à déterminer si l’intérêt porté par les parents agit ou non comme un stimulant pour la scolarité de l’enfant. 
+
+```{r, echo = FALSE, warning = FALSE}
+#| fig-cap: "Les élèves ayant des parents quotidiennement intéressés par ce qu'iels apprennent à l'école n'ont pas forcément de meilleures notes que les autres"
+#| label: fig-appr
+
+df_2_1 <- data.frame(ST300Q08JA = inq_sans_pa$ST300Q08JA, moyenne = df_discipline_et_score$moyenne)
+
+ggplot(df_2_1, aes(y = ST300Q08JA, x = moyenne, fill = ST300Q08JA)) +
+  # ASTUCE : Ajouter un petit boxplot à l'intérieur pour avoir les médianes
+  geom_boxplot(width = 0.5, color = "black", alpha = 0.8, outlier.shape = NA) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Tous les jours ou presque" = "#4D9BF7", "Une ou deux fois par semaine" = "#F2DBAB", "Une ou deux fois par mois" = "#C74B5C", "Une ou deux fois par an" = "darksalmon", "Jamais ou presque" = "darkolivegreen3")) +
+  labs(
+    subtitle = "Distribution des scores PISA moyens par niveau \n d'intéressement des parents à ce que \n l'enfant apprend à l'école",
+    y = "Les parents s'intéressent \n à ce que l'enfant apprend",
+    x = "Scores PISA moyens",
+    caption = "Source : Données PISA 2022 \n Note de lecture : Le score moyen obtenu aux tests PISA médian chez les élèves \n dont les parents ne s'interessent jamais ou presque à ce que l'enfant apprend à l'école est de 450."
+  ) +
+  # Supprimer la légende si elle répète l'axe X
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),legend.position = "none") +
+  scale_x_continuous(limits = c(300, 600))
+```
+
+L’observation de la distribution des scores moyens montre que la fréquence de l’intérêt parental selon l’enfant ne suit pas une courbe de progression linéaire simple. Nous remarquons une stagnation dans les médianes, qui reste stable autour des 450-500 points, que l’intérêt soit *Jamais ou presque* ou *Tous les jours ou presque*. Cela suggère donc que l’implication quotidienne ne garantit pas un gain de points aux tests PISA. On remarque toutefois un léger rehaussement du violin plot pour la catégorie U*ne ou deux fois par semaine*. Un suivi régulier mais non intrusif semble donc offrir un cadre stable de performance. Par ailleurs, le léger tassement des scores pour la modalité *Tous les jours ou presque* peut s’interpréter par l'inquiétude parentale. Les parents dont les enfants sont déjà en difficulté ont tendance à intensifier leur suivi pour compenser les lacunes de leur enfant.
+
+```{r, echo = FALSE}
+#| fig-cap: "Les 10% des élèves les moins performants·es ont deux fois de chance d'avoir des parents qui s'intéressent très peu à ce qu'iels apprennent à l'école"
+#| label: fig-profils
+#| fig-width: 9
+
+# 1. On définit qui est dans le Top 10% et le Bottom 10%
+seuils <- quantile(df_2_1$moyenne, probs = c(0.1, 0.9), na.rm = TRUE)
+
+df_clean <- df_2_1 %>%
+  filter(!is.na(ST300Q08JA))
+
+df_extremes <- df_clean %>%
+  mutate(profil_eleve = case_when(
+    moyenne <= seuils[1] ~ "10% les moins performants·es",
+    moyenne >= seuils[2] ~ "10% les plus performants·es"
+  )) %>%
+  # On ne garde que ces deux groupes
+  filter(!is.na(profil_eleve))
+
+# 2. On fait le barplot empilé pour comparer
+ggplot(df_extremes, aes(y = profil_eleve, fill = ST300Q08JA)) +
+  geom_bar(position = "fill") +
+  scale_x_continuous(labels = scales::percent) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Tous les jours ou presque" = "#4D9BF7", "Une ou deux fois par semaine" = "#F2DBAB", "Une ou deux fois par mois" = "#C74B5C", "Une ou deux fois par an" = "darksalmon", "Jamais ou presque" = "darkolivegreen3")) +
+  labs(subtitle = "L'intérêt parental chez les profils extrêmes",
+       y = "Profil de l'élève (Score PISA)",
+       x = "Proportion",
+       fill = "Intérêt parental",
+       caption = "Source : Données PISA 2022 \n Note de lecture : Chez les 10% des élèves les moins performants·es, \n environ 15% des parents ne s'interessent jamais ou presque à ce que leur enfant apprend à l'école.")
+```
+
+En isolant les 10% des élèves les plus performants et les 10% les plus faibles, le contraste s’accentue. Nous remarquons la prédominance du suivi régulier chez les élèves performants. Ces élèves bénéficient d'un intérêt hebdomadaire ou quotidien dans près de 70 % des cas. Ce socle sécurisant semble être une condition nécessaire à de très bons résultats. Cependant, chez les élèves les plus faibles, les modalités *Jamais ou presque* et *Une ou deux fois par an* sont deux fois plus importantes. Ainsi, le manque d’intérêt parental dans les apprentissages constitue un risque majeur pour les résultats des enfants. De surcroît, la modalité *Une ou deux fois par semaine* représente presque deux fois plus d’élèves chez les meilleurs élèves que chez les plus faibles. Cela peut donc s’interpréter par le fait qu’un meilleur équilibre entre soutien et autonomie apporte de meilleurs résultats scolaires.
+
+## Une régularité plutôt modérée des encouragements semble être corrélée plus fortement avec de meilleures performances scolaires
+
+Si une performance scolaire de l'élève plus élevée semble refléter une famille qui s'intéresse à l'avenir scolaire de l'élève de manière plutôt régulière, il peut être intéressant de voir ce qu'il en est du point de vue des encouragements. En effet, si des encouragements sont plus à même de rendre l'élève plus régulier·ère dans son travail, qu'en est-il de sa performance ? Le questionnaire PISA des élèves et des parents s'intéresse à la régularité des encouragements à avoir de bonnes notes, il est donc intéressant de voir si la régularité des encouragements peut influencer les performances de l'élève. Tout d'abord, il faut noter que dans l'ensemble des réponses données, les parents disent plus régulièrement encourager leurs enfants que les enfants se disent encouragés·es de ce point de vue-là par leur famille (cf. @tbl-encour_bonnes_notes en annexe). La réponse des parents est la plus corrélée à la performance, avec un rapport de corrélation neuf fois plus élevé que lorsque les parents répondent. Graphiquement (cf. @fig-pa_perf), nous pouvons comprendre que lorsque les parents disent moins régulièrement encourager leur enfant à avoir de bonnes notes, l'élève tend à avoir de meilleurs résultats aux tests PISA.
+
+```{r, echo=FALSE}
+#| label: fig-pa_perf
+#| fig-cap: "Les parents ont tendance à plus régulièrement encourager les élèves avec de moins bons résultats scolaires"
+
+ggplot(var_avec_pa, aes(x = SCORE_MOY, y = PA003Q14JA, fill = PA003Q14JA)) +
+  geom_boxplot(width = 0.5, outliers = T, alpha = 0.75) +
+  scale_fill_manual(values = c("Tous les jours ou presque" = "#4D9BF7", "Une ou deux fois par semaine" = "#F2DBAB", "Une ou deux fois par mois" = "#C74B5C", "Une ou deux fois par an" = "darksalmon", "Jamais ou presque" = "darkolivegreen3")) +
+  labs(y = "Le parent dit encourager son enfant \n à avoir de bonnes notes",
+       caption = "Source : Données PISA 2022 \n Note de lecture : Parmi les élèves dont le parent dit \n les encourager une ou deux fois par mois à avoir de bonnes notes, \n la moitié d'entre elleux ont une note moyenne aux tests PISA inférieure à 500.") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, size = 11, face = "bold"), legend.position = "none",
+        axis.title.x = element_text(size = 9.5, face = "bold"),
+        axis.title.y = element_text(size = 9.5, face = "bold"))
+```
+
+\noindent En effet, la moitié des élèves encouragés·es à avoir de bonnes notes de manière mensuelle et annuelle ont un score moyen aux tests PISA supérieur à 500, contre environ 425 pour la moitié des élèves encouragés·es de manière quasi-quotidienne à ce sujet. La différence n'est pas si marquée que cela, ce qui peut s'observer avec l'étalement des notes selon les différentes réponses fournies par les parents. Nous pouvons remarquer une différence de presque 50 points entre le quart des élèves les moins bons n'étant presque jamais encouragés·es à avoir de bonnes notes et celleux qui le sont mensuellement. Il faut aussi prendre en compte la présence de valeurs extrêmes entre 675 et 810 chez les élèves étant encouragés·es quasi-quotidiennement. Nous pouvons supposer qu'il existe un certain nombre d'élèves (pas suffisamment significatif d'un point de vue statistique) pour lesquels être encouragés·es quasi-quotidiennement à avoir de bonnes notes influence positivement les notes. Ainsi, nous voyons qu'il n'est pas rare pour les parents d'encourager plus régulièrement leur enfant lorsque celui-ci a de moins bons résultats scolaires.
+
+De mêmes résultats peuvent être observés lorsque nous nous intéressons à la régularité des discussions sur l'importance de finir le cycle secondaire. La variable issue du questionnaire des parents a un rapport de corrélation plus élevé, ce qui nous incite à nous questionner sur la manière d'objectiver les données. En effet, nous pourrions penser que le point de vue des parents sur l'encouragement, étant extérieur à l'apprentissage même de l'élève, peut être plus objectif. Néanmoins, la question de l'encouragement a aussi une dimension psychologique qui nous invite à savoir comment les élèves perçoivent ces mêmes encouragements. Peut-être que si l'élève ne sent pas encouragé·e, c'est parce que la famille n'est pas suffisamment explicite à ce propos. Toutefois, du point de vue de notre analyse, le point de vue des parents a tout son intérêt car nous pouvons remarquer que  le score moyen obtenu par les élèves aux tests PISA a une corrélation qui n'est pas négligeable avec la régularité de l'engagement familial du point de vue des parents. En outre, les parents affirmant soutenir leur enfant quasi-quotidiennement, notamment dans leur scolarité, ont des enfants qui ont tendance à avoir de moins bonnes performances scolaires que les autres.
+
+```{r, echo = FALSE}
+#| label: fig-acm_pa
+#| fig-cap: "Un parent qui dit soutenir son enfant quasi-quotidiennement a plus de chances d'avoir un enfant qui a de mauvais résultats scolaires"
+#| fig-subcap: 
+#| - "ACM - Modalités parentales sur le plan factoriel (représentativité supérieure à 0.25)"
+#| - "Projection des performances moyennes aux tests PISA"
+#| - "Individus selon la régularité des encouragements à avoir de bonnes notes"
+#| layout: "[[1], [1,1]]"
+
+var_avec_pa <- var_avec_pa %>% 
+  drop_na(PA003Q14JA)
+
+variables_selection <- c(
+  # --- VARIABLES ACTIVES (Index 1 à 4) ---
+  "PA003Q14JA", # encouragements notes
+  "PA003Q11JA", # régularité discussions fin secondaire
+  "PA003Q01TA", # ça se passe bien à l'école
+  "PA003Q16JA", # scolarité future
+  
+  # --- VARIABLES ILLUSTRATIVES QUANTITATIVES (Index 5) ---
+  "SCORE_MOY",  # score moyen
+  
+  # --- VARIABLES ILLUSTRATIVES QUALITATIVES (Index 6 à 8) ---
+  "ST268Q04JA", # Maths facile
+  "ST268Q05JA", # Langue facile
+  "ST268Q06JA"  # Sciences faciles
+)
+
+# Création du sous-tableau
+df_acm <- var_avec_pa[, variables_selection]
+
+# Convertir les actives et quali.sup en facteurs (catégories)
+colonnes_facteurs <- c(1:4, 6:8)
+df_acm[, colonnes_facteurs] <- lapply(df_acm[, colonnes_facteurs], as.factor)
+
+# Convertir les quanti.sup en numérique
+colonnes_numeriques <- 5
+df_acm[, colonnes_numeriques] <- lapply(df_acm[, colonnes_numeriques], as.numeric)
+
+res.mca <- MCA(df_acm, 
+               quanti.sup = 5,  # Index de PERSEVAGR, STUDYHMW, SCORE_MOY
+               quali.sup = 6:8,  # Index de Maths, Langue, Sciences
+               graph = FALSE)     # On désactive le graphe par défaut pour utiliser factoextra
+
+fviz_mca_var(res.mca, 
+             repel = TRUE, 
+             col.var = "cos2",
+             gradient.cols = c("#E7B800", "#FC4E07"), 
+             col.quali.sup = "black",
+             select.var = list(cos2 = 0.25))
+?fviz_mca_var
+
+fviz_mca_var(res.mca, 
+             choice = "quanti.sup",
+             repel = TRUE,
+             col.quanti.sup = "blue")
+
+fviz_mca_ind(res.mca, 
+             label = "none", 
+             habillage = "PA003Q14JA", 
+             addEllipses = TRUE, ellipse.level = 0.95)
+```
+
+
+# Conclusion {.unnumbered}
+
+L'objectif de cette étude était de déterminer si l’apprentissage des élèves, envisagé à la fois comme un processus d’investissement personnel et comme un résultat académique était influencé différemment selon la nature de l’engagement familial. Au terme de notre analyse, il apparaît que l’implication des parents joue un rôle fondamental, mais d’une manière asymétrique selon l’étape de l’apprentissage observée.
+
+Sur le sentiment d’efficacité personnel, le soutien familial agit comme un moteur de l’investissement personnel, ce qui peut laisser penser qu’un engagement familial peut favoriser le travail scolaire fourni par l’élève. Nos analyses révèlent néanmoins que le suivi parental quotidien du travail scolaire de l’élève ne crée pas directement un climat de confiance mais se présente plutôt comme une norme réactive. Plus l’élève est en difficulté, plus la surveillance parentale s’intensifie. Ainsi, le contrôle n’augmente pas l'intensité du travail de l’élève mais il répond simplement à un sentiment d’efficacité personnel affaibli.
+
+Quant à la performance scolaire, l’influence de l’engagement familial n’est pas linéaire. Un équilibre optimal semble se situer autour d’une discussion hebdomadaire ou mensuelle sur l’avenir de l’élève. À l’inverse, un engagement quasi-quotidien ou très actif est associé à des performances plus faibles. Cela agit soit comme une source de stress contre-productive, soit comme une aide réactive face à un échec déjà acté. Par ailleurs, l’aide concrète apportée par les parents suit la même logique : plus celle-ci est importante, plus elle est associée à des scores faibles de l’élève.
+
+Donc l’engagement familial influence différemment le processus et le résultat de l’apprentissage. S’il favorise l’effort et une attitude positive de l’élève lorsqu’il est perçu comme un soutien, il devient un facteur de pression lorsqu’il devient omniprésent. La réussite scolaire semble donc moins dépendre de l’intensité de l’engagement familial que de son dosage optimal et de sa capacité à encourager l’autonomie de l’élève plutôt que de pallier un manque de confiance.
+
+# Bibliographie {.unnumbered}
+
+::: {#refs}
+:::
+
+\newpage
+\pagenumbering{roman}
+\addcontentsline{toc}{part}{Annexe}
+\part*{Annexe}
+
+\newpage
+```{r, echo = FALSE}
+#| label: tbl-glossaire-complet
+#| tbl-cap: "Glossaire complet des variables de l'étude"
+
+
+
+# 1. Création du jeu de données complet (36 variables)
+glossaire_vars <- tibble(
+  "Code" = c(
+    # --- AIDE CONCRÈTE (1 à 6) ---
+    "PA003Q18WA", "ST353Q01JA", "ST352Q08JA", "ST353Q08JA", "WB163Q01HA", "WB163Q06HA",
+    # --- ENCOURAGEMENTS (7 à 12) ---
+    "FAMSUP", "PA003Q11JA", "ST300Q04JA", "PA003Q14JA", "ST300Q07JA", "ST324Q05JA",
+    # --- INQUIÉTUDE / DISCUSSIONS (13 à 21) ---
+    "PA003Q01TA", "PA003Q15JA", "PA003Q16JA", "PA008Q03TA", "PAREXPT", "ST300Q01JA", "ST300Q08JA", "ST300Q09JA", "ST353Q05JA",
+    # --- APPRENTISSAGE & PERFORMANCE (22 à 36) ---
+    "ST331Q01JA", "ST331Q02JA", "ST331Q03JA", "WB176Q01HA", "ST355Q07JA", "ST268Q04JA", "ST268Q05JA", "ST268Q06JA", "ST340Q08JA", "SCORE_READ", "SCORE_MATH", "SCORE_SCIE","SCORE_MOYEN" ,"PERSEVAGR", "STUDYHMW", "GRADE"
+  ),
+  
+  "Nature" = c(
+    # Aide concrète
+    "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale",
+    # Encouragements
+    "Quanti. continue", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale",
+    # Inquiétude
+    "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. nominale", "Quanti. continue", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale",
+    # Apprentissage
+    "Quanti. ordinale", "Quanti. ordinale", "Quanti. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quali. ordinale", "Quanti. continue", "Quanti. continue", "Quanti. continue","Quanti. continue", "Quanti. continue", "Quanti. continue", "Quanti. ordinale"
+  ),
+  
+  "Libellé" = c(
+    # Aide concrète
+    "Parent : Aide avec les devoirs de maths", "Enfant : Reçoit de l'aide aux devoirs", "Enfant : Peine à trouver de l'aide pour travailler", "Enfant : Reçoit des cours hors école", "Enfant : Mes parents m'aident autant que possible", "Enfant : Mes parents contrôlent tout ce que je fais",
+    # Encouragements
+    "Indice de soutien familial global", "Parent : Importance de finir le secondaire", "Enfant : Importance de finir le secondaire", "Parent : Encouragements pour les notes", "Enfant : Encouragements pour les notes", "Enfant : Pression pour suivre un chemin spécifique",
+    # Inquiétude
+    "Parent : Suivi des résultats de l'enfant", "Parent : Intérêt pour ce que l'enfant apprend", "Parent : Discussions sur la scolarité future", "Parent : Rencontre volontaire avec les profs", "Indice d'attente parentale (éducation)", "Enfant : Discussions pour savoir si ça se passe bien", "Enfant : Intérêt parental perçu pour l'apprentissage", "Enfant : Discussions sur la scolarité future", "Enfant : Vérification des devoirs durant le COVID",
+    # Apprentissage
+    "Effort fourni pour les tests PISA", "Effort supplémentaire si le test était noté", "Effort pour fournir des réponses réalistes", "Dernière fois que l'enfant a fait ses devoirs", "Capacité à travailler de manière indépendante", "SEP : Les mathématiques sont faciles", "SEP : La lecture est facile", "SEP : Les sciences sont faciles", "Aime le travail scolaire qui demande des efforts", "Score lecture", "Score en mathématiques", "Score en sciences","Score moyen des trois matières", "Indice de persévérance face à la difficulté", "Indice du temps passé sur les devoirs", "Niveau scolaire actuel (Grade)"
+  ),
+  
+"Échelle" = c(
+    # Aide concrète
+    "Jamais ou presque à Tous les jours ou presque", "Jamais à Tous les jours ou presque", "Jamais à Tous les jours ou presque", "Jamais à Tous les jours ou presque", "Presque jamais à Presque toujours", "Presque jamais à Presque toujours",
+    # Encouragements
+    "Indice standardisé PISA", "Jamais ou presque à Tous les jours ou presque", "Jamais ou presque à Tous les jours ou presque", "Jamais ou presque à Tous les jours ou presque", "Jamais ou presque à Tous les jours ou presque", "Pas du tout d'accord à Très d'accord",
+    # Inquiétude
+    "Jamais ou presque à Tous les jours ou presque", "Jamais ou presque à Tous les jours ou presque", "Jamais ou presque à Tous les jours ou presque", "Oui / Non / Impossible", "Indice standardisé PISA", "Jamais ou presque à Tous les jours ou presque", "Jamais ou presque à Tous les jours ou presque", "Jamais ou presque à Tous les jours ou presque", "Jamais à Tous les jours ou presque",
+    # Apprentissage
+    "1 à 10", "1 à 10", "1 à 10", "Aujourd'hui à Jamais", "Pas confiant.e du tout à Très confiant.e", "Pas du tout d'accord à Très d'accord", "Pas du tout d'accord à Très d'accord", "Pas du tout d'accord à Très d'accord", "Pas du tout d'accord à Très d'accord", "0 - 800 pts", "0 - 800 pts", "0 - 800 pts", "0 - 800 pts","Indice standardisé PISA", "Indice standardisé PISA", "Niveau d'étude"
+  )
+)
+
+# 2. Rendu graphique avec gt
+glossaire_vars %>%
+  gt() %>%
+  tab_header(
+    title = md("**Glossaire des variables**")
+  ) %>%
+  # --- GROUPEMENTS THÉMATIQUES ---
+  tab_row_group(
+    label = "Variables d'Apprentissage (Performance, Attitude, SEP)",
+    rows = 22:36
+  ) %>%
+  tab_row_group(
+    label = "Engagement : Inquiétude et simples discussions",
+    rows = 13:21
+  ) %>%
+  tab_row_group(
+    label = "Engagement : Encouragements",
+    rows = 7:12
+  ) %>%
+  tab_row_group(
+    label = "Engagement : Aide concrète",
+    rows = 1:6
+  ) %>%
+  # --- FORMATAGE DES COLONNES ---
+  cols_label(
+    Code = md("**Code**"),
+    Nature = md("**Nature**"),
+    Libellé = md("**Libellé**"),
+    Échelle = md("**Échelle**")
+  ) %>%
+  # --- GESTION STRICTE DES LARGEURS (Anti-chevauchement) ---
+  cols_width(
+    Code ~ pct(16),
+    Nature ~ pct(18),
+    Libellé ~ pct(38),  # Plus de place pour les longues descriptions
+    Échelle ~ pct(28)   # Textes raccourcis pour tenir ici
+  ) %>%
+  # --- OPTIONS GLOBALES POUR LE PDF ---
+  tab_options(
+    table.width = pct(100),
+    table.font.size = px(10), # Police à 10px : obligatoire pour qu'un tableau de 36 lignes respire en PDF
+    row_group.font.weight = "bold",
+    column_labels.background.color = "#f8f9fa",
+    row_group.background.color = "#e9ecef" # Grise légèrement les titres de catégories
+  ) %>%
+  opt_row_striping()
+```
+
+\newpage
+## Matrice de corrélation entre les variables d'engagement familial {#matcor .unnumbered}
+
+```{r, echo = FALSE}
+#| label: fig-matcor
+#| fig-cap: "Le soutien familial est plus prononcé lorsque certains sujets de discussions sur l'école sont plus réguliers aux yeux des élèves"
+
+bdd <- readRDS("~nathan/ENSAI/1A/BDD_ProjetStat1A.rds")
+df_encour <- bdd %>%
+  drop_na(LANGTEST_PAQ) %>% 
+  select(ST353Q01JA, WB163Q01HA, FAMSUP, PA003Q11JA, ST300Q04JA,ST300Q07JA, PA003Q01TA, ST300Q01JA, ST300Q09JA, ST353Q05JA)
+df_encour <- rename(df_encour,
+                    pa_imp_fin_sec = PA003Q11JA,
+                    pa_enf_sen_sort_ecole = PA003Q01TA,
+                    st_ecole_se_passe_b = ST300Q01JA,
+                    st_enc_bonnes_notes = ST300Q07JA,
+                    st_imp_fin_sec = ST300Q04JA,
+                    famsup = FAMSUP,
+                    st_sco_future = ST300Q09JA,
+                    wb_aides_plus_possible = WB163Q01HA,
+                    st_aides_devoirs = ST353Q01JA,
+                    st_verif_tr_covid = ST353Q05JA
+                    )
+matcor <- cor(df_encour, use = "pairwise.complete.obs")
+?cor
+corrplot(matcor, type = "upper", order = "AOE", tl.col = "black", tl.srt = 45)
+```
+
+\newpage
+## Les parents s’affirment plus réguliers dans leur soutien familial {.unnumbered}
+
+::: {#tbl-encour_bonnes_notes}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Selon les élèves & Régularité & Selon les parents\tabularnewline
+\hline\hline
+$7,11\:\%$ & Jamais ou presque & $2,34\:\%$ \tabularnewline
+\hline
+$7,53\:\%$ & Une ou deux fois par an & $3,43\:\%$ \tabularnewline
+\hline
+$17\:\%$ & Une ou deux fois par mois & $14,22\:\%$ \tabularnewline
+\hline
+$25,3\:\%$ & Une ou deux fois par semaine & $22,6\:\%$ \tabularnewline
+\hline
+$43\:\%$ & Tous les jours ou presque & $57,4\:\%$ \tabularnewline
+\hline
+\end{tabular}
+\end{center}
+
+Plus de parents affirment encourager leur enfant à avoir de bonnes notes quasi-quotidiennement
+:::
+
+\newpage
+## Croisement des indices de soutien familial et de travail pour l'école
+
+Dans la @fig-densitejointe1, seuls les individus aux indices de soutien familial les plus extrêmes sont pris en compte. Ci-dessous (@fig-densitejointe2), le graphique pris sur l'ensemble de la population.
+
+```{r, warning = FALSE, echo = FALSE}
+#| label: fig-densitejointe2
+#| fig-cap: ""
+ggplot(encour_sans_pa, aes(x = FAMSUP, y = STUDYHMW)) +
+  geom_hdr(aes(fill = after_stat(probs)), alpha = 1, probs = c(0.99, 0.95, 0.75, 0.5, 0.25, 0.1))
+```
+Coefficient de corrélation linéaire : 'r cor(encour_sans_pa$FAMSUP, encour_sans_pa$STUDYHMW, use = "complete.obs")`
+
+Test de corrélation de Pearson : 
+```{r, echo = FALSE}
+cor.test(encour_sans_pa$FAMSUP, encour_sans_pa$STUDYHMW, use = "complete.obs")
+```

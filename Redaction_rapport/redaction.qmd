@@ -1,0 +1,76 @@
+---
+format: 
+  pdf:
+    documentclass: report
+    mainfont: "TeX Gyre Termes"
+    header-includes: |
+      \usepackage{enumitem}
+      \setlist[itemize]{label=$\bullet$}
+      \usepackage[dvipsnames]{xcolor}
+lang: fr
+include-in-header:
+      text: |
+        \usepackage{titlesec}
+        \titleformat{\chapter}{\normalfont\huge\bfseries}{\thechapter}{20pt}{\huge}
+        \titlespacing{\chapter}{0pt}{*-5}{*2}
+fontsize: 12pt
+papersize: a4
+geometry: top=1.5cm, bottom=1.5cm, left=2.5cm, right=2.5cm
+link-citations: true 
+nocite: "@*"
+number-sections: true
+---
+
+\begin{titlepage}
+\centering
+
+\includegraphics{ensai_logo_1.png}\\
+\vspace{1.0cm}
+
+{\LARGE\textsc{Rapport de projet traitement de données de Première Année}}\\
+\vspace{0.5cm}
+{\large Élèves 1A}
+
+\vspace{2.5cm}
+
+\rule{\textwidth}{0.5mm}\\
+\vspace{0.8cm}
+{\huge\bfseries A REMPLIR}\\
+\vspace{0.8cm}
+\rule{\textwidth}{0.5mm}\\
+
+\vspace{2.5cm}
+
+\begin{flushleft}
+\emph{Étudiants :}\\
+Groupe à préciser\\
+Ilan GUEDJ\\
+Jules FRULLI\\
+Thomas ETIENNE\\
+Alexandre FRATTER-BARDY\\
+\end{flushleft}
+
+\begin{flushright}
+\emph{Responsable :}\\
+Johann FAOUZI\\
+\vspace{1.0cm}
+\emph{Encadrant :}\\
+Clément VALOT\\
+\end{flushright}
+
+\vfill 
+\begin{center}
+École nationale de la statistique et de l’analyse de l’information\\
+2025--2026
+\end{center}
+\end{titlepage}
+
+\setlength{\parindent}{20pt}
+
+\color{black}
+\tableofcontents
+\thispagestyle{empty}
+
+# Introduction {.unnumbered}
+\pagenumbering{arabic}
+
