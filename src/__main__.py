@@ -12,7 +12,7 @@ from statistiques.match_par_joueur import calculer_stats_joueur
 from statistiques.visualisation import afficher_comparateur_joueurs, afficher_comparateur_equipes
 from statistiques.details_match import MatchFormatter
 from statistiques.statistiques_physiologie import AnalysePhysiologique
-
+from statistiques.gestion_donnees import DataUpdater
 
 def main():
     sports_disponibles = ["football", "tennis", "volley", "basketball", "lol"]
@@ -54,14 +54,20 @@ def main():
             
         try:
             nom_sport_choisi = sports_disponibles[int(choix) - 1]
+            sport_obj = Sport(nom_sport_choisi)
         except (ValueError, IndexError):
             print("\n/!\\ Choix invalide.")
             continue
 
-        matchs = tous_les_matchs[nom_sport_choisi]
-        if not matchs:
-            print(f"\nAucun match disponible pour {nom_sport_choisi}.")
+        matchs = tous_les_matchs.get(nom_sport_choisi, [])
+        joueurs = tous_les_joueurs.get(nom_sport_choisi, [])
+        
+        if not matchs and not joueurs:
+            print(f"\n❌ Aucune donnée (ni match, ni joueur) disponible pour {nom_sport_choisi.capitalize()}.")
             continue
+            
+        if not matchs:
+            print(f"\n⚠️ Attention : Aucun match pour {nom_sport_choisi.capitalize()}. Certaines actions seront limitées.")
 
         while True:
             print("\n" + "-"*40)
@@ -71,17 +77,19 @@ def main():
             print("3. Consulter les statistiques d'un joueur")
             print("4. Comparateur graphique")
             print("5. Statistique physiologique")
-            print("6. Retourner au choix des sports")
+            print("6. Importer des données (Nouvelle compétition par CSV)")
+            print("7. Éditer une donnée existante manuellement") # <-- NOUVEAU
+            print("8. Retourner au choix des sports") # <-- DÉCALÉ
             
-            choix_action = input("\nVotre choix (1 à 5) ? (0 pour quitter) : ")
+            # MODIFIÉ : On va jusqu'à 8 maintenant
+            choix_action = input("\nVotre choix (1 à 8) ? (0 pour quitter) : ")
 
             if choix_action == "0": return
-            if choix_action == "6": break
+            if choix_action == "8": break # <-- DÉCALÉ
 
-            # --- ACTION 1 : DÉTAILS D'UN MATCH (RECHERCHE PAR ÉQUIPES) ---
+            # --- ACTION 1 : DÉTAILS D'UN MATCH ---
             if choix_action == "1":
                 try:
-                    # 1. Sélection de la Saison
                     saisons_dispo = sorted(list(set(str(getattr(m, "season", "")) for m in matchs if getattr(m, "season", None))))
                     saison_choisie = None
                     
@@ -94,47 +102,38 @@ def main():
                         if choix_s.strip() and choix_s != "0":
                             saison_choisie = saisons_dispo[int(choix_s) - 1]
 
-                    # 2. Saisie des Équipes
                     print("\n--- ÉTAPE 2 : CHOIX DU DUEL ---")
                     nom_e1 = input("Entrez le nom de la première équipe : ").strip().lower()
                     nom_e2 = input("Entrez le nom de la deuxième équipe : ").strip().lower()
 
-                    # 3. Trouver les IDs de ces équipes (pour le Football/Basket)
                     id_e1, id_e2 = None, None
                     for eq in toutes_les_equipes[nom_sport_choisi]:
                         nom_eq = str(getattr(eq, "name", "")).lower()
                         if nom_e1 == nom_eq: id_e1 = str(eq.id)
                         if nom_e2 == nom_eq: id_e2 = str(eq.id)
 
-                    # 4. Recherche du match correspondant
                     matchs_trouves = []
                     for m in matchs:
-                        # Vérification de la saison
                         if saison_choisie and str(getattr(m, "season", "")) != saison_choisie:
                             continue
                         
-                        # Récupération des IDs ou Noms du match pour comparer
                         m_h_id = str(getattr(m, "home_team_api_id", getattr(m, "team_id_home", "")))
                         m_a_id = str(getattr(m, "away_team_api_id", getattr(m, "team_id_away", "")))
                         m_h_name = str(getattr(m, "home_team_name", "")).lower()
                         m_a_name = str(getattr(m, "away_team_name", "")).lower()
 
-                        # On vérifie si c'est le duel recherché (dans un sens ou dans l'autre)
                         match_ok = False
-                        # Test par ID (Foot/Basket)
                         if id_e1 and id_e2:
                             if (m_h_id == id_e1 and m_a_id == id_e2) or (m_h_id == id_e2 and m_a_id == id_e1):
                                 match_ok = True
-                        # Test par Nom (LoL/Tennis)
                         elif (nom_e1 in m_h_name and nom_e2 in m_a_name) or (nom_e2 in m_h_name and nom_e1 in m_a_name):
                             match_ok = True
 
                         if match_ok:
                             matchs_trouves.append(m)
 
-                    # 5. Affichage du résultat
                     if not matchs_trouves:
-                        print(f"\n❌ Aucun match trouvé entre ces deux équipes pour la saison {saison_choisie if saison_choisie else 'choisie'}.")
+                        print(f"\n❌ Aucun match trouvé entre ces deux équipes.")
                     else:
                         print(f"\n✅ {len(matchs_trouves)} match(s) trouvé(s) :")
                         for m_trouve in matchs_trouves:
@@ -162,8 +161,8 @@ def main():
                     nom_equipe = input("\nEntrez le nom de l'équipe (ex: France, Lakers...) : ")
                     if nom_equipe == "0": return
 
-                    saison_choisie = None
                     saisons_dispo = sorted(list(calculateur.get_available_seasons()))
+                    saison_choisie = None
                     
                     if saisons_dispo:
                         print("\nSaisons/Tournois disponibles :")
@@ -172,14 +171,11 @@ def main():
                         print("0. Toutes les saisons")
                         
                         choix_s = input("\nChoisissez le numéro de la saison : ")
-                        if choix_s == "0" or not choix_s.strip():
-                            saison_choisie = None
-                        else:
+                        if choix_s != "0" and choix_s.strip():
                             try:
                                 saison_choisie = saisons_dispo[int(choix_s) - 1]
                             except:
                                 print("Choix invalide, calcul sur tout.")
-                                saison_choisie = None
 
                     resultat = calculateur.get_team_points(nom_equipe, saison_choisie, genre=genre_choisi)
                     
@@ -298,15 +294,15 @@ def main():
                             afficher_comparateur_equipes(res_e1, res_e2)
                     except Exception as e:
                         print(f"\nErreur lors du calcul : {e}")
+                        
+            # --- ACTION 5 : PHYSIOLOGIE ---
             elif choix_action == "5":
                 print(f"\nAnalyse de la morphologie des joueurs de {nom_sport_choisi.capitalize()}...")
                 
-                joueurs_du_sport = tous_les_joueurs.get(nom_sport_choisi, [])
-                
-                if not joueurs_du_sport:
+                if not joueurs:
                     print("❌ Aucun joueur chargé pour ce sport.")
                 else:
-                    analyseur = AnalysePhysiologique(joueurs_du_sport, nom_sport_choisi)
+                    analyseur = AnalysePhysiologique(joueurs, nom_sport_choisi)
                     
                     print("\nOptions d'analyse :")
                     print("1. Distribution des tailles (Histogramme)")
@@ -314,12 +310,86 @@ def main():
                     choix_graph = input("Votre choix (1 ou 2) : ")
                     
                     if choix_graph == "2":
-                        # Pour le Win Rate, la classe a besoin de la liste des matchs !
                         analyseur.generer_heatmap_taille_victoire(matchs)
                     else:
                         analyseur.generer_graphique_taille()   
+                        
+            # --- ACTION 6 : MISE À JOUR (IMPORT CSV) ---
+            elif choix_action == "6":
+                print("\n--- MODULE DE MISE À JOUR DYNAMIQUE ---")
+                print("Entrez les chemins relatifs vers vos nouveaux fichiers CSV.")
+                print("Laissez vide (appuyez sur Entrée) si vous ne voulez pas mettre à jour l'un des deux.")
+                
+                csv_matchs = input("1. CSV des nouveaux matchs : ").strip()
+                csv_joueurs = input("2. CSV des profils de joueurs : ").strip()
+                
+                if not csv_matchs and not csv_joueurs:
+                    print("❌ Opération annulée, aucune donnée fournie.")
+                else:
+                    updater = DataUpdater(sport_obj)
+                    
+                    path_m = csv_matchs if csv_matchs else None
+                    path_j = csv_joueurs if csv_joueurs else None
+                    
+                    # On lance la mise à jour physique sur les disques
+                    updater.mettre_a_jour_tout(path_m, path_j)
+                    
+                    print("\n🔄 Rechargement de l'application en mémoire...")
+                    try:
+                        # On recharge l'historique fraîchement mis à jour
+                        tous_les_matchs[nom_sport_choisi] = loader_match.load_all_matches(sport_obj)
+                        
+                        loader_player = PlayerLoader(sport_obj) # Correction de l'instanciation
+                        tous_les_joueurs[nom_sport_choisi] = loader_player.charger_player(sport_obj)
+                        
+                        toutes_les_equipes[nom_sport_choisi] = loader_team.load_all_teams(sport_obj)
+                        
+                        # On n'oublie pas de mettre à jour la variable "matchs" et "joueurs" locales !
+                        matchs = tous_les_matchs[nom_sport_choisi]
+                        joueurs = tous_les_joueurs[nom_sport_choisi]
+                        
+                        print("✨ Tout est à jour ! Les nouvelles stats sont immédiatement disponibles.")
+                    except Exception as e:
+                        print(f"❌ Erreur lors du rechargement des données : {e}")
+
+            # --- ACTION 7 : ÉDITEUR MANUEL ---
+            elif choix_action == "7":
+                print("\n--- ÉDITEUR DE DONNÉES MANUEL ---")
+                print("Que souhaitez-vous modifier ?")
+                print("1. Un joueur / Une joueuse")
+                print("2. Une équipe")
+                choix_edition = input("Votre choix (1 ou 2) : ")
+
+                updater = DataUpdater(sport_obj)
+                succes = False
+                type_modif = ""
+
+                if choix_edition == "1":
+                    succes = updater.editer_joueur_manuellement()
+                    type_modif = "joueurs"
+                elif choix_edition == "2":
+                    succes = updater.editer_equipe_manuellement()
+                    type_modif = "equipes"
+                else:
+                    print("❌ Choix invalide.")
+                
+                # Si la modification a réussi, on recharge uniquement la mémoire concernée
+                if succes:
+                    print("\n🔄 Rechargement des données en mémoire...")
+                    try:
+                        if type_modif == "joueurs":
+                            loader_player = PlayerLoader(sport_obj)
+                            tous_les_joueurs[nom_sport_choisi] = loader_player.charger_player(sport_obj)
+                            joueurs = tous_les_joueurs[nom_sport_choisi]
+                        elif type_modif == "equipes":
+                            toutes_les_equipes[nom_sport_choisi] = loader_team.load_all_teams(sport_obj)
+                            
+                        print("✨ L'application est à jour avec vos corrections !")
+                    except Exception as e:
+                        print(f"❌ Erreur lors du rechargement : {e}")
+
             else:
-                if choix_action not in ["0", "1", "2", "3", "4", "5"]:
+                if choix_action not in ["0", "1", "2", "3", "4", "5", "6", "7", "8"]:
                     print("\n/!\\ Choix invalide.")
 
             input("\nAppuyez sur Entrée pour continuer...")
