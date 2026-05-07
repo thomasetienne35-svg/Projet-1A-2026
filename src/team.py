@@ -1,4 +1,5 @@
 class Team:
+    """Modèle de données représentant un joueur."""
     def __init__(
         self,team_id, name, short_name
     ) -> None:

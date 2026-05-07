@@ -1,5 +1,7 @@
-import pandas as pd
 from typing import Any
+
+import pandas as pd
+
 
 class ChampionshipPointsCalculator:
     """Calculateur de points et de statistiques de championnat."""
@@ -514,7 +516,7 @@ class ChampionshipPointsCalculator:
             "total_assists": total_assists,
         }
  
- 
+
     def get_available_seasons(self) -> list[str]:
         """Retourne la liste des saisons disponibles dans les données.
 
