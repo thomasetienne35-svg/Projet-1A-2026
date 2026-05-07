@@ -8,7 +8,26 @@ from .lol_team_loader import LolTeamLoader
 
 
 class TeamLoader:
+    """Chargement centralisée pour les équipes de tous les sports.
+    """
     def load_all_teams(self, sport: Sport) -> list[Team]:
+        """Chargement des équipes vers le chargeur spécifique au sport.
+
+        Parameters
+        ----------
+        sport : Sport
+            L'objet Sport définissant la discipline à charger.
+
+        Returns
+        -------
+        list[Team]
+            La collection complète des joueurs pour le sport demandé.
+
+        Raises
+        ------
+        ValueError
+            Si le nom du sport fourni n'est pas reconnu.
+        """
         if sport.name == "football":
             return FootballTeamLoader().load_all_team()
         elif sport.name == "volley":  

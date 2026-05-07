@@ -1,14 +1,22 @@
 from team import Team
 import pandas as pd
 
-# pd.options.display.max_columns = 100
-
+pd.options.display.max_columns = 100
 
 class FootballTeamLoader:
-    def __init__(self):
+    """Chargeur spécifique pour l'extraction et la structuration des équipes de football.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_team(self):
+    def load_all_team(self) -> list[Team]:
+        """Charge et instancie l'ensemble des équipes de football.
+
+        Returns
+        -------
+        list[Team]
+            Une liste d'objets Team contenant les informations extraites.
+        """
         res = []
         df_football = pd.read_csv(
             "data/football_european_leagues_tdd/team.csv" 

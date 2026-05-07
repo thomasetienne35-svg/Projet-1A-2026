@@ -8,10 +8,29 @@ from sport import Sport
 
 
 class PlayerLoader:
-    def __init__(self, sport: Sport):
+    """Chargement centralisée pour les joueurs de tous les sports.
+    """
+    def __init__(self, sport: Sport) -> None:
         self.sport = sport
 
-    def charger_player(self, sport) -> list[Player]:
+    def charger_player(self, sport: Sport) -> list[Player]:
+        """Chargement des joueurs vers le chargeur spécifique au sport.
+
+        Parameters
+        ----------
+        sport : Sport
+            L'objet Sport définissant la discipline à charger.
+
+        Returns
+        -------
+        list[Player]
+            La collection complète des joueurs pour le sport demandé.
+
+        Raises
+        ------
+        ValueError
+            Si le nom du sport fourni n'est pas reconnu.
+        """
         if sport.name == "football":
             return FootballPlayerLoader().load_all_player()
         if sport.name == "volley":

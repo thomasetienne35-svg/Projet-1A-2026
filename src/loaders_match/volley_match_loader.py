@@ -2,10 +2,19 @@ from match import Match
 import pandas as pd
 
 class VolleyMatchLoaderFemme:
-    def __init__(self):
+    """Chargeur spécifique pour les matchs de volley-ball féminin.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Charge, nettoie et compile l'intégralité des matchs de volley-ball féminin.
+
+        Returns
+        -------
+        list[Match]
+            Une collection complète d'objets Match enrichis avec les scores (sets), la date, l'étape du tournoi et les joueuses.
+        """
         res = []
         df_match_volley_femme = pd.read_csv("data/volleyball_tdd/match_women.csv")
         df_player_femme = pd.read_csv("data/volleyball_tdd/player_women.csv")
@@ -54,10 +63,19 @@ class VolleyMatchLoaderFemme:
 
 
 class VolleyMatchLoaderHomme:
-    def __init__(self):
+    """Chargeur spécifique pour les matchs de volley-ball masculin.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Charge, nettoie et compile l'intégralité des matchs de volley-ball masculin.
+
+        Returns
+        -------
+        list[Match]
+            Une collection complète d'objets Match enrichis avec les scores (sets), la date, l'étape du tournoi et les joueurs.
+        """
         res = []
         df_match_volley_homme = pd.read_csv("data/volleyball_tdd/match_men.csv")
         df_player_homme = pd.read_csv("data/volleyball_tdd/player_men.csv")
@@ -105,10 +123,19 @@ class VolleyMatchLoaderHomme:
 
 
 class VolleyMatchLoader:
-    def __init__(self):
+    """Charger simultanément les données homme et femme en utilisant les chargeurs spécialisés.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Exécute le chargement complet (Hommes + Femmes) des données de volley.
+
+        Returns
+        -------
+        list[Match]
+            Liste combinée de tous les matchs de volley.
+        """
         loader_femme = VolleyMatchLoaderFemme()
         liste_matchs_femmes = loader_femme.load_all_match() 
 

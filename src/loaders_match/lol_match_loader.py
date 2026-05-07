@@ -1,14 +1,22 @@
 from match import Match
-from sport import Sport
 import pandas as pd
 
 pd.options.display.max_columns = 100
 
 class LolMatchLoader:
-    def __init__(self):
+    """Chargeur spécifique à League of Legends (LoL) pour l'extraction et la structuration des données.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Charge, traduit et compile l'ensemble des matchs League of Legends.
+
+        Returns
+        -------
+        list[Match]
+            Une collection complète d'objets Match enrichis avec les données LoL.
+        """
         res = []
         df_lol_match = pd.read_csv("data/league_of_legends_tdd/match.csv")
         df_lol_team = pd.read_csv("data/league_of_legends_tdd/team.csv")

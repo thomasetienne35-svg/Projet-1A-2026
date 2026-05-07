@@ -4,7 +4,9 @@ import pandas as pd
 pd.options.display.max_columns = 100
 
 class FootballMatchLoader:
-    def __init__(self):
+    """Chargeur spécifique au football pour l'extraction et la structuration des données.
+    """
+    def __init__(self) -> None:
       
         chemin_match = "data/football_european_leagues_tdd/match.csv"
         chemin_joueur = "data/football_european_leagues_tdd/player.csv"
@@ -19,9 +21,23 @@ class FootballMatchLoader:
         # Format : {id_joueur: "nom_du_joueur"}
         self.dict_joueurs = df_joueur.set_index("player_api_id")["player_name"].to_dict()
 
-    def get_match(self, match_id):
-        """
-        Charge et retourne un objet Match spécifique à partir de son ID.
+    def get_match(self, match_id: int) -> Match | None:
+        """Récupère et structure les données d'un match spécifique à partir de son ID.
+
+        Parameters
+        ----------
+        match_id : int
+            L'identifiant unique du match à rechercher.
+
+        Returns
+        -------
+        Match
+            Un objet Match enrichi avec les scores et les listes 
+            de joueurs (domicile/extérieur).
+        
+        None 
+            Si le match_id est introuvable.
+
         """
         # On vérifie si le match existe dans nos données
         if match_id not in self.df_football.index:
@@ -61,9 +77,13 @@ class FootballMatchLoader:
 
         return match
 
-    def load_all_match(self):
-        """
-        Optionnel : Si tu as besoin de charger TOUS les matchs d'un coup.
+    def load_all_match(self) -> list[Match]:
+        """Charge et instancie l'ensemble des matchs de football du jeu de données.
+
+        Returns
+        -------
+        list[Match]
+            Contient tous les objets Match instancier.
         """
         res = []
         for match_id in self.df_football.index:

@@ -2,10 +2,19 @@ from player import Player
 import pandas as pd
 
 class TennisPlayerLoader:
-    def __init__(self):
+    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de tennis.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_player(self):
+    def load_all_player(self) -> list[Player]:
+        """Charge et instancie l'ensemble des joueurs de tennis.
+
+        Returns
+        -------
+        list[Player]
+            Une liste d'objets Player contenant les informations extraites.
+        """
         res = []
 
         df_atp = pd.read_csv("data/tennis_tdd/atp_players_2024.csv")

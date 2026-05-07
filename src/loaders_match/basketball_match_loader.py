@@ -4,10 +4,20 @@ import pandas as pd
 pd.options.display.max_columns = 100
 
 class BasketballMatchLoader:
-    def __init__(self):
+    """Chargeur spécifique au basketball pour l'extraction et la structuration des données.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Charge et compile les données des matchs de basketball et de leurs joueurs à partir des fichiers CSV.
+
+        Returns
+        -------
+        list[Match]
+            Une liste d'objets Match où chaque instance contient les informations d'identification, les scores convertis 
+            en nombres flottants et les listes nominatives des joueurs pour les deux équipes (domicile et extérieur).
+        """
         res = []
         df_basketball = pd.read_csv("data/basketball/game.csv")
         df_basketball_joueurs = pd.read_csv("data/basketball/player.csv")
