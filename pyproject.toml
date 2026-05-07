@@ -1,0 +1,20 @@
+[tool.ruff]
+# Indique à Ruff la version de Python utilisée pour optimiser ses corrections
+target-version = "py313"
+
+# Limite de caractères par ligne (88 est le standard)
+line-length = 88
+
+# Règles à appliquer :
+# E = Erreurs de style (Espaces, sauts de ligne...)
+# F = Fautes de logique (Variables non utilisées, erreurs de syntaxe...)
+# D = Docstrings (Commentaires des classes et fonctions)
+# I = Tri alphabétique des imports
+select = ["E", "F", "D", "I"]
+
+# Règles à ignorer (Laissez vide pour l'instant, à remplir si Ruff est trop pointilleux)
+ignore = []
+
+[tool.ruff.lint.pydocstyle]
+# Force la vérification des docstrings selon la convention Google
+convention = "google"

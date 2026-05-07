@@ -1,30 +1,82 @@
-# Projet 1A 2026
+# Projet de Traitement de Données
 
-## Goal
+Ce projet est une application de traitement de données développée en Python, reposant sur les principes de la Programmation Orientée Objet (POO). 
 
-This student project aims to determine who is the greatest football player of all time via a thorough statistical analysis
+---
 
-## Usage
+## Licence
 
-Install the necessary dependencies listed in `requirements.txt` with `pip install -r requirements.txt`
+Ce projet est distribué sous la licence spécifiée dans le fichier `LICENSE` présent à la racine du dépôt.
 
-Run the CLI app with `python __main__.py`
+---
 
-## Test
+## Version de Python
 
-With the standard Onyxia installation, run `python -m pytest --cov`
+- **Python :** Version **3.13.12** 
 
+---
 
-# Notes for students
+## Dépendances
 
-Miscellaneous things of note and advice for your project
+Les paquets nécessaires pour exécuter cette application (ainsi que pour le développement) sont listés dans le fichier `requirements.txt` situé à la racine du projet.
 
-- The code and its documentation are in English! This will have you practice a bit, English is key in IT. You may code in English or French (Or another language if you're _really_ adventurous), but do not mix them: Choose one and stick with it throughout the project.
+**Dépendances :**
+- `pandas == 2.1.0`
+- `pytest == 7.4.2`
 
-- There's an `__init__.py` in every folder. They can be used for more advanced stuff, but you'll notice in that case that they're all empty; they're mostly here to ensure the Python compiler recognizes the contents of the folder as a **package** and is able to import them
+---
 
-- Note the sparse use of classes/objects. They're useful to pass formatted data around the app, and for display purposes with the interface; you probably won't have to use them for more than this in the context of this project. They're even less required when using `pandas`; you'll mostly pass raw data around in the form of dataframes/series.
+## Installation
 
-- Pay attention to the structure of the project:
-  - The sub-packages rarely import each other. They're as much as possible standalone and independent. The `__main__.py` is where everything is tied together. This helps write maintainable and easily testable code.
-  - Methods that interact with the files (e.g. the readers for the `.csv` files) should never be unit-tested with real data (Think about the overhead in performance! Tests should be near-instantaneous). You'll notice test files with data that mimics the real data.
+Pour faire fonctionner ce projet sur votre machine locale, veuillez suivre les étapes ci-dessous. Elles incluent la création d'un environnement virtuel afin d'isoler les dépendances du projet. Ces commandes sont à exécuter dans le terminal.
+
+```bash
+# 1. Cloner le dépôt
+git clone https://github.com/thomasetienne35-svg/Projet-1A-2026.git
+
+# 2. Entrer dans le dossier du projet
+cd Projet-1A-2026
+
+# 3. Créer l'environnement virtuel (nommé .venv)
+python -m venv .venv
+
+# 4. Activer l'environnement virtuel
+# - Si vous êtes sur Windows, utilisez la commande suivante à la place : .venv\Scripts\activate
+source .venv/bin/activate
+
+# 5. Installer les dépendances du projet
+pip install -r requirements.txt
+
+# 6. Lancer l'application
+python -m src
+```
+
+---
+
+##  Tests
+
+Ce projet utilise `pytest` pour les tests unitaires. Pour exécuter l'ensemble des tests, assurez-vous d'être dans votre environnement virtuel et lancez la commande suivante depuis la racine du projet :
+
+```bash
+python -m pytest
+```
+
+---
+
+## Qualité du code : Linter et Formatter
+
+Ce projet respecte les conventions de style de code **Google**. 
+
+Pour garantir la qualité, la propreté et l'uniformité du code, nous utilisons l'outil tout-en-un **Ruff**, qui agit à la fois comme linter et comme formatter. 
+
+Assurez-vous d'être dans votre environnement virtuel, puis exécutez les commandes suivantes depuis la racine du projet :
+
+**1. Pour vérifier le code (Linter) :**
+```bash
+python -m ruff check .
+```
+
+**2. Pour formater le code automatiquement (Formatter) :**
+```bash
+python -m ruff format .
+```
