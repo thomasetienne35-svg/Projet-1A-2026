@@ -56,3 +56,25 @@ Ce projet utilise `pytest` pour les tests unitaires. Pour exécuter l'ensemble d
 ```bash
 python -m pytest
 ```
+
+---
+
+---
+
+## Qualité du code : Linter et Formatter
+
+Ce projet respecte les conventions de style de code **Google**. 
+
+Pour garantir la qualité, la propreté et l'uniformité du code, nous utilisons l'outil tout-en-un **Ruff**, qui agit à la fois comme linter et comme formatter. 
+
+Assurez-vous d'être dans votre environnement virtuel, puis exécutez les commandes suivantes depuis la racine du projet :
+
+**1. Pour vérifier le code (Linter) :**
+```bash
+python -m ruff check .
+```
+
+**2. Pour formater le code automatiquement (Formatter) :**
+```bash
+python -m ruff format .
+```

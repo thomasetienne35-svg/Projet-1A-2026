@@ -123,6 +123,7 @@ referencing==0.37.0
 regex==2026.4.4
 requests==2.33.1
 rpds-py==0.30.0
+ruff==0.15.12
 s3fs==2026.3.0
 scikit-learn==1.8.0
 scipy==1.17.1
