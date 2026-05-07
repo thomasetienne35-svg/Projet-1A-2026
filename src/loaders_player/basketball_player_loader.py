@@ -1,14 +1,22 @@
 from player import Player
-from sport import Sport
 import pandas as pd
 
 pd.options.display.max_columns = 100
 
 class BasketballPlayerLoader:
-    def __init__(self):
+    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de basketball.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_player(self):
+    def load_all_player(self) -> list[Player]:
+        """Charge et instancie l'ensemble des joueurs de basketball depuis le fichier de données.
+
+        Returns
+        -------
+        list[Player]
+            Une liste d'objets Player enrichis avec les données extraites.
+        """
         res = []
         df_basketball = pd.read_csv("data/basketball/player.csv")
         

@@ -1,13 +1,22 @@
 from team import Team
 import pandas as pd
 
-# pd.options.display.max_columns = 100
+pd.options.display.max_columns = 100
 
 class VolleyTeamLoader:
-    def __innit__(self):
+    """Chargeur spécifique pour l'extraction et la structuration des équipes de volley.
+    """
+    def __innit__(self) -> None:
         pass
 
-    def load_all_team(self):
+    def load_all_team(self) -> list[Team]:
+        """Charge et instancie l'ensemble des équipes de LoL.
+
+        Returns
+        -------
+        list[Team]
+            Une liste d'objets Team contenant les informations extraites.
+        """
         res = []
         df_volley = pd.read_csv(
             "data/volleyball_tdd/country.csv" 

@@ -1,13 +1,21 @@
 from match import Match
-from sport import Sport
 import pandas as pd
 
 class TennisMatchLoaderFemme:
-    def __init__(self, chemin_matchs, chemin_joueuses):
+    """Chargeur spécialisé pour les matchs de tennis féminin (WTA).
+    """
+    def __init__(self, chemin_matchs: str, chemin_joueuses: str) -> None:
         self.chemin_matchs = chemin_matchs
         self.chemin_joueuses = chemin_joueuses
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Charge et traite l'intégralité des matchs féminins.
+
+        Returns
+        -------
+        list[Match]
+            Liste des matchs WTA formatés.
+        """
         res = []
         df_matchs = pd.read_csv(self.chemin_matchs)
         df_joueuses = pd.read_csv(self.chemin_joueuses)
@@ -36,11 +44,20 @@ class TennisMatchLoaderFemme:
         return res
 
 class TennisMatchLoaderHomme:
-    def __init__(self, chemin_matchs, chemin_joueurs):
+    """Chargeur spécialisé pour les matchs de tennis masculin (ATP).
+    """
+    def __init__(self, chemin_matchs: str, chemin_joueurs: str) -> None:
         self.chemin_matchs = chemin_matchs
         self.chemin_joueurs = chemin_joueurs
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Charge et traite l'intégralité des matchs masculins.
+
+        Returns
+        -------
+        list[Match]
+            Liste des matchs ATP formatés.
+        """
         res = []
         df_matchs = pd.read_csv(self.chemin_matchs)
         df_joueurs = pd.read_csv(self.chemin_joueurs)
@@ -67,10 +84,19 @@ class TennisMatchLoaderHomme:
         return res
 
 class TennisMatchLoader:
-    def __init__(self):
+    """Charger simultanément les données ATP et WTA en utilisant les chargeurs spécialisés.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_match(self):
+    def load_all_match(self) -> list[Match]:
+        """Exécute le chargement complet (Hommes + Femmes) des données de tennis.
+
+        Returns
+        -------
+        list[Match]
+            Liste combinée de tous les matchs de tennis (ATP et WTA).
+        """
         # Chemins vers les matchs
         chemin_matchs_wta = "data/tennis_tdd/wta_matches_2024.csv"
         chemin_matchs_atp = "data/tennis_tdd/atp_matches_2024.csv"

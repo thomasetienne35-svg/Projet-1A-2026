@@ -1,13 +1,22 @@
 from team import Team
 import pandas as pd
 
-# pd.options.display.max_columns = 100
+pd.options.display.max_columns = 100
 
 class LolTeamLoader:
-    def __init__(self):
+    """Chargeur spécifique pour l'extraction et la structuration des équipes de LoL.
+    """
+    def __init__(self) -> None:
         pass
 
-    def load_all_team(self):
+    def load_all_team(self) -> list[Team]:
+        """Charge et instancie l'ensemble des équipes de LoL.
+
+        Returns
+        -------
+        list[Team]
+            Une liste d'objets Team contenant les informations extraites.
+        """
         res = []
         df_lol = pd.read_csv(
             "data/league_of_legends_tdd/team.csv" 
