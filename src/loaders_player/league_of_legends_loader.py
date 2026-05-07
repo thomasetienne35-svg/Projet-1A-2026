@@ -30,7 +30,7 @@ class LeagueOfLegendsLoader:
                 genre=None, 
                 taille=None, 
                 poids=None, 
-                team=df_lol.loc[i, "team"] # Ici on passe directement le nom (String)
+                team=df_lol.loc[i, "team"] 
                 )
             
             res.append(joueur)

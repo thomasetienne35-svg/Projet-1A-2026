@@ -1,8 +1,8 @@
-import pandas as pd
-from unittest.mock import patch
-from types import SimpleNamespace
 from pathlib import Path
-from unittest.mock import MagicMock
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
+
+import pandas as pd
 
 from src.statistiques.gestion_donnees import DataUpdater
 
@@ -15,7 +15,6 @@ def test_mettre_a_jour_tout_joueurs_et_matchs(tmp_path: Path) -> None:
     tmp_path : Path
         Chemin vers un répertoire temporaire unique à cette exécution de test.
     """
-
     faux_sport = SimpleNamespace(name="tennis")
     updater = DataUpdater(sport_obj=faux_sport)
 
@@ -52,13 +51,15 @@ def test_mettre_a_jour_tout_joueurs_et_matchs(tmp_path: Path) -> None:
 
 
 @patch('builtins.input')
-def test_editer_joueur_manuellement_succes(mock_input: MagicMock, tmp_path: Path) -> None:
+def test_editer_joueur_manuellement_succes(mock_input: MagicMock, 
+                                           tmp_path: Path) -> None:
     """Simule une modification avec succès d'un joueur via la console.
 
     Parameters
     ----------
     mock_input : MagicMock
-        Objet de simulation remplaçant la fonction native 'input' pour injecter automatiquement des réponses clavier durant le test.
+        Objet de simulation remplaçant la fonction native 'input' pour injecter 
+        automatiquement des réponses clavier durant le test.
     tmp_path : Path
         Chemin vers un répertoire temporaire unique à cette exécution de test.
     """
@@ -83,13 +84,15 @@ def test_editer_joueur_manuellement_succes(mock_input: MagicMock, tmp_path: Path
 
 
 @patch('builtins.input')
-def test_editer_equipe_manuellement_succes(mock_input: MagicMock, tmp_path: Path) -> None:
+def test_editer_equipe_manuellement_succes(mock_input: MagicMock, 
+                                           tmp_path: Path) -> None:
     """Simule une modification avec succès d'une équipe via la console.
 
     Parameters
     ----------
     mock_input : MagicMock
-        Objet de simulation remplaçant la fonction native 'input' pour injecter automatiquement des réponses clavier durant le test.
+        Objet de simulation remplaçant la fonction native 'input' pour injecter 
+        automatiquement des réponses clavier durant le test.
     tmp_path : Path
         Chemin vers un répertoire temporaire unique à cette exécution de test.
     """
@@ -121,7 +124,8 @@ def test_editer_joueur_fichier_introuvable(mock_input: MagicMock) -> None:
     Parameters
     ----------
     mock_input : MagicMock
-        Objet de simulation remplaçant la fonction native 'input' pour injecter automatiquement des réponses clavier durant le test.
+        Objet de simulation remplaçant la fonction native 'input' pour injecter 
+        automatiquement des réponses clavier durant le test.
     """
     faux_sport = SimpleNamespace(name="tennis")
     updater = DataUpdater(sport_obj=faux_sport)

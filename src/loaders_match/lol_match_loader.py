@@ -1,18 +1,18 @@
-from match import Match
 import pandas as pd
+
+from match import Match
 
 pd.options.display.max_columns = 100
 
 class LolMatchLoader:
-    """Chargeur spécifique à League of Legends (LoL) pour l'extraction et la structuration des données.
-    """
+    """Chargeur spécifique à League of Legends (LoL) pour l'extraction et la structuration des données."""
     def __init__(self) -> None:
         pass
 
     def load_all_match(self) -> list[Match]:
         """Charge, traduit et compile l'ensemble des matchs League of Legends.
 
-        Returns
+        Returns:
         -------
         list[Match]
             Une collection complète d'objets Match enrichis avec les données LoL.
@@ -22,8 +22,6 @@ class LolMatchLoader:
         df_lol_team = pd.read_csv("data/league_of_legends_tdd/team.csv")
         df_lol_player = pd.read_csv("data/league_of_legends_tdd/player.csv")
         
-        # Création d'un dictionnaire magique pour traduire les abréviations en noms complets
-        # Exemple: {"FNC": "Fnatic", "VIT": "Team Vitality"}
         dict_equipes = dict(zip(df_lol_team["team_abbreviation"], df_lol_team["team"]))
 
         for i in range(len(df_lol_match)):
@@ -34,10 +32,6 @@ class LolMatchLoader:
             abbr_red = df_lol_match.loc[i, "team_red"]
             winner_raw = df_lol_match.loc[i, "winner"]
 
-            # =========================================================
-            # TRADUCTION ET SAUVEGARDE (On ne garde que les noms complets !)
-            # =========================================================
-            # .get(clé, valeur_par_défaut) remplace "FNC" par "Fnatic"
             nom_complet_blue = dict_equipes.get(abbr_blue, abbr_blue)
             nom_complet_red = dict_equipes.get(abbr_red, abbr_red)
             nom_winner = dict_equipes.get(winner_raw, winner_raw)
@@ -56,16 +50,16 @@ class LolMatchLoader:
             match.kills_team_red = df_lol_match.loc[i, "kills_team_red"]
             match.deaths_team_red = df_lol_match.loc[i, "deaths_team_red"]
             match.assists_team_red = df_lol_match.loc[i, "assists_team_red"]
-            # =========================================================
 
-            # --- Récupération des joueurs ---
             if abbr_blue in dict_equipes:
-                match.list_home_player = df_lol_player[df_lol_player["team"] == nom_complet_blue]["name"].tolist()
+                match.list_home_player = df_lol_player[df_lol_player["team"] == 
+                                                       nom_complet_blue]["name"].tolist()
             else:
                 match.list_home_player = []
 
             if abbr_red in dict_equipes:
-                match.list_away_player = df_lol_player[df_lol_player["team"] == nom_complet_red]["name"].tolist()
+                match.list_away_player = df_lol_player[df_lol_player["team"] == 
+                                                       nom_complet_red]["name"].tolist()
             else:
                 match.list_away_player = []
 

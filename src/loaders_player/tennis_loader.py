@@ -1,9 +1,10 @@
-from player import Player
 import pandas as pd
 
+from player import Player
+
+
 class TennisPlayerLoader:
-    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de tennis.
-    """
+    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de tennis."""
     def __init__(self) -> None:
         pass
 

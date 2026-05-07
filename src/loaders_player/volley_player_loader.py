@@ -1,18 +1,18 @@
-from player import Player
 import pandas as pd
+
+from player import Player
 
 pd.options.display.max_columns = 100
 
 class VolleyPlayerLoader:
-    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de volley.
-    """
+    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de volley."""
     def __init__(self) -> None:
         pass
 
     def load_all_player(self) -> list[Player]:
         """Charge et instancie l'ensemble des joueurs de volley depuis le fichier de données.
 
-        Returns
+        Returns:
         -------
         list[Player]
             Une liste d'objets Player enrichis avec les données extraites.

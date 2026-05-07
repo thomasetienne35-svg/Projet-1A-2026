@@ -1,12 +1,12 @@
 import os
-from types import SimpleNamespace
-from src.statistiques.statistiques_physiologie import AnalysePhysiologique
 from pathlib import Path
+from types import SimpleNamespace
+
+from src.statistiques.statistiques_physiologie import AnalysePhysiologique
 
 
 def test_extraire_tailles_conversions() -> None:
-    """Vérifie que le traducteur transforme bien tous les formats en cm.
-    """
+    """Vérifie que le traducteur transforme bien tous les formats en cm."""
     p1 = SimpleNamespace(height="6-0") 
     p2 = SimpleNamespace(taille="1.90") 
     p3 = SimpleNamespace(size="70")    
@@ -41,12 +41,13 @@ def test_generer_graphique_cree_fichier(tmp_path: Path) -> None:
 
 
 def test_heatmap_pas_assez_de_donnees() -> None:
-    """Vérifie que le code prévient s'il n'y a pas assez de données.
-    """
+    """Vérifie que le code prévient s'il n'y a pas assez de données."""
     p = SimpleNamespace(prenom_nom="Petit Joueur", height=170)
-    m = SimpleNamespace(list_home_player=["Petit Joueur"], home_team_score=1, away_team_score=0)
+    m = SimpleNamespace(list_home_player=["Petit Joueur"], home_team_score=1, 
+                        away_team_score=0)
     
     analyse = AnalysePhysiologique(liste_joueurs=[p], sport="foot")
     analyse.generer_heatmap_taille_victoire(matchs=[m])
     
-    assert "Pas assez de données croisées (Taille + Minimum 3 matchs joués) pour générer la Heatmap"
+    assert "Pas assez de données croisées (Taille + Minimum 3 matchs joués) pour "
+    "générer la Heatmap"

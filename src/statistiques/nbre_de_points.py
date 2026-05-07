@@ -1,26 +1,23 @@
 import pandas as pd
-
+from typing import Any
 
 class ChampionshipPointsCalculator:
+    """Calculateur de points et de statistiques de championnat."""
     def __init__(
         self,
         sport_name: str,
         matches_df: pd.DataFrame,
         liste_equipes_foot: list,
         liste_matchs_foot: list,
-    ):
-        """
-        Initialise le calculateur avec le nom du sport et le DataFrame des matchs.
-        """
+    ) -> None:
         self.liste_equipes_foot = liste_equipes_foot
         self.liste_matchs_foot = liste_matchs_foot
         self.sport_name = sport_name.lower()
         self.matches_df = matches_df
  
-    def get_team_points(self, nom_equipe: str, saison: str | None = None, genre: str | None = None) -> dict:
-        """
-        Méthode principale qui agit comme un "aiguilleur".
-        Elle redirige vers la bonne méthode de calcul selon le sport.
+    def get_team_points(self, nom_equipe: str, 
+        saison: str | None = None, genre: str | None = None) -> dict[str, Any] | str:
+        """Méthode principale, elle redirige vers la bonne méthode de calcul selon le sport.
  
         Parameters
         ----------
@@ -30,9 +27,9 @@ class ChampionshipPointsCalculator:
             La saison souhaitée au format "YYYY/YYYY" (ex: "2008/2009").
             Si None, toutes les saisons sont prises en compte.
  
-        Returns
+        Returns:
         -------
-        dict
+        dict[str, Any] | str
             Statistiques de l'équipe pour la saison donnée.
         """
         if self.sport_name == "football":
@@ -49,28 +46,35 @@ class ChampionshipPointsCalculator:
             raise ValueError(
                 f"Statistiques non implémentées pour le sport : {self.sport_name}"
             )
- 
-    # ------------------------------------------------------------------
-    # FOOTBALL
-    # ------------------------------------------------------------------
+
  
     def _calculate_football_points(
         self, nom_equipe: str, saison: str | None = None
-    ) -> dict:
-        
-        # --- Résolution de l'équipe ---
+    ) -> dict[str, Any] | str:
+        """Calcule le bilan football selon la règle : Victoire=3pts, Nul=1pt, Défaite=0pt.
+
+        Parameters
+        ----------
+        nom_equipe : str
+            Nom de l'équipe à rechercher.
+        saison : str | None
+            Saison ciblée, par défaut None.
+
+        Returns:
+        -------
+        dict[str, Any] | str
+            Statistiques complètes ou message d'erreur.
+        """
         team_id = None
         nom_recherche = str(nom_equipe).strip().lower()
         vrai_nom_equipe = nom_equipe
 
-        # 1. Recherche exacte
         for equipe in self.liste_equipes_foot:
             if equipe.name is not None and str(equipe.name).strip().lower() == nom_recherche:
                 team_id = equipe.id
                 vrai_nom_equipe = str(equipe.name).strip()
                 break
  
-        # 2. Recherche partielle
         if team_id is None:
             equipes_proches = [
                 eq for eq in self.liste_equipes_foot 
@@ -86,11 +90,9 @@ class ChampionshipPointsCalculator:
             else:
                 return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
 
-        # VÉRIFICATION CRITIQUE : L'ID de l'équipe est-il bien là ?
         if team_id is None:
             return f"Erreur : L'équipe '{vrai_nom_equipe}' a été trouvée, mais son ID est manquant dans la base de données."
 
-        # --- Filtrage des matchs par saison ---
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
@@ -100,23 +102,19 @@ class ChampionshipPointsCalculator:
             if not matchs_filtres:
                 return f"Erreur : Aucun match trouvé pour la saison '{saison}'."
  
-        # --- Calcul des statistiques ---
         victoires_dom = victoires_ext = nuls = 0
         defaites_dom = defaites_ext = 0
         buts_marques = buts_encaisses = nb_matchs = 0
  
-        # On est maintenant certain que team_id n'est pas None
         t_id = float(team_id)
 
         for match in matchs_filtres:
             try:
-                # getattr permet d'éviter l'erreur si l'attribut n'existe pas
                 h_id = getattr(match, "home_team_api_id", None)
                 a_id = getattr(match, "away_team_api_id", None)
                 h_goals = getattr(match, "home_team_goal", None)
                 a_goals = getattr(match, "away_team_goal", None)
 
-                # Si l'une des données essentielles est vide (None), on ignore ce match
                 if None in (h_id, a_id, h_goals, a_goals):
                     continue
 
@@ -125,7 +123,6 @@ class ChampionshipPointsCalculator:
                 home_goals = int(h_goals)
                 away_goals = int(a_goals)
             except Exception:
-                # Toute autre erreur (texte illisible, etc.) fera ignorer le match
                 continue
                 
             if home_id == t_id:
@@ -165,26 +162,34 @@ class ChampionshipPointsCalculator:
             "difference_buts": buts_marques - buts_encaisses,
         }
  
-    # ------------------------------------------------------------------
-    # BASKETBALL  
-    # ------------------------------------------------------------------
  
     def _calculate_basketball_points(
         self, nom_equipe: str, saison: str | None = None
-    ) -> dict:
-        # --- Résolution de l'équipe ---
+    ) -> dict[str, Any] | str:
+        """Calcule le bilan basketball selon la règle : Victoire=2pts, Défaite=1pt.
+
+        Parameters
+        ----------
+        nom_equipe : str
+            Nom de l'équipe à rechercher.
+        saison : str | None
+            Saison ciblée, par défaut None.
+
+        Returns:
+        -------
+        dict[str, Any] | str
+            Statistiques complètes ou message d'erreur.
+        """
         team_id = None
         nom_recherche = str(nom_equipe).strip().lower()
         vrai_nom_equipe = nom_equipe
 
-        # 1. Recherche exacte
         for equipe in self.liste_equipes_foot:
             if equipe.name is not None and str(equipe.name).strip().lower() == nom_recherche:
                 team_id = equipe.id
                 vrai_nom_equipe = str(equipe.name).strip()
                 break
  
-        # 2. Recherche partielle
         if team_id is None:
             equipes_proches = [
                 eq for eq in self.liste_equipes_foot 
@@ -203,7 +208,6 @@ class ChampionshipPointsCalculator:
         if team_id is None:
             return f"Erreur : L'équipe '{vrai_nom_equipe}' a été trouvée, mais son ID est manquant."
 
-        # --- Filtrage des matchs par saison ---
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
@@ -213,8 +217,6 @@ class ChampionshipPointsCalculator:
             if not matchs_filtres:
                 return f"Erreur : Aucun match trouvé pour la saison '{saison}'."
 
-       
-        # --- Calcul des statistiques ---
         victoires_dom = victoires_ext = 0
         defaites_dom = defaites_ext = 0
         points_marques = points_encaisses = nb_matchs = 0
@@ -223,7 +225,6 @@ class ChampionshipPointsCalculator:
 
         for match in matchs_filtres:
             try:
-                # On essaie les noms exacts du CSV, et on ajoute un plan B
                 h_id = getattr(match, "team_id_home", getattr(match, "home_team_id", None))
                 a_id = getattr(match, "team_id_away", getattr(match, "away_team_id", None))
                 h_pts = getattr(match, "pts_home", getattr(match, "home_team_score", getattr(match, "home_team_goal", None)))
@@ -274,32 +275,47 @@ class ChampionshipPointsCalculator:
             "difference_points": points_marques - points_encaisses,
         }
  
-    # ------------------------------------------------------------------
-    # TENNIS  
-    # ------------------------------------------------------------------
  
     def _calculate_tennis_points(
         self, nom_equipe: str, saison: str | None = None
     ) -> str:
+        """Gère le cas particulier du tennis qui est un sport individuel.
+
+        Parameters
+        ----------
+        nom_equipe : str
+            Nom de l'équipe.
+        saison : str | None, optional
+            Saison ciblée, par défaut None.
+
+        Returns:
+        -------
+        str
+            Message explicatif indiquant l'absence de statistiques d'équipe.
         """
-        Le tennis est un sport individuel.
-        Renvoie simplement un message explicatif.
-        """
-        return "Le tennis est un sport individuel. Il n'y a donc pas de statistiques d'équipe disponibles pour ce sport."
+        return "Le tennis est un sport individuel. Il n'y a donc pas de statistiques " \
+        "d'équipe disponibles pour ce sport."
  
-    # ------------------------------------------------------------------
-    # VOLLEYBALL  
-    # ------------------------------------------------------------------
  
     def _calculate_volley_points(
         self, nom_equipe: str, saison: str | None = None, genre: str | None = None
-    ) -> dict:
+    ) -> dict[str, Any] | str:
+        """Calcule le bilan de tournoi pour le volley-ball (victoires, sets, stade final).
+
+        Parameters
+        ----------
+        nom_equipe : str
+            Nom de l'équipe à rechercher.
+        saison : str | None
+            Saison ou date ciblée, par défaut None.
+        genre : str | None
+            Filtre équipe homme ou femme, par défaut None.
+
+        Returns:
+        -------
+        dict[str, Any] | str
+            Statistiques complètes ou message d'erreur.
         """
-        Bilan de tournoi pour le volley-ball.
-        Ignore les points de championnat et se concentre sur le parcours (victoires, sets, stade final).
-        """
-        
-        # --- Résolution de l'équipe ---
         team_id = None
         nom_recherche = str(nom_equipe).strip().lower()
         vrai_nom_equipe = nom_equipe
@@ -328,7 +344,6 @@ class ChampionshipPointsCalculator:
         if team_id is None:
             return f"Erreur : L'équipe '{vrai_nom_equipe}' a été trouvée, mais son identifiant est manquant."
 
-        # --- Filtrage des matchs par saison/date ---
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
@@ -338,7 +353,6 @@ class ChampionshipPointsCalculator:
             if not matchs_filtres:
                 return f"Erreur : Aucun match trouvé pour la saison/date '{saison}'."
  
-        # --- Calcul du bilan de tournoi ---
         victoires_total = defaites_total = 0
         sets_gagnes = sets_perdus = nb_matchs = 0
         stade_final = "Aucun match joué"
@@ -351,7 +365,6 @@ class ChampionshipPointsCalculator:
         
         print(f"4. Répartition en mémoire -> Hommes: {nb_hommes} | Femmes: {nb_femmes} | Sans genre: {nb_sans_genre}")
         print("="*45 + "\n")
-        # =========================================================
 
         for match in matchs_filtres:
             try:
@@ -376,9 +389,7 @@ class ChampionshipPointsCalculator:
                 
             if home_id == t_id or away_id == t_id:
                 nb_matchs += 1
-                
-                # Comme les données sont chronologiques, le dernier match écrasera cette variable
-                # et nous donnera le stade maximum atteint par l'équipe !
+
                 stade_final = getattr(match, "stage", "Stade inconnu")
 
                 if home_id == t_id:
@@ -403,21 +414,29 @@ class ChampionshipPointsCalculator:
             "sets_perdus": sets_perdus,
             "difference_sets": sets_gagnes - sets_perdus,
         }
- 
-    # ------------------------------------------------------------------
-    # LOL  (à compléter)
-    # ------------------------------------------------------------------
 
     
     def _calculate_lol_points(
         self, nom_equipe: str, saison: str | None = None
-    ) -> dict | str:
-        
+    ) -> dict[str, Any] | str:
+        """Calcule les statistiques spécifiques à League of Legends (Win Rate, KDA).
+
+        Parameters
+        ----------
+        nom_equipe : str
+            Nom de l'équipe à rechercher.
+        saison : str | None
+            Saison ou patch ciblé, par défaut None.
+
+        Returns:
+        -------
+        dict[str, Any] | str
+            Statistiques complètes ou message d'erreur.
+        """
         nom_recherche = str(nom_equipe).strip().lower()
         vrai_nom_equipe = nom_equipe
         equipe_trouvee = False
 
-        # 1. Vérification que l'équipe existe bien avec ce nom complet
         for equipe in self.liste_equipes_foot:
             if equipe.name and str(equipe.name).strip().lower() == nom_recherche:
                 vrai_nom_equipe = str(equipe.name).strip()
@@ -427,7 +446,6 @@ class ChampionshipPointsCalculator:
         if not equipe_trouvee:
             return f"Erreur : L'équipe '{nom_equipe}' est introuvable. Veuillez saisir son nom complet (ex: Fnatic, Team Vitality)."
 
-        # 2. Filtrage par saison
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
@@ -435,13 +453,11 @@ class ChampionshipPointsCalculator:
                 if getattr(m, "season", getattr(m, "date", getattr(m, "patch", None))) == saison
             ]
 
-        # 3. Calcul des statistiques
         nb_matchs = victoires = defaites = 0
         total_kills = total_deaths = total_assists = 0
 
         for match in matchs_filtres:
             try:
-                # Les matchs contiennent désormais "fnatic", pas "fnc"
                 t_blue = str(getattr(match, "team_blue", "")).strip().lower()
                 t_red = str(getattr(match, "team_red", "")).strip().lower()
 
@@ -453,7 +469,6 @@ class ChampionshipPointsCalculator:
 
                 nb_matchs += 1
                 
-                # Victoire ou Défaite ?
                 winner = str(getattr(match, "winner", "")).strip().lower()
                 won = False
                 
@@ -469,11 +484,13 @@ class ChampionshipPointsCalculator:
                 else:
                     defaites += 1
 
-                # Extraction KDA
                 side = "blue" if is_blue else "red"
-                total_kills += int(float(str(getattr(match, f"kills_team_{side}", 0)).strip()))
-                total_deaths += int(float(str(getattr(match, f"deaths_team_{side}", 0)).strip()))
-                total_assists += int(float(str(getattr(match, f"assists_team_{side}", 0)).strip()))
+                total_kills += int(float(str(getattr(match, 
+                                                f"kills_team_{side}", 0)).strip()))
+                total_deaths += int(float(str(getattr(match, 
+                                                f"deaths_team_{side}", 0)).strip()))
+                total_assists += int(float(str(getattr(match, 
+                                                f"assists_team_{side}", 0)).strip()))
 
             except Exception:
                 continue
@@ -481,7 +498,6 @@ class ChampionshipPointsCalculator:
         if nb_matchs == 0:
             return f"Erreur : Aucune donnée de match trouvée pour l'équipe '{vrai_nom_equipe}'."
 
-        # 4. Affichage final
         win_rate = round((victoires / nb_matchs) * 100, 1)
         kda = round((total_kills + total_assists) / total_deaths, 2) if total_deaths > 0 else "Parfait (0 mort)"
 
@@ -498,14 +514,14 @@ class ChampionshipPointsCalculator:
             "total_assists": total_assists,
         }
  
-    # ------------------------------------------------------------------
-    # UTILITAIRE : lister les saisons disponibles
-    # ------------------------------------------------------------------
  
-    def get_available_seasons(self) -> list:
-        """
-        Retourne la liste des saisons disponibles dans les données.
-        Utile pour guider l'utilisateur dans son choix.
+    def get_available_seasons(self) -> list[str]:
+        """Retourne la liste des saisons disponibles dans les données.
+
+        Returns:
+        -------
+        list[str]
+            Liste triée des saisons uniques.
         """
         saisons = set()
         for match in self.liste_matchs_foot:

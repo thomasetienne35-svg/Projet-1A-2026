@@ -1,18 +1,18 @@
-from team import Team
 import pandas as pd
+
+from team import Team
 
 pd.options.display.max_columns = 100
 
 class LolTeamLoader:
-    """Chargeur spécifique pour l'extraction et la structuration des équipes de LoL.
-    """
+    """Chargeur spécifique pour l'extraction et la structuration des équipes de LoL."""
     def __init__(self) -> None:
         pass
 
     def load_all_team(self) -> list[Team]:
         """Charge et instancie l'ensemble des équipes de LoL.
 
-        Returns
+        Returns:
         -------
         list[Team]
             Une liste d'objets Team contenant les informations extraites.

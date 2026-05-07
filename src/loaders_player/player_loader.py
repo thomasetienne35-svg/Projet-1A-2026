@@ -1,15 +1,15 @@
 from player import Player
-from .tennis_loader import TennisPlayerLoader
+from sport import Sport
+
 from .basketball_player_loader import BasketballPlayerLoader
-from .league_of_legends_loader import LeagueOfLegendsLoader
 from .football_player_loader import FootballPlayerLoader
+from .league_of_legends_loader import LeagueOfLegendsLoader
+from .tennis_loader import TennisPlayerLoader
 from .volley_player_loader import VolleyPlayerLoader
-from sport import Sport 
 
 
 class PlayerLoader:
-    """Chargement centralisée pour les joueurs de tous les sports.
-    """
+    """Chargement centralisée pour les joueurs de tous les sports."""
     def __init__(self, sport: Sport) -> None:
         self.sport = sport
 
@@ -21,12 +21,12 @@ class PlayerLoader:
         sport : Sport
             L'objet Sport définissant la discipline à charger.
 
-        Returns
+        Returns:
         -------
         list[Player]
             La collection complète des joueurs pour le sport demandé.
 
-        Raises
+        Raises:
         ------
         ValueError
             Si le nom du sport fourni n'est pas reconnu.

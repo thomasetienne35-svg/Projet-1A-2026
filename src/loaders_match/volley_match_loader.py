@@ -1,19 +1,21 @@
-from match import Match
 import pandas as pd
 
+from match import Match
+
+
 class VolleyMatchLoaderFemme:
-    """Chargeur spécifique pour les matchs de volley-ball féminin.
-    """
+    """Chargeur spécifique pour les matchs de volley-ball féminin."""
     def __init__(self) -> None:
         pass
 
     def load_all_match(self) -> list[Match]:
         """Charge, nettoie et compile l'intégralité des matchs de volley-ball féminin.
 
-        Returns
+        Returns:
         -------
         list[Match]
-            Une collection complète d'objets Match enrichis avec les scores (sets), la date, l'étape du tournoi et les joueuses.
+            Une collection complète d'objets Match enrichis avec les scores (sets), 
+            la date, l'étape du tournoi et les joueuses.
         """
         res = []
         df_match_volley_femme = pd.read_csv("data/volleyball_tdd/match_women.csv")
@@ -63,18 +65,18 @@ class VolleyMatchLoaderFemme:
 
 
 class VolleyMatchLoaderHomme:
-    """Chargeur spécifique pour les matchs de volley-ball masculin.
-    """
+    """Chargeur spécifique pour les matchs de volley-ball masculin."""
     def __init__(self) -> None:
         pass
 
     def load_all_match(self) -> list[Match]:
         """Charge, nettoie et compile l'intégralité des matchs de volley-ball masculin.
 
-        Returns
+        Returns:
         -------
         list[Match]
-            Une collection complète d'objets Match enrichis avec les scores (sets), la date, l'étape du tournoi et les joueurs.
+            Une collection complète d'objets Match enrichis avec les scores (sets), 
+            la date, l'étape du tournoi et les joueurs.
         """
         res = []
         df_match_volley_homme = pd.read_csv("data/volleyball_tdd/match_men.csv")
@@ -123,15 +125,14 @@ class VolleyMatchLoaderHomme:
 
 
 class VolleyMatchLoader:
-    """Charger simultanément les données homme et femme en utilisant les chargeurs spécialisés.
-    """
+    """Charger simultanément les données homme et femme en utilisant les chargeurs spécialisés."""
     def __init__(self) -> None:
         pass
 
     def load_all_match(self) -> list[Match]:
         """Exécute le chargement complet (Hommes + Femmes) des données de volley.
 
-        Returns
+        Returns:
         -------
         list[Match]
             Liste combinée de tous les matchs de volley.

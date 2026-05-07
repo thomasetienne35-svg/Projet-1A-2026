@@ -1,11 +1,12 @@
-import pandas as pd
 from types import SimpleNamespace
+
+import pandas as pd
+
 from src.statistiques.nbre_de_points import ChampionshipPointsCalculator
 
 
 def preparer_donnees_test() -> tuple[list[SimpleNamespace], list[SimpleNamespace]]:
-    """Crée un petit environnement de test avec 2 équipes.
-    """
+    """Crée un petit environnement de test avec 2 équipes."""
     team_1 = SimpleNamespace(id = 10, name = "Paris SG")
     team_2 = SimpleNamespace(id = 20, name = "Marseille")
     
@@ -27,8 +28,7 @@ def preparer_donnees_test() -> tuple[list[SimpleNamespace], list[SimpleNamespace
 
 
 def test_calcul_football_points() -> None:
-    """Vérifie qu'une victoire (3pts) et un nul (1pt) donnent bien 4 points.
-    """
+    """Vérifie qu'une victoire (3pts) et un nul (1pt) donnent bien 4 points."""
     equipes, matchs = preparer_donnees_test()
 
     calc = ChampionshipPointsCalculator("football", pd.DataFrame(), equipes, matchs)
@@ -43,8 +43,7 @@ def test_calcul_football_points() -> None:
 
 
 def test_calcul_basketball_points() -> None:
-    """Vérifie le système de points du basket (2pts victoire, 1pt défaite).
-    """
+    """Vérifie le système de points du basket (2pts victoire, 1pt défaite)."""
     team_1 = SimpleNamespace(id = 100, name = "Lakers")
     team_2 = SimpleNamespace(id = 200, name = "Bulls")
     
@@ -54,7 +53,8 @@ def test_calcul_basketball_points() -> None:
         pts_home = 90, pts_away = 100
     )
     
-    calc = ChampionshipPointsCalculator("basketball", pd.DataFrame(), [team_1, team_2], [m_basket])
+    calc = ChampionshipPointsCalculator("basketball", pd.DataFrame(), [team_1, team_2], 
+                                        [m_basket])
     
     stats = calc.get_team_points("Lakers")
     
@@ -63,8 +63,7 @@ def test_calcul_basketball_points() -> None:
 
 
 def test_lol_kda_et_winrate() -> None:
-    """Vérifie le calcul du KDA et du taux de victoire sur LoL.
-    """
+    """Vérifie le calcul du KDA et du taux de victoire sur LoL."""
     team_1 = SimpleNamespace(name="Fnatic")
     
     m_lol = SimpleNamespace(
@@ -80,9 +79,9 @@ def test_lol_kda_et_winrate() -> None:
     assert stats["kda_global"] == 10.0
 
 def test_equipe_introuvable() -> None:
-    """Vérifie que le code renvoie bien une erreur si l'équipe n'existe pas.
-    """
+    """Vérifie que le code renvoie bien une erreur si l'équipe n'existe pas."""
     calc = ChampionshipPointsCalculator("football", pd.DataFrame(), [], [])
     calc.get_team_points("A")
     
-    assert "Erreur : L'équipe 'A' est introuvable. Veuillez saisir son nom complet (ex: Fnatic, Team Vitality)." 
+    assert "Erreur : L'équipe 'A' est introuvable. Veuillez saisir son nom complet "
+    "(ex: Fnatic, Team Vitality)." 

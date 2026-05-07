@@ -1,15 +1,15 @@
 from match import Match
 from sport import Sport
-from .football_match_loader import FootballMatchLoader
+
 from .basketball_match_loader import BasketballMatchLoader
-from .volley_match_loader import VolleyMatchLoader
-from .tennis_match_loader import TennisMatchLoader
+from .football_match_loader import FootballMatchLoader
 from .lol_match_loader import LolMatchLoader
+from .tennis_match_loader import TennisMatchLoader
+from .volley_match_loader import VolleyMatchLoader
 
 
 class MatchLoader:
-    """Chargement centralisée pour tous les sports.
-    """
+    """Chargement centralisée pour tous les sports."""
     def load_all_matches(self, sport: Sport) -> list[Match]:
         """Chargement des données vers le chargeur spécifique au sport.
 
@@ -18,12 +18,12 @@ class MatchLoader:
         sport : Sport
             L'objet Sport contenant le nom du sport à charger.
 
-        Returns
+        Returns:
         -------
         list[Match]
             La liste de tous les matchs instanciés pour le sport demandé.
 
-        Raises
+        Raises:
         ------
         ValueError
             Si le nom du sport fourni n'est pas reconnu.
