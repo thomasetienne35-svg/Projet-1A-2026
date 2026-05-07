@@ -4,6 +4,12 @@ Ce projet est une application de traitement de données développée en Python, 
 
 ---
 
+## Licence
+
+Ce projet est distribué sous la licence spécifiée dans le fichier `LICENSE` présent à la racine du dépôt.
+
+---
+
 ## Version de Python
 
 - **Python :** Version **3.13.12** 
@@ -47,8 +53,6 @@ python -m src
 
 ---
 
----
-
 ##  Tests
 
 Ce projet utilise `pytest` pour les tests unitaires. Pour exécuter l'ensemble des tests, assurez-vous d'être dans votre environnement virtuel et lancez la commande suivante depuis la racine du projet :
@@ -56,8 +60,6 @@ Ce projet utilise `pytest` pour les tests unitaires. Pour exécuter l'ensemble d
 ```bash
 python -m pytest
 ```
-
----
 
 ---
 
