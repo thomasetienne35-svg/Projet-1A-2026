@@ -71,7 +71,7 @@ class MatchFormatter:
         return texte if texte and texte != 'nan' else 'Non renseigné'
 
     def generer_texte_console(self):
-        texte = f"\n" + "="*50
+        texte = "\n" + "="*50
         texte += f"\n=== DÉTAILS DU MATCH {self.m_id} ==="
         texte += f"\n📌 Sport  : {self.sport}"
         

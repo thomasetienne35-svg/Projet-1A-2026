@@ -1,13 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from statistiques.match_par_joueur import calculer_stats_joueur
+#from statistiques.match_par_joueur import calculer_stats_joueur
+from .match_par_joueur import calculer_stats_joueur
 
 class AnalysePhysiologique:
     """
     Classe responsable de l'analyse et de la visualisation 
     des données morphologiques des joueurs.
     """
-    def __init__(self, liste_joueurs, sport):
+    def __init__(self, liste_joueurs, sport) -> None:
         self.liste_joueurs = liste_joueurs
         self.sport = sport
 
@@ -118,8 +119,10 @@ class AnalysePhysiologique:
                         h_cm = (float(parts[0]) * 30.48) + (float(parts[1]) * 2.54)
                 else:
                     h = float(h_str)
-                    if 0 < h < 3: h = h * 100
-                    elif 50 < h < 100: h = h * 2.54
+                    if 0 < h < 3 : 
+                        h = h * 100
+                    elif 50 < h < 100 : 
+                        h = h * 2.54
                     h_cm = h
             except (ValueError, TypeError):
                 continue
@@ -165,5 +168,5 @@ class AnalysePhysiologique:
         plt.savefig(nom_fichier)
         plt.close()
         
-        print(f"\n✅ Heatmap générée avec succès !")
+        print("\n✅ Heatmap générée avec succès !")
         print(f"👉 Le graphique a été sauvegardé sous : '{nom_fichier}'")

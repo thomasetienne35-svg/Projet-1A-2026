@@ -34,8 +34,10 @@ def calculer_stats_joueur(nom_joueur: str, sport: str, matchs: list):
         try:
             if sport == "tennis":
                 # Au tennis, le gagnant est toujours mis dans Home par notre Loader
-                if is_home: victoires += 1
-                else: defaites += 1
+                if is_home : 
+                    victoires += 1
+                else : 
+                    defaites += 1
                 
             elif sport == "lol":
                 winner = str(getattr(match, "winner", "")).strip().lower()
@@ -44,16 +46,19 @@ def calculer_stats_joueur(nom_joueur: str, sport: str, matchs: list):
                 team_won = (is_home and winner in [b_name, "blue", "team_blue"]) or \
                            (is_away and winner not in [b_name, "blue", "team_blue"])
                 if team_won: victoires += 1
-                else: defaites += 1
+                else : 
+                    defaites += 1
                 
             elif sport in ["basketball", "football"]:
                 # On récupère les scores (points ou buts)
                 h_score = float(getattr(match, "home_team_score", getattr(match, "home_team_goal", 0)))
                 a_score = float(getattr(match, "away_team_score", getattr(match, "away_team_goal", 0)))
                 
-                if h_score == a_score: nuls += 1
+                if h_score == a_score : 
+                    nuls += 1
                 elif (is_home and h_score > a_score) or (is_away and a_score > h_score): victoires += 1
-                else: defaites += 1
+                else : 
+                    defaites += 1
                 
         except Exception:
             continue

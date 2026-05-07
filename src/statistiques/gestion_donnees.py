@@ -48,7 +48,7 @@ class DataUpdater:
 
         # Sauvegarde du fichier mis à jour
         df_actuel.to_csv(self.path_players, index=False)
-        print(f"✅ Caractéristiques des joueurs mises à jour (nouvelles tailles, nouveaux joueurs).")
+        print("✅ Caractéristiques des joueurs mises à jour (nouvelles tailles, nouveaux joueurs).")
     
     def editer_joueur_manuellement(self):
         """
@@ -117,7 +117,7 @@ class DataUpdater:
         df.loc[index_ligne, colonne] = nouvelle_valeur
         df.to_csv(chemin_csv, index=False)
         
-        print(f"✅ Modification effectuée ! Le fichier a bien été mis à jour.")
+        print("✅ Modification effectuée ! Le fichier a bien été mis à jour.")
         return True
     
 
@@ -192,5 +192,5 @@ class DataUpdater:
         df.loc[index_ligne, colonne] = nouvelle_valeur
         df.to_csv(chemin_csv, index=False)
         
-        print(f"✅ Modification effectuée ! Le fichier de l'équipe a bien été mis à jour.")
+        print("✅ Modification effectuée ! Le fichier de l'équipe a bien été mis à jour.")
         return True
