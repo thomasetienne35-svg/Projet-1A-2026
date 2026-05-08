@@ -373,7 +373,6 @@ def main():
                 if not joueurs:
                     print("❌ Aucun joueur chargé pour ce sport.")
                 else:
-                    # Bien passé "sport_obj" et non la string
                     analyseur = AnalysePhysiologique(joueurs, sport_obj)
 
                     print("\nOptions d'analyse :")
