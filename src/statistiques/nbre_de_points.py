@@ -6,7 +6,13 @@ import pandas as pd
 class ChampionshipPointsCalculator:
     """Calculateur de points et de statistiques de championnat."""
 
-    def __init__(self, sport_name: str, matches_df: pd.DataFrame, liste_equipes_foot: list, liste_matchs_foot: list,) -> None:
+    def __init__(
+        self,
+        sport_name: str,
+        matches_df: pd.DataFrame,
+        liste_equipes_foot: list,
+        liste_matchs_foot: list,
+    ) -> None:
         """Initialise la classe."""
         self.liste_equipes_foot = liste_equipes_foot
         self.liste_matchs_foot = liste_matchs_foot

@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 # On force Python à chercher les modules directement dans le dossier "src"
 sys.path.insert(0, os.path.abspath("src"))

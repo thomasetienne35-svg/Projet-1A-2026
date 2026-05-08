@@ -4,6 +4,7 @@ from typing import Any
 
 class PlayerStatsCalculator:
     """Définit la classe PlayerStatsCalulator."""
+
     def __init__(self, sport_obj, liste_matchs):
         """On initialise avec l'objet sport et la liste des matchs pour éviter de les repasser en argument à chaque fois."""
         self.sport_name = sport_obj.name.lower()
