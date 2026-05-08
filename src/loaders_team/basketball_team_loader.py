@@ -9,6 +9,7 @@ class BasketballTeamLoader:
     """Chargeur spécifique pour l'extraction et la structuration des équipes de basketball."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_team(self) -> list[Team]:

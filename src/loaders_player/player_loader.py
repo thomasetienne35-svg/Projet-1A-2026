@@ -12,6 +12,7 @@ class PlayerLoader:
     """Chargement centralisée pour les joueurs de tous les sports."""
 
     def __init__(self, sport: Sport) -> None:
+        """Initialise la classe."""
         self.sport = sport
 
     def charger_player(self, sport: Sport) -> list[Player]:

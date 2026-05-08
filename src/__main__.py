@@ -16,6 +16,7 @@ from statistiques.visualisation import VisualisationComparateur
 
 
 def main():
+    """Permet de lancer l'application."""
     sports_disponibles = ["football", "tennis", "volley", "basketball", "lol"]
 
     print("Chargement initial des données... Veuillez patienter.")
@@ -297,7 +298,9 @@ def main():
                                 ]
                             except Exception:
                                 print("Choix invalide, calcul sur toutes les saisons.")
-                    calculateur_filtre = PlayerStatsCalculator(sport_obj, matchs_filtres)
+                    calculateur_filtre = PlayerStatsCalculator(
+                        sport_obj, matchs_filtres
+                    )
                     res_j1 = calculateur_filtre.obtenir_bilan(nom_j1)
                     res_j2 = calculateur_filtre.obtenir_bilan(nom_j2)
 

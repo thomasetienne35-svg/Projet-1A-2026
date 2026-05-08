@@ -9,7 +9,7 @@ class FootballMatchLoader:
     """Chargeur spécifique au football pour l'extraction et la structuration des données."""
 
     def __init__(self) -> None:
-
+        """Initialise la classe."""
         chemin_match = "data/football_european_leagues_tdd/match.csv"
         chemin_joueur = "data/football_european_leagues_tdd/player.csv"
 

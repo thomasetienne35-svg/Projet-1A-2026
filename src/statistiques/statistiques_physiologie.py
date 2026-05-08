@@ -12,6 +12,7 @@ class AnalysePhysiologique:
     """Classe responsable de l'analyse et de la visualisation des données morphologiques des joueurs."""
 
     def __init__(self, liste_joueurs: list[Any], sport: Sport) -> None:
+        """Initialise la classe."""
         self.liste_joueurs = liste_joueurs
         self.sport = sport
 

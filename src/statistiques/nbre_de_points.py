@@ -13,6 +13,7 @@ class ChampionshipPointsCalculator:
         liste_equipes_foot: list,
         liste_matchs_foot: list,
     ) -> None:
+        """Initialise la classe."""
         self.liste_equipes_foot = liste_equipes_foot
         self.liste_matchs_foot = liste_matchs_foot
         self.sport_name = sport_name.lower()

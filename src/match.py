@@ -11,6 +11,7 @@ class Match:
         list_home_player: list[int],
         list_away_player: list[int],
     ) -> None:
+        """Initialise la classe."""
         self.id = id
         self.sport = sport
         self.list_home_player = list_home_player

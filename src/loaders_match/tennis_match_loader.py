@@ -7,6 +7,7 @@ class TennisMatchLoaderFemme:
     """Chargeur spécialisé pour les matchs de tennis féminin (WTA)."""
 
     def __init__(self, chemin_matchs: str, chemin_joueuses: str) -> None:
+        """Initialise la classe."""
         self.chemin_matchs = chemin_matchs
         self.chemin_joueuses = chemin_joueuses
 
@@ -51,6 +52,7 @@ class TennisMatchLoaderHomme:
     """Chargeur spécialisé pour les matchs de tennis masculin (ATP)."""
 
     def __init__(self, chemin_matchs: str, chemin_joueurs: str) -> None:
+        """Initialise la classe."""
         self.chemin_matchs = chemin_matchs
         self.chemin_joueurs = chemin_joueurs
 
@@ -94,6 +96,7 @@ class TennisMatchLoader:
     """Charger simultanément les données ATP et WTA en utilisant les chargeurs spécialisés."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_match(self) -> list[Match]:

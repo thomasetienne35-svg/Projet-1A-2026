@@ -26,35 +26,35 @@ def test_extraire_tailles_conversions() -> None:
 def test_generer_graphique_cree_fichier(tmp_path: Path) -> None:
     """Vérifie que le code crée bien un fichier image .png."""
     os.chdir(tmp_path)
-    
+
     p = SimpleNamespace(height=180)
-    
+
     faux_sport = SimpleNamespace(name="tennis")
     analyse = AnalysePhysiologique(liste_joueurs=[p], sport=faux_sport)
-    
+
     analyse.generer_graphique_taille()
     nom_attendu = "distribution_taille_tennis.png"
-    
+
     assert os.path.exists(nom_attendu)
 
 
 def test_heatmap_pas_assez_de_donnees(capsys: pytest.CaptureFixture[str]) -> None:
     """Vérifie que le code prévient s'il n'y a pas assez de données."""
     p = SimpleNamespace(prenom_nom="Petit Joueur", height=170)
-    
+
     m = SimpleNamespace(
-        list_home_player=["Petit Joueur"], 
+        list_home_player=["Petit Joueur"],
         list_away_player=[],
-        home_team_score=1, 
+        home_team_score=1,
         away_team_score=0,
         team_blue="Vide",
-        winner="Vide"
+        winner="Vide",
     )
-    
+
     faux_sport = SimpleNamespace(name="foot")
     analyse = AnalysePhysiologique(liste_joueurs=[p], sport=faux_sport)
-    
+
     analyse.generer_heatmap_taille_victoire(matchs=[m])
-    
+
     capture = capsys.readouterr()
     assert "Pas assez de données" in capture.out
