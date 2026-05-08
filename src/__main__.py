@@ -391,47 +391,62 @@ def main():
             # --- ACTION 6 :
             elif choix_action == "6":
                 print("\n--- MODULE DE MISE À JOUR DYNAMIQUE ---")
-                print("Entrez les chemins relatifs vers vos nouveaux fichiers CSV.")
+                
+                # CORRECTION 1 : Demander le sous-type pour les sports qui en ont besoin
+                sous_type = None
+                if nom_sport_choisi == "tennis":
+                    print("\n1. ATP (Hommes)\n2. WTA (Femmes)")
+                    sous_type = "wta" if input("Catégorie (1 ou 2) : ") == "2" else "atp"
+                elif nom_sport_choisi == "volley":
+                    print("\n1. Hommes\n2. Femmes")
+                    sous_type = "femmes" if input("Catégorie (1 ou 2) : ") == "2" else "hommes"
+
+                print("\nEntrez les chemins relatifs vers vos nouveaux fichiers CSV.")
                 print(
                     "Laissez vide (appuyez sur Entrée) si vous ne voulez pas mettre à jour l'un des deux."
                 )
 
-                csv_matchs = input("1. CSV des nouveaux matchs : ").strip()
-                csv_joueurs = input("2. CSV des profils de joueurs : ").strip()
+                csv_matchs = input("1. CSV des nouveaux matchs : ").strip(" '\"")
+                csv_joueurs = input("2. CSV des profils de joueurs : ").strip(" '\"")
 
                 if not csv_matchs and not csv_joueurs:
                     print("❌ Opération annulée, aucune donnée fournie.")
                 else:
-                    updater = DataUpdater(sport_obj)
+                    # CORRECTION 2 : On injecte le sous-type dans l'Updater
+                    updater = DataUpdater(sport_obj, sous_type=sous_type)
 
                     path_m = csv_matchs if csv_matchs else None
                     path_j = csv_joueurs if csv_joueurs else None
 
-                    updater.mettre_a_jour_tout(path_m, path_j)
+                    # CORRECTION 3 : On capture le retour booléen pour savoir si on doit recharger
+                    succes_maj = updater.mettre_a_jour_tout(path_m, path_j)
 
-                    print("\n🔄 Rechargement de l'application en mémoire...")
-                    try:
-                        tous_les_matchs[nom_sport_choisi] = (
-                            loader_match.load_all_matches(sport_obj)
-                        )
+                    if succes_maj:
+                        print("\n🔄 Rechargement de l'application en mémoire...")
+                        try:
+                            tous_les_matchs[nom_sport_choisi] = (
+                                loader_match.load_all_matches(sport_obj)
+                            )
 
-                        loader_player = PlayerLoader(sport_obj)
-                        tous_les_joueurs[nom_sport_choisi] = (
-                            loader_player.charger_player(sport_obj)
-                        )
+                            loader_player = PlayerLoader(sport_obj)
+                            tous_les_joueurs[nom_sport_choisi] = (
+                                loader_player.charger_player(sport_obj)
+                            )
 
-                        toutes_les_equipes[nom_sport_choisi] = (
-                            loader_team.load_all_teams(sport_obj)
-                        )
+                            toutes_les_equipes[nom_sport_choisi] = (
+                                loader_team.load_all_teams(sport_obj)
+                            )
 
-                        matchs = tous_les_matchs[nom_sport_choisi]
-                        joueurs = tous_les_joueurs[nom_sport_choisi]
+                            matchs = tous_les_matchs[nom_sport_choisi]
+                            joueurs = tous_les_joueurs[nom_sport_choisi]
 
-                        print(
-                            "✨ Tout est à jour ! Les nouvelles stats sont immédiatement disponibles."
-                        )
-                    except Exception as e:
-                        print(f"❌ Erreur lors du rechargement des données : {e}")
+                            print(
+                                "✨ Tout est à jour ! Les nouvelles stats sont immédiatement disponibles."
+                            )
+                        except Exception as e:
+                            print(f"❌ Erreur lors du rechargement des données : {e}")
+                    else:
+                        print("\n⚠️ Le rechargement a été annulé car l'import a échoué.")
 
             # --- ACTION 7 : ÉDITEUR MANUEL ---
             elif choix_action == "7":
