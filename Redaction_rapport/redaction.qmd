@@ -182,7 +182,42 @@ Nous avons donc implémenté un algorithme d'extraction et de conversion. Pour l
 Ce travail de nettoyage et de transformation a été adapté à la spécificité de chaque jeu de données. À titre d'exemple, pour la base de données du Tennis, les données étaient scindées en deux fichiers distincts (ATP pour les hommes, WTA pour les femmes). Le traitement de ce jeu de données a nécessité l'ajout d'une colonne de genre et la concaténation des deux fichiers via Pandas avant de procéder à l'extraction. Ces traitements spécifiques garantissent que, in fine, toutes les données convergent vers un modèle unique et exploitable par notre application.
 
 
+# Présentation des résultats
 
+Le développement de notre architecture orientée objet, couplé à l'utilisation des bibliothèques Pandas et Matplotlib, a permis d'aboutir à une application fonctionnelle et dynamique. L'interface reflète directement la modularité de notre code sous-jacent. Cette section présente visuellement les fonctionnalités implémentées, qui démontre ainsi la conformité de notre rendu avec le cahier des charges initial.
+
+## L'interface utilisateur
+
+L'application repose sur une interface en ligne de commande structurée autour d'une boucle d'exécution continue. À l'ouverture, l'utilisateur est invité à sélectionner le sport qu'il souhaite analyser parmi les cinq disciplines chargées en mémoire. L'application intègre des mécanismes de sécurité pour fluidifier l'expérience : si un jeu de données est manquant ou corrompu pour un sport précis, le programme ne s'interrompt pas. Il informe l'utilisateur de l'indisponibilité des données et l'invite à choisir une autre option. Une fois le sport sélectionné, un menu d'actions contextuel s'affiche, offrant une arborescence claire entre les requêtes statistiques simples, les visualisations graphiques avancées et le module d'administration des données.
+
+![Légende optionnelle](images_partie7/image1.png){width="75%" fig-align="center"}
+
+## Consultation des statistiques
+
+La première fonctionnalité majeure de l'application est sa capacité d'interrogation ciblée. En saisissant le nom d'une entité (un joueur ou une équipe), le programme utilise ses algorithmes sur l'historique des matchs. Afin d'offrir une précision maximale, l'utilisateur peut filtrer sa requête sur une saison spécifique ou demander un bilan global sur l'ensemble de la carrière. L'application s'adapte dynamiquement aux règles inhérentes à chaque discipline sportive : elle calcule et affiche le nombre de matchs nuls si la requête concerne le football, mais occulte automatiquement cette caractéristique pour des sports comme le tennis ou League of Legends, calculant ainsi un taux de victoire.
+
+![Légende optionnelle](images_partie7/image2.png){width="75%" fig-align="center"}
+
+## Les comparateurs graphiques 
+
+Pour dépasser les limites de la simple lecture de données textuelles, l'application intègre un outil d'analyse comparative visuelle. Ce comparateur permet de mettre en opposition directe deux joueurs ou deux équipes. Une fois les cibles et la temporalité (saison spécifique ou historique complet) sélectionnées par l'utilisateur, l'application sollicite Matplotlib pour générer des diagrammes en barres. Ces graphiques permettent de confronter instantanément les volumes de matchs joués et les taux de victoire.
+
+![Légende optionnelle](images_partie7/image3.png){width="75%" fig-align="center"}
+
+## Analyses physiologiques et data visualisation 
+
+Notre classe *AnalysePhysiologique* propose des visualisations croisées. Un premier niveau de lecture prend la forme d'un histogramme des tailles, utile pour identifier le profil physique médian d'un sport donné.
+Par ailleurs, nous avons également une méthode pour analyser la corrélation entre les caractéristiques physiques (taille) et les performances (pourcentage de victoire). Pour des bases de données volumineuses contenant des milliers de joueurs, un nuage de points classique aurait été illisible à cause de la superposition des données. Nous avons donc opté pour une carte de chaleur en nid d'abeille (fonction hexbin). Cette méthode regroupe les joueurs par alvéoles et utilise une échelle colorimétrique pour mettre en évidence les zones de chaleur physiologique où se concentrent les joueurs les plus victorieux.
+
+![Légende optionnelle](images_partie7/image4.png){width="75%" fig-align="center"}
+
+## Édition et mise à jour dynamique
+
+L'application se distingue par sa dimension interactive et pérenne grâce à son module de gestion des données intégré. Elle permet non seulement d'importer de nouveaux fichiers de compétition, mais aussi d'éditer les données existantes pour corriger d'éventuelles anomalies.
+Lorsqu'un utilisateur recherche une entité à modifier, l'algorithme utilise Pandas pour fusionner virtuellement les colonnes. Une fois la cellule ciblée et la nouvelle valeur saisie, la méthode *to_csv()*  réécrit physiquement le fichier sur le disque dur, garantissant la persistance de l'information. Immédiatement après la sauvegarde, l'application force les Loaders à rafraîchir les instances en mémoire vive. Ainsi, les modifications manuelles et les nouveaux matchs sont instantanément pris en compte dans les calculs et les graphiques suivants, sans que l'utilisateur n'ait besoin de redémarrer le programme
+
+
+![Légende optionnelle](images_partie7/image5.png){width="75%" fig-align="center"}
 
 
 
