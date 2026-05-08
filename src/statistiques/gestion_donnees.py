@@ -3,7 +3,6 @@ from typing import Any
 
 import pandas as pd
 
-
 # Chemins réels lus par les loaders
 CHEMINS_PAR_SPORT: dict[str, dict[str, str]] = {
     "football": {
@@ -83,7 +82,7 @@ class DataUpdater:
         type_fichier : str
             'matchs' ou 'joueurs' — détermine le fichier de référence.
 
-        Returns
+        Returns:
         -------
         tuple[bool, str]
             (True, 'OK') si le fichier est valide, (False, message) sinon.
@@ -148,7 +147,7 @@ class DataUpdater:
         chemin_nouveaux_joueurs : str | None, optional
             Chemin vers le CSV des nouveaux joueurs (None = ignoré).
 
-        Returns
+        Returns:
         -------
         bool
             True si au moins un fichier a été importé avec succès.
@@ -218,7 +217,7 @@ class DataUpdater:
     def editer_joueur_manuellement(self) -> bool:
         """Permet de modifier une caractéristique d'un joueur via la console.
 
-        Returns
+        Returns:
         -------
         bool
             True si la modification a réussi, False sinon.
@@ -290,7 +289,7 @@ class DataUpdater:
     def editer_equipe_manuellement(self) -> bool:
         """Permet de modifier une caractéristique d'une équipe via la console.
 
-        Returns
+        Returns:
         -------
         bool
             True si la modification a réussi, False sinon.
