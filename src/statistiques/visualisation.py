@@ -84,3 +84,21 @@ class VisualisationComparateur:
         plt.savefig(nom_fichier, bbox_inches='tight')
         plt.close()
         print(f"\n✅ Graphique généré avec succès ! Double-cliquez sur '{nom_fichier}' dans l'explorateur à gauche pour le voir.")
+
+
+def afficher_comparateur_joueurs(stats_j1: dict[str, Any], stats_j2: dict[str, Any]) -> None:
+    """
+    Fonction adaptateur (Adapter Pattern) pour utiliser la nouvelle classe 
+    sans casser les tests existants.
+    """
+    visualiseur = VisualisationComparateur()
+    visualiseur.comparer_joueurs(stats_j1, stats_j2)
+
+
+def afficher_comparateur_equipes(stats_e1: dict[str, Any], stats_e2: dict[str, Any]) -> None:
+    """
+    Fonction adaptateur (Adapter Pattern) pour utiliser la nouvelle classe 
+    sans casser les tests existants.
+    """
+    visualiseur = VisualisationComparateur()
+    visualiseur.comparer_equipes(stats_e1, stats_e2)

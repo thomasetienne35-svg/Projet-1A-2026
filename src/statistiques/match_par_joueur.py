@@ -1,4 +1,6 @@
+from types import SimpleNamespace
 from typing import Any
+
 
 class PlayerStatsCalculator:
     def __init__(self, sport_obj, liste_matchs):
@@ -21,7 +23,6 @@ class PlayerStatsCalculator:
             if not is_home and not is_away:
                 continue
 
-            # Identification du nom exact pour l'affichage
             if is_home:
                 for p in match.list_home_player:
                     if nom_recherche in str(p).lower(): vrai_nom = str(p); break
@@ -31,7 +32,6 @@ class PlayerStatsCalculator:
 
             nb_matchs += 1
             
-            # Logique de calcul selon le sport
             try:
                 res = self._analyser_victoire(match, is_home, is_away)
                 if res == "V": victoires += 1
@@ -56,7 +56,7 @@ class PlayerStatsCalculator:
         }
 
     def _analyser_victoire(self, match, is_home, is_away):
-        """Méthode privée pour isoler la logique métier par sport"""
+        """Méthode privée pour isoler la logique métier par sport."""
         if self.sport_name == "tennis":
             return "V" if is_home else "D"
             
@@ -72,3 +72,13 @@ class PlayerStatsCalculator:
             if h_score == a_score: return "N"
             victoire_domicile = h_score > a_score
             return "V" if (is_home and victoire_domicile) or (is_away and not victoire_domicile) else "D"
+
+def calculer_stats_joueur(nom_joueur: str, sport: str, matchs: list[Any]) -> dict[str, Any] | str:
+    """
+    Fonction adaptateur (Adapter Pattern) pour maintenir la compatibilité 
+    avec les autres modules et les tests existants.
+    """
+    sport_obj = SimpleNamespace(name=sport)
+    
+    calculateur = PlayerStatsCalculator(sport_obj, matchs)
+    return calculateur.obtenir_bilan(nom_joueur)

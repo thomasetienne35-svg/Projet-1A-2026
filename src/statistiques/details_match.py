@@ -1,5 +1,5 @@
 from typing import Any, List, Union
-from match import Match
+from src.match import Match
 
 class MatchFormatter:
     """Classe responsable du formatage et de l'affichage des détails d'un match."""

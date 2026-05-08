@@ -3,7 +3,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 
-from sport import Sport
+from src.sport import Sport
 from .match_par_joueur import PlayerStatsCalculator
 
 
