@@ -4,7 +4,7 @@ from typing import Any
 import pandas as pd
 
 
-# Chemins réels lus par les loaders — c'est ici qu'il faut écrire
+# Chemins réels lus par les loaders
 CHEMINS_PAR_SPORT: dict[str, dict[str, str]] = {
     "football": {
         "matchs":  "data/football_european_leagues_tdd/match.csv",
