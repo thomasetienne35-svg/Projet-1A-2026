@@ -43,7 +43,7 @@ number-sections: true
 
 \begin{flushleft}
 \emph{Étudiants :}\\
-Groupe à préciser\\
+Groupe 25\\
 Ilan GUEDJ\\
 Jules FRULLI\\
 Thomas ETIENNE\\
@@ -89,11 +89,13 @@ Afin de répondre efficacement à ces enjeux de modélisation et de flexibilité
 ## Diagramme d'état
 
 ![Diagramme d'état de l'application](Diagramme_état.png){width="100%" fig-align="center"}
+
 Pour éviter de surcharger le diagramme les fonctionnalités qui permettent de produire des graphiques n'ont pas été représentées dans le diagramme d'état.
 
 ## Diagramme de classe
 
 ![Diagramme de classe de l'application](Diagramme_classe.pdf){width="100%" fig-align="center"}
+
 Le choix a été fait de ne pas mettre tous les loaders spécifiques des sports (seulement celui du foot qui est le même que les autres) pour éviter de surcharger la diagramme.
 
 ## Diagramme d'action
@@ -110,14 +112,14 @@ Le langage de programmation utilisé lors de ce projet est *Python 3*. La biblio
 
 Lors de la réalisation de ce projet, nous avons fait face à un problème de données. En effet, ces données font référence à des sports différents. Ces données sont donc, par nature, hétérogènes. Nous avons par exemple des données sur le football, d’autres sur le tennis. Mais ces dernières sont séparées selon le genre de l’athlète. Par ailleurs, les fichiers CSV n’ont ni les mêmes colonnes, ni les mêmes unités de mesure d’un sport à l’autre. Ainsi, une approche avec de simples listes ou dictionnaires aurait créé un code peu lisible, rempli de conditions sur le sport choisi. Grâce à la programmation orientée objet (POO), nous avons créé une manière universelle de représenter nos sports, matchs et athlètes. Peu importe comment le joueur est décrit dans le fichier CSV, les loaders extraient la donnée et fabriquent un objet *Player* avec des attributs universels comme par exemple la taille ou le nom. Aussi,les responsabilités sont séparées,  le fichier *main.py* ne fait que gérer le menu, les loaders ne font que traduire les CSV en objets et les différents services proposés ne font que générer des graphiques ou des statistiques à partir de ces objets. 
 
-![Légende optionnelle](Images_partie3/image1.png){width="75%" fig-align="center"}
+![Extracteur de taille](Images_partie3/image1.png){width="75%" fig-align="center"}
 Cela représente un extrait de notre code portant sur le nettoyage des données. Nous suivons une logique de standardisation de la taille de l’objet *Player*, nous convertissons ainsi les données impériales (pieds-pouces) en système métrique (cm).
 
 ## Les choix d’utilisations
 
 Nous avons fait le choix d’utiliser Pandas et non le module CSV natif. En effet, Pandas permet de gérer facilement les données textuelles incomplètes. Pandas permet également de pouvoir filtrer les données de manière plus efficace que si nous n’avions pas utilisé cette bibliothèque. Par exemple, dans notre classe *DataUpdater*, pour trouver un joueur quand on ne sait pas si la colonne s’appelle *fistr_name* ou *player_name*, Pandas fusionne virtuellement les colonnes des noms et applique un filtre de recherche.
 
-![Légende optionnelle](Images_partie3/image2.png){width="85%" fig-align="center"}
+![Extrait du filtre de recherche](Images_partie3/image2.png){width="85%" fig-align="center"}
 Pour répondre au cahier des charges, nous avons également utilisé la bibliothèque Matplotlib qui nous permet de réaliser des graphiques complets comme par exemple l’analyse de la taille des joueurs avec le pourcentage de victoires. Pour représenter la corrélation entre ces deux variables, nous avons utilisé la fonction *plt.hexbin()*. En effet, quand on croise deux variables comme la taille et le pourcentage de victoires pour des milliers d’individus, un graphique classique crée un nuage de points illisible. Donc cette fonction regroupe les joueurs par alvéoles et utilise la couleur pour montrer la concentration des individus dans un certaine zone. Cela offre une lecture plus fluide.
 
 ![Configuration d’une carte de chaleur avec Matplotlib](Images_partie3/image3.png){width="85%" fig-align="center"}
@@ -132,21 +134,21 @@ Afin de gérer la diversité de nos données sportives et d'éviter un code diff
 Nous avons créé des classes spécifiques comme *Player*, *Team* et *Sport* qui agissent comme des conteneurs de données. Au lieu de manipuler directement des lignes de DataFrames ou des dictionnaires tout au long du code, chaque élément pertinent de nos fichiers CSV est transformé en un objet. L'objectif principal de cette démarche est la standardisation et la sécurité des données.
 Par exemple, qu'un athlète provienne du fichier *atp_players_2024.csv* (tennis) ou *player.csv* (football), il devient un objet *Player* avec des attributs stricts et communs comme *prenom_nom*, *taille*, ou *genre*. Cette encapsulation garantit que le reste du programme n'a pas à se soucier des noms de colonnes originaux du CSV. Si une clé de dictionnaire vient à changer dans les données brutes, l'erreur ne se propagera pas dans toute l'application : la donnée est verrouillée et uniformisée au sein de l'objet. Cela permet à l'application de traiter n'importe quel sport de manière universelle.
 
-![Légende optionnelle](Images_partie4/image1.png){width="75%" fig-align="center"}
+![Création d'un joueur et assignation des attributs](Images_partie4/image1.png){width="75%" fig-align="center"}
 
 ## Les classes Loaders
 
 Pour protéger la logique de notre application des incohérences souvent présentes dans les jeux de données bruts, nous avons isolé la lecture des fichiers. La mission des classes  *MatchLoader*, *PlayerLoader* et *TeamLoader* est d'ouvrir les fichiers CSV, de gérer les valeurs manquantes via des blocs *try/except*, de convertir les types de variables (par exemple, transformer une chaîne de caractères en entier) et de fabriquer les objets finaux.
 L'intérêt de cette approche est que chaque sport possède son propre comportement lors du chargement, sans impacter le programme principal. Par exemple, le loader du tennis gère la séparation des données en deux fichiers distincts (ATP pour les hommes et WTA pour les femmes). Le loader va lire ces deux fichiers séparément, leur ajouter une colonne *genre* pour garder la trace de la catégorie, puis utiliser *Pandas* pour les concaténer. Il renvoie ainsi une liste unique et complète de joueurs de tennis prête à être analysée.
 
-![Légende optionnelle](Images_partie4/image2.png){width="75%" fig-align="center"}
+![Concaténation de deux dataframes dans TennisPlayerLoader](Images_partie4/image2.png){width="75%" fig-align="center"}
 
 ## Les classes services
 
 Les services sont les classes qui effectuent les calculs complexes ou génèrent les affichages, sans stocker la donnée de manière permanente. Nous avons par exemple la classe AnalysePhysiologique, qui reçoit la liste des objets Player et s'occupe de toute la visualisation (génération des histogrammes et des heatmaps). Le fait de l'isoler dans une classe évite de surcharger le fichier principal **main.py** avec de multiples paramétrages Matplotlib et permet de réutiliser ces graphiques facilement.
 De la même manière, d'autres classes de services gèrent la logique métier de l'application. La classe ChampionshipPointsCalculator s'occupe du calcul des points de victoires ou de défaites. Puisque les règles de calcul diffèrent selon les sports, cette classe centralise cette complexité : le programme principal se contente d'appeler une méthode unique, et le service applique la bonne formule. Enfin, la classe DataUpdater gère l'aspect persistance des données. Elle isole les opérations d'écriture afin de s'assurer que toute modification manuelle ou importation de nouvelle compétition n'écrase pas accidentellement nos historiques.
 
-![Légende optionnelle](Images_partie4/image3.png){width="75%" fig-align="center"}
+![Classe AnalysePhysiologique](Images_partie4/image3.png){width="75%" fig-align="center"}
 
 ## Les avantages de cette architecure logicielle
 
@@ -166,7 +168,7 @@ Notre application traite des données issues de cinq sports différents : le foo
 
 Le fichier *player.csv* du Basketball recense les athlètes professionnels. Chaque ligne représente un joueur unique. Parmi les variables brutes à notre disposition, nous exploitons principalement : les variables textuelles telles que  *first_name*, *last_name*, *team_name* et les variables numériques stockées sous format texte telles que *height* (taille) et *weight* (poids).
 
-![Légende optionnelle](Images_partie5/image1.png){width="75%" fig-align="center"}
+![Extrait du player.csv de basketball](Images_partie5/image1.png){width="75%" fig-align="center"}
 
 ### Nettoyage et gestion des valeurs manquantes
 
@@ -181,6 +183,29 @@ Nous avons donc implémenté un algorithme d'extraction et de conversion. Pour l
 
 Ce travail de nettoyage et de transformation a été adapté à la spécificité de chaque jeu de données. À titre d'exemple, pour la base de données du Tennis, les données étaient scindées en deux fichiers distincts (ATP pour les hommes, WTA pour les femmes). Le traitement de ce jeu de données a nécessité l'ajout d'une colonne de genre et la concaténation des deux fichiers via Pandas avant de procéder à l'extraction. Ces traitements spécifiques garantissent que, in fine, toutes les données convergent vers un modèle unique et exploitable par notre application.
 
+# Assurance qualité du code
+
+## Outils qualitatifs 
+
+Pour garantir un code propre et fiable tout au long du projet, nous avons mis en place plusieurs outils qualitatifs. Tout d'abord, nous avons choisi d'utiliser Ruff, qui a l'avantage d'être un outil combinant deux fonctions essentielles : un linter et un formateur. L'utilité du linter est d'analyser le code en profondeur pour prévenir les bugs potentiels, détecter les erreurs de logique et vérifier le respect des bonnes pratiques de programmation. En complément, le formateur agit comme un metteur en page automatique dont le but est d'harmoniser l'esthétique du fichier, par exemple en gérant les espaces ou la longueur des lignes, afin d'offrir une présentation visuelle standardisée. L'utilisation conjointe de ces deux fonctionnalités au sein de Ruff nous a ainsi permis de maintenir une syntaxe claire et d'appliquer naturellement la convention Google pour documenter nos classes. 
+Afin de pouvoir correctement standardiser notre code, nous avons créé un fichier *pyproject.toml* qui recense les règles à appliquer par notre linter. Pour cela, nous avons en premier lieu renseigné la version de python utilisée  : déjà définie dans notre fichier *README.md* . Nous avons ensuite choisi de définir la longueur maximale de nos lignes à 88, taille standard pour le code. Un ensemble de règles à appliquer par le linter a également été définis sur la base d’une couverture maximale des bases de la lisibilité du code : les erreurs de style, les fautes de logique, les docstrings et le tri alphabétique des imports. Enfin, la convention Google a été paramétrée dans ce fichier afin que la vérification des docstring se fasse bien sous ce critère.
+
+![Paramétrage de l'outil d'analyse statique Ruff pour l'assurance qualité du projet](Images_partie6/image1.png){width="75%" fig-align="center"}
+
+Ensuite, pour évaluer objectivement la qualité de notre travail, nous nous sommes appuyés sur deux métriques quantitatives. D'une part, nous avons utilisé l'évaluation du linter comme un repère. Avec Ruff, notre but était d'atteindre zéro erreurs. Par conséquent, en corrigeant systématiquement chaque avertissement soulevé par l'outil d'inspection, nous avons l'assurance de livrer un code qui respecte parfaitement les règles de style.
+
+## Mise en place des test
+
+Pour la réalisation des tests nous avons créé un dossier puis un fichier par classe à tester. Pour la réalisation de nos tests, nous avons opté pour une approche axée sur les tests unitaires automatisés via le framework pytest.
+D'autre part, nous avons mesuré notre couverture de code grâce à l'outil pytest-cov. Cette métrique, exprimée en pourcentage, nous indique concrètement quelle proportion de notre code source est traversée lors de l'exécution de nos tests unitaires.
+Nous avons fait le choix de ne pas tester le fichier main.py car c'est un menu d'affichage. Il relie l'utilisateur au reste du programme. Pour vérifier que le menu visuel fonctionne bien et réagit correctement aux choix de l'utilisateur nous l’avons testé nous-mêmes à la main.
+La majorité de nos classes (ChampionshipPointsCalculator, AnalysePhysiologique, etc.) dépendent de volumes de données importants. Pour garantir des tests rapides et déterministes, nous avons fait le choix de ne pas charger les vrais fichiers de données lors des tests. Nous avons simulé des objets "matchs" et "équipes" très simple en utilisant *SimpleNamespace*. Cela nous a permis de cibler précisément la logique de nos classes tel que le ratio de victoire au basket.
+De plus pour le test de certaines classes nécessite que l'utilisateur rentre des informations dans le terminal. Nous avons donc utilisé l'outil *unittest.mock.patch*. Cela nous a permis de simuler les réponses d'un utilisateur humain et de vérifier que notre programme réagit correctement face aux erreurs de saisie.
+Pour les modules de statistiques générant des graphiques, les tests sont donc concentrés sur l'exécution sans erreur de la bibliothèque mathématique et sur l'assertion de la présence du fichier final. C’est à dire vérifier si le fichier image a bien été créé et sauvegardé sur l'ordinateur. Si le fichier final existe, cela nous prouve que tout le processus de génération a fonctionné correctement.
+
+![Résultat du test coverage pytest-cov](Images_partie6/image2.png){width="75%" fig-align="center"}
+
+
 
 # Présentation des résultats
 
@@ -190,26 +215,26 @@ Le développement de notre architecture orientée objet, couplé à l'utilisatio
 
 L'application repose sur une interface en ligne de commande structurée autour d'une boucle d'exécution continue. À l'ouverture, l'utilisateur est invité à sélectionner le sport qu'il souhaite analyser parmi les cinq disciplines chargées en mémoire. L'application intègre des mécanismes de sécurité pour fluidifier l'expérience : si un jeu de données est manquant ou corrompu pour un sport précis, le programme ne s'interrompt pas. Il informe l'utilisateur de l'indisponibilité des données et l'invite à choisir une autre option. Une fois le sport sélectionné, un menu d'actions contextuel s'affiche, offrant une arborescence claire entre les requêtes statistiques simples, les visualisations graphiques avancées et le module d'administration des données.
 
-![Légende optionnelle](images_partie7/image1.png){width="75%" fig-align="center"}
+![Menu principal du terminal](images_partie7/image1.png){width="95%" fig-align="center"}
 
 ## Consultation des statistiques
 
 La première fonctionnalité majeure de l'application est sa capacité d'interrogation ciblée. En saisissant le nom d'une entité (un joueur ou une équipe), le programme utilise ses algorithmes sur l'historique des matchs. Afin d'offrir une précision maximale, l'utilisateur peut filtrer sa requête sur une saison spécifique ou demander un bilan global sur l'ensemble de la carrière. L'application s'adapte dynamiquement aux règles inhérentes à chaque discipline sportive : elle calcule et affiche le nombre de matchs nuls si la requête concerne le football, mais occulte automatiquement cette caractéristique pour des sports comme le tennis ou League of Legends, calculant ainsi un taux de victoire.
 
-![Légende optionnelle](images_partie7/image2.png){width="75%" fig-align="center"}
+![Résultats des statistiques sur une équipe](images_partie7/image2.png){width="75%" fig-align="center"}
 
 ## Les comparateurs graphiques 
 
 Pour dépasser les limites de la simple lecture de données textuelles, l'application intègre un outil d'analyse comparative visuelle. Ce comparateur permet de mettre en opposition directe deux joueurs ou deux équipes. Une fois les cibles et la temporalité (saison spécifique ou historique complet) sélectionnées par l'utilisateur, l'application sollicite Matplotlib pour générer des diagrammes en barres. Ces graphiques permettent de confronter instantanément les volumes de matchs joués et les taux de victoire.
 
-![Légende optionnelle](images_partie7/image3.png){width="75%" fig-align="center"}
+![Comparaison des résultats de deux équipes](images_partie7/image3.png){width="75%" fig-align="center"}
 
 ## Analyses physiologiques et data visualisation 
 
 Notre classe *AnalysePhysiologique* propose des visualisations croisées. Un premier niveau de lecture prend la forme d'un histogramme des tailles, utile pour identifier le profil physique médian d'un sport donné.
 Par ailleurs, nous avons également une méthode pour analyser la corrélation entre les caractéristiques physiques (taille) et les performances (pourcentage de victoire). Pour des bases de données volumineuses contenant des milliers de joueurs, un nuage de points classique aurait été illisible à cause de la superposition des données. Nous avons donc opté pour une carte de chaleur en nid d'abeille (fonction hexbin). Cette méthode regroupe les joueurs par alvéoles et utilise une échelle colorimétrique pour mettre en évidence les zones de chaleur physiologique où se concentrent les joueurs les plus victorieux.
 
-![Légende optionnelle](images_partie7/image4.png){width="75%" fig-align="center"}
+![Heatmap entre la taille et le pourcentage de victoire](images_partie7/image4.png){width="75%" fig-align="center"}
 
 ## Édition et mise à jour dynamique
 
@@ -217,8 +242,32 @@ L'application se distingue par sa dimension interactive et pérenne grâce à so
 Lorsqu'un utilisateur recherche une entité à modifier, l'algorithme utilise Pandas pour fusionner virtuellement les colonnes. Une fois la cellule ciblée et la nouvelle valeur saisie, la méthode *to_csv()*  réécrit physiquement le fichier sur le disque dur, garantissant la persistance de l'information. Immédiatement après la sauvegarde, l'application force les Loaders à rafraîchir les instances en mémoire vive. Ainsi, les modifications manuelles et les nouveaux matchs sont instantanément pris en compte dans les calculs et les graphiques suivants, sans que l'utilisateur n'ait besoin de redémarrer le programme
 
 
-![Légende optionnelle](images_partie7/image5.png){width="75%" fig-align="center"}
+![Mise à jour des attributs d'un joueur](images_partie7/image5.png){width="75%" fig-align="center"}
+
+# Conclusion 
+
+Ce projet avait pour objectif de développer une application capable de traiter, analyser et comparer des données sportives issues de plusieurs disciplines. L'adoption de la programmation orientée objet a facilité la réponse au cahier des charges en permettant de standardiser des jeux de données. Les fonctionnalités principales ont pu être implémentées : le nettoyage des données brutes avec Pandas, l'analyse physiologique via les cartes de chaleur de Matplotlib, et un module permettant la modification et la sauvegarde des informations en mémoire.
+Bien que l'architecture logicielle mise en place soit fonctionnelle, l'outil présente des axes d'amélioration. L'interface reposant exclusivement sur la ligne de commande, le développement d'une interface graphique rendrait l'utilisation générale plus intuitive. De plus, l'actualisation des résultats reposant sur l'importation manuelle de fichiers CSV, une automatisation constituerait une évolution pertinente. En définitive, ce projet nous a amenés à dépasser l'écriture de scripts classiques pour mettre en pratique des concepts d'ingénierie logicielle, tels que l'encapsulation et la séparation des responsabilités.
 
 
+# Annexes 
+
+## Avis personnels
+
+### Jules
+
+Durant ce projet, j'ai pu expérimenter, dans le prolongement du DM donné en IPOO, la réflexion sur la façon d'organiser son code en modules afin de faciliter la lisibilité et le travail d'équipe. Contrairement au DM où l'on nous fournissait le diagramme de classes, j'ai pu comprendre son importance dans un projet : à la fois en amont du développement, pour avoir une direction claire, mais aussi en aval, puisque certaines erreurs de conception peuvent être mises en lumière par le diagramme.
+
+### Ilan
+
+
+
+### Thomas
+
+
+
+### Alexandre
+
+Ce projet a été une expérience très formatrice, même s'il a demandé un gros effort d'organisation au départ lorsque nous n’avions pas les bases de données. Le fait de travailler avec des données réelles, avec leurs erreurs et leurs différences d'un sport à l'autre, m'a vraiment fait comprendre l'intérêt d'avoir un code bien structuré. Ce travail m'a surtout permis de comprendre l’intérêt de la Programmation Orientée Objet. Au lieu de coder de façon classique, j'ai appris à bien séparer les tâches avec des classes. Enfin, l'utilisation de Pandas et Matplotlib m'a donné beaucoup de pratique sur le nettoyage et la visualisation de données. En résumé, c'était un excellent pont entre la théorie vue en cours et la réalité du développement d’une application.
 
 
