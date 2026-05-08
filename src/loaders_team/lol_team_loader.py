@@ -4,6 +4,7 @@ from team import Team
 
 pd.options.display.max_columns = 100
 
+
 class LolTeamLoader:
     """Chargeur spécifique pour l'extraction et la structuration des équipes de LoL."""
 
@@ -19,16 +20,14 @@ class LolTeamLoader:
             Une liste d'objets Team contenant les informations extraites.
         """
         res = []
-        df_lol = pd.read_csv(
-            "data/league_of_legends_tdd/team.csv" 
-        )
+        df_lol = pd.read_csv("data/league_of_legends_tdd/team.csv")
         for i in range(len(df_lol)):
             equipe = Team(None, None, None)
-            
-            equipe.id = i+1
+
+            equipe.id = i + 1
             equipe.name = df_lol.loc[i, "team"]
             equipe.short_name = df_lol.loc[i, "team_abbreviation"]
-            
+
             res.append(equipe)
-            
+
         return res

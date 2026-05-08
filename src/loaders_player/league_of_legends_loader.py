@@ -4,9 +4,10 @@ from player import Player
 
 pd.options.display.max_columns = 100
 
+
 class LeagueOfLegendsLoader:
-    """Chargeur spécifique pour les joueurs professionnels de League of Legends.
-    """
+    """Chargeur spécifique pour les joueurs professionnels de League of Legends."""
+
     def __init__(self) -> None:
         pass
 
@@ -19,13 +20,10 @@ class LeagueOfLegendsLoader:
             Une liste d'objets Player contenant les informations extraites.
         """
         res = []
-        df_lol = pd.read_csv(
-            "data/league_of_legends_tdd/player.csv"
-        )
+        df_lol = pd.read_csv("data/league_of_legends_tdd/player.csv")
         for i in range(len(df_lol)):
-
             joueur = Player(
-                prenom_nom=df_lol.loc[i, "name"], 
+                prenom_nom=df_lol.loc[i, "name"],
                 nationalite=df_lol.loc[i, "country_of_birth"],
                 date_naissance=df_lol.loc[i, "birthdate"],
                 genre=None,

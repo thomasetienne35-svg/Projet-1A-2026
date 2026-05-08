@@ -11,4 +11,3 @@ class Player:
         self.taille = taille
         self.poids = poids
         self.team = team
-        

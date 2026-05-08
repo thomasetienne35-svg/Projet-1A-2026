@@ -31,13 +31,13 @@ class MatchLoader:
         """
         if sport.name == "football":
             return FootballMatchLoader().load_all_match()
-        elif sport.name == "volley":  
+        elif sport.name == "volley":
             return VolleyMatchLoader().load_all_match()
         elif sport.name == "tennis":
             return TennisMatchLoader().load_all_match()
         elif sport.name == "lol":
             return LolMatchLoader().load_all_match()
-        elif sport.name == "basketball": 
+        elif sport.name == "basketball":
             return BasketballMatchLoader().load_all_match()
         else:
             raise ValueError(f"Sport non valide : {sport.name}")

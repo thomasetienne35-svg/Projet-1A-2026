@@ -29,4 +29,6 @@ class Match:
         bool
             True si le joueur est trouvé dans l'une des deux équipes, False sinon.
         """
-        return (player_id in self.list_home_player) or (player_id in self.list_away_player)
+        return (player_id in self.list_home_player) or (
+            player_id in self.list_away_player
+        )

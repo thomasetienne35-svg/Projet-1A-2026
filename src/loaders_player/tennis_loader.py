@@ -33,15 +33,15 @@ class TennisPlayerLoader:
             nom_complet = f"{prenom} {nom}"
 
             joueur = Player(None, None, None, None, None, None, None)
-            
+
             joueur.prenom_nom = nom_complet
-            joueur.nationalite = df_tennis.loc[i, "ioc"] 
-            joueur.date_naissance = df_tennis.loc[i, "dob"] 
-            joueur.genre = df_tennis.loc[i, "genre"] 
+            joueur.nationalite = df_tennis.loc[i, "ioc"]
+            joueur.date_naissance = df_tennis.loc[i, "dob"]
+            joueur.genre = df_tennis.loc[i, "genre"]
             joueur.height = df_tennis.loc[i, "height"]
             joueur.poids = None
             joueur.team = None
-            
+
             res.append(joueur)
 
         return res

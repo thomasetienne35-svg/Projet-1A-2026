@@ -29,22 +29,23 @@ class TennisMatchLoaderFemme:
         )
 
         dict_joueuses = dict(zip(df_joueuses["player_id"], df_joueuses["nom_complet"]))
-        
+
         for i in range(len(df_matchs)):
             match = Match(None, "tennis", [], [])
             match.id = f"F{i + 1}"
-            
+
             id_gagnante = df_matchs.loc[i, "winner_id"]
             id_perdante = df_matchs.loc[i, "loser_id"]
 
             nom_gagnante = dict_joueuses.get(id_gagnante, str(id_gagnante))
             nom_perdante = dict_joueuses.get(id_perdante, str(id_perdante))
-            
+
             match.list_home_player = [nom_gagnante]
             match.list_away_player = [nom_perdante]
             res.append(match)
-            
+
         return res
+
 
 class TennisMatchLoaderHomme:
     """Chargeur spécialisé pour les matchs de tennis masculin (ATP)."""
@@ -71,22 +72,23 @@ class TennisMatchLoaderHomme:
             + df_joueurs["name_last"].astype(str)
         )
         dict_joueurs = dict(zip(df_joueurs["player_id"], df_joueurs["nom_complet"]))
-        
+
         for i in range(len(df_matchs)):
             match = Match(None, "tennis", [], [])
             match.id = f"H{i + 1}"
-            
+
             id_gagnant = df_matchs.loc[i, "winner_id"]
             id_perdant = df_matchs.loc[i, "loser_id"]
 
             nom_gagnant = dict_joueurs.get(id_gagnant, str(id_gagnant))
             nom_perdant = dict_joueurs.get(id_perdant, str(id_perdant))
-            
+
             match.list_home_player = [nom_gagnant]
             match.list_away_player = [nom_perdant]
             res.append(match)
-            
+
         return res
+
 
 class TennisMatchLoader:
     """Charger simultanément les données ATP et WTA en utilisant les chargeurs spécialisés."""

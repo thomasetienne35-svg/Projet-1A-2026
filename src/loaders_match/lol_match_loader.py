@@ -4,6 +4,7 @@ from match import Match
 
 pd.options.display.max_columns = 100
 
+
 class LolMatchLoader:
     """Chargeur spécifique à League of Legends (LoL) pour l'extraction et la structuration des données."""
 
@@ -28,7 +29,7 @@ class LolMatchLoader:
         for i in range(len(df_lol_match)):
             match = Match(None, "lol", None, None)
             match.id = i + 2
-            
+
             abbr_blue = df_lol_match.loc[i, "team_blue"]
             abbr_red = df_lol_match.loc[i, "team_red"]
             winner_raw = df_lol_match.loc[i, "winner"]
@@ -40,7 +41,7 @@ class LolMatchLoader:
             match.team_blue = str(nom_complet_blue).strip()
             match.team_red = str(nom_complet_red).strip()
             match.winner = str(nom_winner).strip()
-            
+
             match.date = df_lol_match.loc[i, "date"]
             match.patch = df_lol_match.loc[i, "patch"]
 
@@ -67,5 +68,5 @@ class LolMatchLoader:
                 match.list_away_player = []
 
             res.append(match)
-            
+
         return res

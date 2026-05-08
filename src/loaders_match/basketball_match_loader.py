@@ -4,6 +4,7 @@ from match import Match
 
 pd.options.display.max_columns = 100
 
+
 class BasketballMatchLoader:
     """Chargeur spécifique au basketball pour l'extraction et la structuration des données."""
 
@@ -21,15 +22,15 @@ class BasketballMatchLoader:
         res = []
         df_basketball = pd.read_csv("data/basketball/game.csv")
         df_basketball_joueurs = pd.read_csv("data/basketball/player.csv")
-        
+
         for i in range(len(df_basketball)):
             match = Match(None, "basketball", None, None)
-            
+
             match.id = df_basketball.loc[i, "game_id"]
-            
+
             id_home = df_basketball.loc[i, "team_id_home"]
             id_away = df_basketball.loc[i, "team_id_away"]
-            
+
             match.team_id_home = id_home
             match.team_id_away = id_away
             match.season = df_basketball.loc[i, "season"]
@@ -62,5 +63,5 @@ class BasketballMatchLoader:
             ).tolist()
 
             res.append(match)
-            
+
         return res

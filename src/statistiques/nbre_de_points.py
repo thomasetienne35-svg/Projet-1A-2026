@@ -73,14 +73,18 @@ class ChampionshipPointsCalculator:
         vrai_nom_equipe = nom_equipe
 
         for equipe in self.liste_equipes_foot:
-            if equipe.name is not None and str(equipe.name).strip().lower() == nom_recherche:
+            if (
+                equipe.name is not None
+                and str(equipe.name).strip().lower() == nom_recherche
+            ):
                 team_id = equipe.id
                 vrai_nom_equipe = str(equipe.name).strip()
                 break
 
         if team_id is None:
             equipes_proches = [
-                eq for eq in self.liste_equipes_foot 
+                eq
+                for eq in self.liste_equipes_foot
                 if eq.name is not None and nom_recherche in str(eq.name).strip().lower()
             ]
 
@@ -89,7 +93,9 @@ class ChampionshipPointsCalculator:
                 vrai_nom_equipe = str(equipes_proches[0].name).strip()
             elif len(equipes_proches) > 1:
                 noms = ", ".join([str(eq.name).strip() for eq in equipes_proches])
-                return f"Erreur : '{nom_equipe}' est ambigu. Voulez-vous dire : {noms} ?"
+                return (
+                    f"Erreur : '{nom_equipe}' est ambigu. Voulez-vous dire : {noms} ?"
+                )
             else:
                 return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
 
@@ -99,7 +105,8 @@ class ChampionshipPointsCalculator:
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
-                m for m in self.liste_matchs_foot 
+                m
+                for m in self.liste_matchs_foot
                 if getattr(m, "season", None) == saison
             ]
             if not matchs_filtres:
@@ -127,27 +134,33 @@ class ChampionshipPointsCalculator:
                 away_goals = int(a_goals)
             except Exception:
                 continue
-                
+
             if home_id == t_id:
                 nb_matchs += 1
                 buts_marques += home_goals
                 buts_encaisses += away_goals
-                if home_goals > away_goals: victoires_dom += 1
-                elif home_goals == away_goals: nuls += 1
-                else: defaites_dom += 1
- 
+                if home_goals > away_goals:
+                    victoires_dom += 1
+                elif home_goals == away_goals:
+                    nuls += 1
+                else:
+                    defaites_dom += 1
+
             elif away_id == t_id:
                 nb_matchs += 1
                 buts_marques += away_goals
                 buts_encaisses += home_goals
-                if away_goals > home_goals: victoires_ext += 1
-                elif away_goals == home_goals: nuls += 1
-                else: defaites_ext += 1
- 
+                if away_goals > home_goals:
+                    victoires_ext += 1
+                elif away_goals == home_goals:
+                    nuls += 1
+                else:
+                    defaites_ext += 1
+
         victoires_total = victoires_dom + victoires_ext
         defaites_total = defaites_dom + defaites_ext
         points_totaux = victoires_total * 3 + nuls * 1
- 
+
         return {
             "equipe": vrai_nom_equipe,
             "saison": saison if saison else "Toutes saisons",
@@ -187,14 +200,18 @@ class ChampionshipPointsCalculator:
         vrai_nom_equipe = nom_equipe
 
         for equipe in self.liste_equipes_foot:
-            if equipe.name is not None and str(equipe.name).strip().lower() == nom_recherche:
+            if (
+                equipe.name is not None
+                and str(equipe.name).strip().lower() == nom_recherche
+            ):
                 team_id = equipe.id
                 vrai_nom_equipe = str(equipe.name).strip()
                 break
 
         if team_id is None:
             equipes_proches = [
-                eq for eq in self.liste_equipes_foot 
+                eq
+                for eq in self.liste_equipes_foot
                 if eq.name is not None and nom_recherche in str(eq.name).strip().lower()
             ]
 
@@ -203,7 +220,9 @@ class ChampionshipPointsCalculator:
                 vrai_nom_equipe = str(equipes_proches[0].name).strip()
             elif len(equipes_proches) > 1:
                 noms = ", ".join([str(eq.name).strip() for eq in equipes_proches])
-                return f"Erreur : '{nom_equipe}' est ambigu. Voulez-vous dire : {noms} ?"
+                return (
+                    f"Erreur : '{nom_equipe}' est ambigu. Voulez-vous dire : {noms} ?"
+                )
             else:
                 return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
 
@@ -213,7 +232,8 @@ class ChampionshipPointsCalculator:
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
-                m for m in self.liste_matchs_foot 
+                m
+                for m in self.liste_matchs_foot
                 if getattr(m, "season", None) == saison
             ]
             if not matchs_filtres:
@@ -222,7 +242,7 @@ class ChampionshipPointsCalculator:
         victoires_dom = victoires_ext = 0
         defaites_dom = defaites_ext = 0
         points_marques = points_encaisses = nb_matchs = 0
- 
+
         t_id = float(team_id)
 
         for match in matchs_filtres:
@@ -258,25 +278,29 @@ class ChampionshipPointsCalculator:
 
             except Exception:
                 continue
-                
+
             if home_id == t_id:
                 nb_matchs += 1
                 points_marques += home_pts
                 points_encaisses += away_pts
-                if home_pts > away_pts: victoires_dom += 1
-                elif home_pts < away_pts: defaites_dom += 1
- 
+                if home_pts > away_pts:
+                    victoires_dom += 1
+                elif home_pts < away_pts:
+                    defaites_dom += 1
+
             elif away_id == t_id:
                 nb_matchs += 1
                 points_marques += away_pts
                 points_encaisses += home_pts
-                if away_pts > home_pts: victoires_ext += 1
-                elif away_pts < home_pts: defaites_ext += 1
- 
+                if away_pts > home_pts:
+                    victoires_ext += 1
+                elif away_pts < home_pts:
+                    defaites_ext += 1
+
         victoires_total = victoires_dom + victoires_ext
         defaites_total = defaites_dom + defaites_ext
         points_totaux = (victoires_total * 2) + (defaites_total * 1)
- 
+
         return {
             "equipe": vrai_nom_equipe,
             "saison": saison if saison else "Toutes saisons",
@@ -339,23 +363,33 @@ class ChampionshipPointsCalculator:
         vrai_nom_equipe = nom_equipe
 
         for equipe in self.liste_equipes_foot:
-            if equipe.name is not None and str(equipe.name).strip().lower() == nom_recherche:
-                team_id = equipe.id if equipe.id else equipe.name 
+            if (
+                equipe.name is not None
+                and str(equipe.name).strip().lower() == nom_recherche
+            ):
+                team_id = equipe.id if equipe.id else equipe.name
                 vrai_nom_equipe = str(equipe.name).strip()
                 break
- 
+
         if team_id is None:
             equipes_proches = [
-                eq for eq in self.liste_equipes_foot 
+                eq
+                for eq in self.liste_equipes_foot
                 if eq.name is not None and nom_recherche in str(eq.name).strip().lower()
             ]
 
             if len(equipes_proches) == 1:
-                team_id = equipes_proches[0].id if equipes_proches[0].id else equipes_proches[0].name
+                team_id = (
+                    equipes_proches[0].id
+                    if equipes_proches[0].id
+                    else equipes_proches[0].name
+                )
                 vrai_nom_equipe = str(equipes_proches[0].name).strip()
             elif len(equipes_proches) > 1:
                 noms = ", ".join([str(eq.name).strip() for eq in equipes_proches])
-                return f"Erreur : '{nom_equipe}' est ambigu. Voulez-vous dire : {noms} ?"
+                return (
+                    f"Erreur : '{nom_equipe}' est ambigu. Voulez-vous dire : {noms} ?"
+                )
             else:
                 return f"Erreur : L'équipe '{nom_equipe}' est introuvable."
 
@@ -365,7 +399,8 @@ class ChampionshipPointsCalculator:
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
-                m for m in self.liste_matchs_foot 
+                m
+                for m in self.liste_matchs_foot
                 if getattr(m, "season", getattr(m, "date", None)) == saison
             ]
             if not matchs_filtres:
@@ -374,11 +409,15 @@ class ChampionshipPointsCalculator:
         victoires_total = defaites_total = 0
         sets_gagnes = sets_perdus = nb_matchs = 0
         stade_final = "Aucun match joué"
- 
+
         t_id = str(team_id).strip().upper()
 
-        nb_hommes = sum(1 for m in matchs_filtres if getattr(m, 'genre', None) == 'Homme')
-        nb_femmes = sum(1 for m in matchs_filtres if getattr(m, 'genre', None) == 'Femme')
+        nb_hommes = sum(
+            1 for m in matchs_filtres if getattr(m, "genre", None) == "Homme"
+        )
+        nb_femmes = sum(
+            1 for m in matchs_filtres if getattr(m, "genre", None) == "Femme"
+        )
         nb_sans_genre = len(matchs_filtres) - nb_hommes - nb_femmes
 
         print(
@@ -406,7 +445,7 @@ class ChampionshipPointsCalculator:
                 away_sets = int(a_sets)
             except Exception:
                 continue
-                
+
             if home_id == t_id or away_id == t_id:
                 nb_matchs += 1
 
@@ -415,14 +454,18 @@ class ChampionshipPointsCalculator:
                 if home_id == t_id:
                     sets_gagnes += home_sets
                     sets_perdus += away_sets
-                    if home_sets > away_sets: victoires_total += 1
-                    else: defaites_total += 1
+                    if home_sets > away_sets:
+                        victoires_total += 1
+                    else:
+                        defaites_total += 1
                 else:
                     sets_gagnes += away_sets
                     sets_perdus += home_sets
-                    if away_sets > home_sets: victoires_total += 1
-                    else: defaites_total += 1
- 
+                    if away_sets > home_sets:
+                        victoires_total += 1
+                    else:
+                        defaites_total += 1
+
         return {
             "equipe": vrai_nom_equipe,
             "tournoi": saison if saison else "Toutes compétitions",
@@ -468,8 +511,10 @@ class ChampionshipPointsCalculator:
         matchs_filtres = self.liste_matchs_foot
         if saison is not None:
             matchs_filtres = [
-                m for m in self.liste_matchs_foot 
-                if getattr(m, "season", getattr(m, "date", getattr(m, "patch", None))) == saison
+                m
+                for m in self.liste_matchs_foot
+                if getattr(m, "season", getattr(m, "date", getattr(m, "patch", None)))
+                == saison
             ]
 
         nb_matchs = victoires = defaites = 0
@@ -480,24 +525,24 @@ class ChampionshipPointsCalculator:
                 t_blue = str(getattr(match, "team_blue", "")).strip().lower()
                 t_red = str(getattr(match, "team_red", "")).strip().lower()
 
-                is_blue = (t_blue == nom_recherche)
-                is_red = (t_red == nom_recherche)
+                is_blue = t_blue == nom_recherche
+                is_red = t_red == nom_recherche
 
                 if not is_blue and not is_red:
-                    continue 
+                    continue
 
                 nb_matchs += 1
 
                 winner = str(getattr(match, "winner", "")).strip().lower()
                 won = False
-                
+
                 if winner == nom_recherche:
                     won = True
                 elif is_blue and winner in ["blue", "team_blue"]:
                     won = True
                 elif is_red and winner in ["red", "team_red"]:
                     won = True
-                
+
                 if won:
                     victoires += 1
                 else:
@@ -521,7 +566,11 @@ class ChampionshipPointsCalculator:
             return f"Erreur : Aucune donnée de match trouvée pour l'équipe '{vrai_nom_equipe}'."
 
         win_rate = round((victoires / nb_matchs) * 100, 1)
-        kda = round((total_kills + total_assists) / total_deaths, 2) if total_deaths > 0 else "Parfait (0 mort)"
+        kda = (
+            round((total_kills + total_assists) / total_deaths, 2)
+            if total_deaths > 0
+            else "Parfait (0 mort)"
+        )
 
         return {
             "equipe": vrai_nom_equipe,
@@ -549,4 +598,3 @@ class ChampionshipPointsCalculator:
             if hasattr(match, "season") and match.season:
                 saisons.add(match.season)
         return sorted(saisons)
- 

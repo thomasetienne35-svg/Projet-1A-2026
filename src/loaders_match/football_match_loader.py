@@ -4,14 +4,15 @@ from match import Match
 
 pd.options.display.max_columns = 100
 
+
 class FootballMatchLoader:
     """Chargeur spécifique au football pour l'extraction et la structuration des données."""
 
     def __init__(self) -> None:
-      
+
         chemin_match = "data/football_european_leagues_tdd/match.csv"
         chemin_joueur = "data/football_european_leagues_tdd/player.csv"
-        
+
         self.df_football = pd.read_csv(chemin_match)
         df_joueur = pd.read_csv(chemin_joueur)
 
@@ -32,10 +33,10 @@ class FootballMatchLoader:
         Returns:
         -------
         Match
-            Un objet Match enrichi avec les scores et les listes 
+            Un objet Match enrichi avec les scores et les listes
             de joueurs (domicile/extérieur).
-        
-        None 
+
+        None
             Si le match_id est introuvable.
 
         """

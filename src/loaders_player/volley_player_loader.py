@@ -4,6 +4,7 @@ from player import Player
 
 pd.options.display.max_columns = 100
 
+
 class VolleyPlayerLoader:
     """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de volley."""
 
@@ -19,9 +20,7 @@ class VolleyPlayerLoader:
             Une liste d'objets Player enrichis avec les données extraites.
         """
         res = []
-        df_volley_men = pd.read_csv(
-            "data/volleyball_tdd/player_men.csv"
-        )
+        df_volley_men = pd.read_csv("data/volleyball_tdd/player_men.csv")
         for i in range(len(df_volley_men)):
             joueur = Player(None, None, None, "H", None, None, None)
             joueur.prenom_nom = df_volley_men.loc[i, "name"]
@@ -30,9 +29,7 @@ class VolleyPlayerLoader:
             joueur.height = df_volley_men.loc[i, "height"]
             res.append(joueur)
 
-        df_volley_women = pd.read_csv(
-            "data/volleyball_tdd/player_women.csv"
-        )
+        df_volley_women = pd.read_csv("data/volleyball_tdd/player_women.csv")
         for i in range(len(df_volley_women)):
             joueur = Player(None, None, None, "F", None, None, None)
             joueur.prenom_nom = df_volley_women.loc[i, "name"]
