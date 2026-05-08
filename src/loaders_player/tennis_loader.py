@@ -7,6 +7,7 @@ class TennisPlayerLoader:
     """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de tennis."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_player(self) -> list[Player]:

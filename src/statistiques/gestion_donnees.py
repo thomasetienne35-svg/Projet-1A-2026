@@ -8,6 +8,7 @@ class DataUpdater:
     """Classe responsable de la mise à jour des bases de données CSV (matchs et joueurs)."""
 
     def __init__(self, sport_obj: Any) -> None:
+        """Initialise la classe."""
         self.sport = sport_obj.name
         self.path_matches = f"data/{self.sport}/matchs.csv"
         self.path_players = f"data/{self.sport}/player.csv"

@@ -8,6 +8,7 @@ class VisualisationComparateur:
     """Service de visualisation pour comparer graphiquement des entités (joueurs ou équipes)."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         self.figsize = (10, 6)
         self.largeur_barre = 0.35
 
@@ -165,9 +166,7 @@ class VisualisationComparateur:
 def afficher_comparateur_joueurs(
     stats_j1: dict[str, Any], stats_j2: dict[str, Any]
 ) -> None:
-    """Fonction adaptateur (Adapter Pattern) pour utiliser la nouvelle classe
-    sans casser les tests existants.
-    """
+    """Fonction adaptateur (Adapter Pattern) pour utiliser la nouvelle classe sans casser les tests existants."""
     visualiseur = VisualisationComparateur()
     visualiseur.comparer_joueurs(stats_j1, stats_j2)
 
@@ -175,8 +174,6 @@ def afficher_comparateur_joueurs(
 def afficher_comparateur_equipes(
     stats_e1: dict[str, Any], stats_e2: dict[str, Any]
 ) -> None:
-    """Fonction adaptateur (Adapter Pattern) pour utiliser la nouvelle classe
-    sans casser les tests existants.
-    """
+    """Fonction adaptateur (Adapter Pattern) pour utiliser la nouvelle classe sans casser les tests existants."""
     visualiseur = VisualisationComparateur()
     visualiseur.comparer_equipes(stats_e1, stats_e2)

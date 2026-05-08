@@ -3,14 +3,14 @@ from typing import Any
 
 
 class PlayerStatsCalculator:
+    """Définit la classe PlayerStatsCalulator."""
     def __init__(self, sport_obj, liste_matchs):
-        """On initialise avec l'objet sport et la liste des matchs pour éviter
-        de les repasser en argument à chaque fois.
-        """
+        """On initialise avec l'objet sport et la liste des matchs pour éviter de les repasser en argument à chaque fois."""
         self.sport_name = sport_obj.name.lower()
         self.matchs = liste_matchs
 
     def obtenir_bilan(self, nom_joueur: str) -> dict | str:
+        """Donne le bilan des statistiques d'un joueur."""
         nom_recherche = nom_joueur.strip().lower()
         nb_matchs = victoires = defaites = nuls = 0
         vrai_nom = nom_joueur
@@ -101,9 +101,7 @@ class PlayerStatsCalculator:
 def calculer_stats_joueur(
     nom_joueur: str, sport: str, matchs: list[Any]
 ) -> dict[str, Any] | str:
-    """Fonction adaptateur (Adapter Pattern) pour maintenir la compatibilité
-    avec les autres modules et les tests existants.
-    """
+    """Fonction adaptateur (Adapter Pattern) pour maintenir la compatibilité avec les autres modules et les tests existants."""
     sport_obj = SimpleNamespace(name=sport)
 
     calculateur = PlayerStatsCalculator(sport_obj, matchs)

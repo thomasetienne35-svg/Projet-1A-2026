@@ -9,6 +9,7 @@ class LeagueOfLegendsLoader:
     """Chargeur spécifique pour les joueurs professionnels de League of Legends."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_player(self) -> list[Player]:

@@ -16,6 +16,7 @@ from statistiques.visualisation import VisualisationComparateur
 
 
 def main():
+    """Permet de lancer l'application."""
     sports_disponibles = ["football", "tennis", "volley", "basketball", "lol"]
 
     print("Chargement initial des données... Veuillez patienter.")

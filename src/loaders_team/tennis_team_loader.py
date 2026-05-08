@@ -7,6 +7,7 @@ class TennisTeamLoader:
     """Pas de loader d'équipe."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_team(self) -> list:
