@@ -2,6 +2,11 @@
 # Indique à Ruff la version de Python utilisée pour optimiser ses corrections
 target-version = "py313"
 
+# On ajoute le .gitignore aux exclusions par défaut de Ruff sans les écraser
+extend-exclude = [
+    ".gitignore",
+]
+
 # Limite de caractères par ligne 
 line-length = 88
 
@@ -13,7 +18,9 @@ line-length = 88
 select = ["E", "F", "D", "I"]
 
 # Règles à ignorer (si jamais ruff est trop embêtant sur certaines règles)
-ignore = []
+ignore = ["E501"]
+#E501 correspond à l'erreur de ligne trop longue, les lignes trop longues restantes correspondent 
+# à des docstrings
 
 [tool.ruff.lint.pydocstyle]
 # Force la vérification des docstrings selon la convention Google

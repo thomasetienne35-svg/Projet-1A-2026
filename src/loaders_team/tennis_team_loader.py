@@ -2,13 +2,12 @@ import pandas as pd
 
 pd.options.display.max_columns = 100
 
+
 class TennisTeamLoader:
     """Pas de loader d'équipe."""
     def __init__(self) -> None:
         pass
 
     def load_all_team(self) -> list:
-        """Le tennis est un sport individuel, il n'y a pas d'équipes.
-        """
+        """Le tennis est un sport individuel, il n'y a pas d'équipes."""
         return []
-        

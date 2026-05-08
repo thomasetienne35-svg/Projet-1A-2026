@@ -4,9 +4,10 @@ from player import Player
 
 pd.options.display.max_columns = 100
 
+
 class FootballPlayerLoader:
-    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de football.
-    """
+    """Chargeur spécifique pour l'extraction et la structuration des données des joueurs de football."""
+
     def __init__(self) -> None:
         pass
 
@@ -19,9 +20,7 @@ class FootballPlayerLoader:
             Une liste d'objets Player enrichis avec les données extraites.
         """
         res = []
-        df_football = pd.read_csv(
-            "data/football_european_leagues_tdd/player.csv"
-        )
+        df_football = pd.read_csv("data/football_european_leagues_tdd/player.csv")
         for i in range(len(df_football)):
             joueur = Player(None, None, None, "H", None, None, None)
             joueur.prenom_nom = df_football.loc[i, "player_name"]
