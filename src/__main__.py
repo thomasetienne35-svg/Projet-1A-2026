@@ -401,7 +401,7 @@ def main():
                     print("\n1. Hommes\n2. Femmes")
                     sous_type = "femmes" if input("Catégorie (1 ou 2) : ") == "2" else "hommes"
 
-                print("\nEntrez les chemins relatifs vers vos nouveaux fichiers CSV.")
+                print("\nEntrez les chemins relatifs vers vos nouveaux fichiers CSV. (vous les avez au préalable téléchargé dans l'environnement.)")
                 print(
                     "Laissez vide (appuyez sur Entrée) si vous ne voulez pas mettre à jour l'un des deux."
                 )
