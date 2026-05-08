@@ -150,7 +150,7 @@ De la même manière, d'autres classes de services gèrent la logique métier de
 
 ![Classe AnalysePhysiologique](Images_partie4/image3.png){width="75%" fig-align="center"}
 
-## Les avantages de cette architecure logicielle
+## Les avantages de cette architecture logicielle
 
 Cette architecture nous a demandé un effort de modélisation et de conception au départ, mais elle apporte des bénéfices majeurs pour le projet.
 Premièrement, la maintenabilité : le fichier principal *main.py* se contente d'afficher les menus et d'appeler des méthodes aux noms explicites, agissant uniquement comme un chef d'orchestre. En cas de bug lors d'un calcul, nous savons exactement dans quelle classe de service chercher, sans avoir à parcourir les lignes de code d'interface.
@@ -194,7 +194,7 @@ Afin de pouvoir correctement standardiser notre code, nous avons créé un fichi
 
 Ensuite, pour évaluer objectivement la qualité de notre travail, nous nous sommes appuyés sur deux métriques quantitatives. D'une part, nous avons utilisé l'évaluation du linter comme un repère. Avec Ruff, notre but était d'atteindre zéro erreurs. Par conséquent, en corrigeant systématiquement chaque avertissement soulevé par l'outil d'inspection, nous avons l'assurance de livrer un code qui respecte parfaitement les règles de style.
 
-## Mise en place des test
+## Mise en place des tests
 
 Pour la réalisation des tests nous avons créé un dossier puis un fichier par classe à tester. Pour la réalisation de nos tests, nous avons opté pour une approche axée sur les tests unitaires automatisés via le framework pytest.
 D'autre part, nous avons mesuré notre couverture de code grâce à l'outil pytest-cov. Cette métrique, exprimée en pourcentage, nous indique concrètement quelle proportion de notre code source est traversée lors de l'exécution de nos tests unitaires.
@@ -263,6 +263,9 @@ Durant ce projet, j'ai pu expérimenter, dans le prolongement du DM donné en IP
 
 
 ### Thomas
+
+Dans un premier temps, le travail en équipe nous a appris à nous coordonner efficacement, notamment lors des séances en autonomie. J’ai pour la première fois eu une utilisation collaborative de GitHub qui m’a permis d’apprendre à gérer un code commun sans conflits.
+Techniquement, ça a été l'occasion d'appliquer la programmation objet de notre dernier DM sur un cas très concret. De plus, j’ai découvert des outils de test plus variés pour répondre aux caractéristiques de nos différentes classes. Ça a été très satisfaisant de passer d’un tableau de données brutes à des statistiques interactives.
 
 
 
