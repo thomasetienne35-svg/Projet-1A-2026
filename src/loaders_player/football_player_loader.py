@@ -1,5 +1,6 @@
-from player import Player
 import pandas as pd
+
+from player import Player
 
 pd.options.display.max_columns = 100
 
@@ -12,7 +13,7 @@ class FootballPlayerLoader:
     def load_all_player(self) -> list[Player]:
         """Charge et instancie l'ensemble des joueurs de football depuis le fichier de données.
 
-        Returns
+        Returns:
         -------
         list[Player]
             Une liste d'objets Player enrichis avec les données extraites.

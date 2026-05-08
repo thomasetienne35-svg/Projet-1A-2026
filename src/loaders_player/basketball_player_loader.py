@@ -1,5 +1,6 @@
-from player import Player
 import pandas as pd
+
+from player import Player
 
 pd.options.display.max_columns = 100
 

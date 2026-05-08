@@ -8,8 +8,7 @@ class TennisTeamLoader:
         pass
 
     def load_all_team(self) -> list:
-        """
-        Le tennis est un sport individuel, il n'y a pas d'équipes.
+        """Le tennis est un sport individuel, il n'y a pas d'équipes.
         """
         return []
         

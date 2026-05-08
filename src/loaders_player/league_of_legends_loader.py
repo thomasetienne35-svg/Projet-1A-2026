@@ -1,5 +1,6 @@
-from player import Player
 import pandas as pd
+
+from player import Player
 
 pd.options.display.max_columns = 100
 
@@ -12,7 +13,7 @@ class LeagueOfLegendsLoader:
     def load_all_player(self) -> list[Player]:
         """Charge et instancie l'ensemble des joueurs de League of Legends.
 
-        Returns
+        Returns:
         -------
         list[Player]
             Une liste d'objets Player contenant les informations extraites.

@@ -11,7 +11,7 @@ class TennisPlayerLoader:
     def load_all_player(self) -> list[Player]:
         """Charge et instancie l'ensemble des joueurs de tennis.
 
-        Returns
+        Returns:
         -------
         list[Player]
             Une liste d'objets Player contenant les informations extraites.

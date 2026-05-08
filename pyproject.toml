@@ -2,7 +2,7 @@
 # Indique à Ruff la version de Python utilisée pour optimiser ses corrections
 target-version = "py313"
 
-# Limite de caractères par ligne (88 est le standard)
+# Limite de caractères par ligne 
 line-length = 88
 
 # Règles à appliquer :
@@ -12,9 +12,13 @@ line-length = 88
 # I = Tri alphabétique des imports
 select = ["E", "F", "D", "I"]
 
-# Règles à ignorer (Laissez vide pour l'instant, à remplir si Ruff est trop pointilleux)
+# Règles à ignorer (si jamais ruff est trop embêtant sur certaines règles)
 ignore = []
 
 [tool.ruff.lint.pydocstyle]
 # Force la vérification des docstrings selon la convention Google
 convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# On ignore les règles de docstrings (D) pour tous les fichiers dans le dossier test/
+"test/**/*.py" = ["D"]
