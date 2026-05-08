@@ -101,7 +101,7 @@ class PlayerStatsCalculator:
 def calculer_stats_joueur(
     nom_joueur: str, sport: str, matchs: list[Any]
 ) -> dict[str, Any] | str:
-    """Fonction adaptateur (Adapter Pattern) pour maintenir la compatibilité
+    """Fonction adaptateur pour maintenir la compatibilité
     avec les autres modules et les tests existants.
     """
     sport_obj = SimpleNamespace(name=sport)
