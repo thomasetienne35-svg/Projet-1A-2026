@@ -1,10 +1,10 @@
 from typing import Any, List, Union
-
+from match import Match
 
 class MatchFormatter:
     """Classe responsable du formatage et de l'affichage des détails d'un match."""
 
-    def __init__(self, match: Any, liste_equipes: List[Any] | None = None) -> None:  
+    def __init__(self, match: Match, liste_equipes: List[Any] | None = None) -> None:  
         self.match = match
         self.liste_equipes = liste_equipes if liste_equipes else []
         self.sport = str(getattr(match, "sport", "Inconnu")).capitalize()

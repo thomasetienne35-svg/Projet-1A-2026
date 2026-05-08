@@ -8,8 +8,8 @@ from loaders_match.match_loader import MatchLoader
 from loaders_player.player_loader import PlayerLoader
 from loaders_team.team_loader import TeamLoader
 from statistiques.nbre_de_points import ChampionshipPointsCalculator
-from statistiques.match_par_joueur import calculer_stats_joueur  
-from statistiques.visualisation import afficher_comparateur_joueurs, afficher_comparateur_equipes
+from statistiques.match_par_joueur import PlayerStatsCalculator  
+from statistiques.visualisation import VisualisationComparateur
 from statistiques.details_match import MatchFormatter
 from statistiques.statistiques_physiologie import AnalysePhysiologique
 from statistiques.gestion_donnees import DataUpdater
@@ -78,14 +78,13 @@ def main():
             print("4. Comparateur graphique")
             print("5. Statistique physiologique")
             print("6. Importer des données (Nouvelle compétition par CSV)")
-            print("7. Éditer une donnée existante manuellement") # <-- NOUVEAU
-            print("8. Retourner au choix des sports") # <-- DÉCALÉ
+            print("7. Éditer une donnée existante manuellement") 
+            print("8. Retourner au choix des sports") 
             
-            # MODIFIÉ : On va jusqu'à 8 maintenant
             choix_action = input("\nVotre choix (1 à 8) ? (0 pour quitter) : ")
 
             if choix_action == "0": return
-            if choix_action == "8": break # <-- DÉCALÉ
+            if choix_action == "8": break
 
             # --- ACTION 1 : DÉTAILS D'UN MATCH ---
             if choix_action == "1":
@@ -194,7 +193,8 @@ def main():
                 nom_joueur = input("\nEntrez le nom ou prénom du joueur (ex: Jannik Sinner, Faker) : ")
                 if nom_joueur == "0": return
                 
-                resultat_joueur = calculer_stats_joueur(nom_joueur, nom_sport_choisi, matchs)
+                calculateur = PlayerStatsCalculator(sport_obj, matchs)
+                resultat_joueur = calculateur.obtenir_bilan(nom_joueur)
                 
                 if isinstance(resultat_joueur, str):
                     print(f"\n❌ {resultat_joueur}")
@@ -208,7 +208,7 @@ def main():
                     print(f"Défaites : {resultat_joueur['defaites']}")
                     print(f"Win Rate : {resultat_joueur['win_rate']}")
 
-            # --- ACTION 4 : SUPER COMPARATEUR ---
+            # --- ACTION 4 : 
             elif choix_action == "4":
                 print("\n=== SUPER COMPARATEUR ===")
                 print("1. Comparer deux joueurs")
@@ -252,7 +252,9 @@ def main():
                         print("\nGénération du graphique... Veuillez patienter.")
                         if saison_choisie:
                             res_j1["sport"] += f" - {saison_choisie}"
-                        afficher_comparateur_joueurs(res_j1, res_j2)
+                        
+                        comparateur = VisualisationComparateur()
+                        comparateur.comparer_joueurs(res_j1, res_j2)
 
                 elif choix_comp == "2":
                     nom_e1 = input("Nom exact de la première équipe : ")
@@ -291,7 +293,9 @@ def main():
                             if saison_choisie:
                                 res_e1["equipe"] += f" ({saison_choisie})"
                                 res_e2["equipe"] += f" ({saison_choisie})"
-                            afficher_comparateur_equipes(res_e1, res_e2)
+                            
+                            comparateur = VisualisationComparateur()
+                            comparateur.comparer_equipes(res_e1, res_e2)
                     except Exception as e:
                         print(f"\nErreur lors du calcul : {e}")
                         
@@ -302,7 +306,8 @@ def main():
                 if not joueurs:
                     print("❌ Aucun joueur chargé pour ce sport.")
                 else:
-                    analyseur = AnalysePhysiologique(joueurs, nom_sport_choisi)
+                    # Bien passé "sport_obj" et non la string
+                    analyseur = AnalysePhysiologique(joueurs, sport_obj)
                     
                     print("\nOptions d'analyse :")
                     print("1. Distribution des tailles (Histogramme)")
@@ -314,7 +319,7 @@ def main():
                     else:
                         analyseur.generer_graphique_taille()   
                         
-            # --- ACTION 6 : MISE À JOUR (IMPORT CSV) ---
+            # --- ACTION 6 : 
             elif choix_action == "6":
                 print("\n--- MODULE DE MISE À JOUR DYNAMIQUE ---")
                 print("Entrez les chemins relatifs vers vos nouveaux fichiers CSV.")
@@ -331,20 +336,17 @@ def main():
                     path_m = csv_matchs if csv_matchs else None
                     path_j = csv_joueurs if csv_joueurs else None
                     
-                    # On lance la mise à jour physique sur les disques
                     updater.mettre_a_jour_tout(path_m, path_j)
                     
                     print("\n🔄 Rechargement de l'application en mémoire...")
                     try:
-                        # On recharge l'historique fraîchement mis à jour
                         tous_les_matchs[nom_sport_choisi] = loader_match.load_all_matches(sport_obj)
                         
-                        loader_player = PlayerLoader(sport_obj) # Correction de l'instanciation
+                        loader_player = PlayerLoader(sport_obj)
                         tous_les_joueurs[nom_sport_choisi] = loader_player.charger_player(sport_obj)
                         
                         toutes_les_equipes[nom_sport_choisi] = loader_team.load_all_teams(sport_obj)
                         
-                        # On n'oublie pas de mettre à jour la variable "matchs" et "joueurs" locales !
                         matchs = tous_les_matchs[nom_sport_choisi]
                         joueurs = tous_les_joueurs[nom_sport_choisi]
                         
@@ -373,7 +375,6 @@ def main():
                 else:
                     print("❌ Choix invalide.")
                 
-                # Si la modification a réussi, on recharge uniquement la mémoire concernée
                 if succes:
                     print("\n🔄 Rechargement des données en mémoire...")
                     try:

@@ -21,7 +21,7 @@ class TennisMatchLoaderFemme:
         df_matchs = pd.read_csv(self.chemin_matchs)
         df_joueuses = pd.read_csv(self.chemin_joueuses)
         
-        df_joueuses["nom_complet"] = df_joueuses["name_first"].astype(str) + " " 
+        df_joueuses["nom_complet"] = df_joueuses["name_first"].astype(str) + " " \
         + df_joueuses["name_last"].astype(str)
 
         dict_joueuses = dict(zip(df_joueuses["player_id"], df_joueuses["nom_complet"]))
@@ -60,7 +60,7 @@ class TennisMatchLoaderHomme:
         df_matchs = pd.read_csv(self.chemin_matchs)
         df_joueurs = pd.read_csv(self.chemin_joueurs)
 
-        df_joueurs["nom_complet"] = df_joueurs["name_first"].astype(str) + " " 
+        df_joueurs["nom_complet"] = df_joueurs["name_first"].astype(str) + " " \
         + df_joueurs["name_last"].astype(str)
         dict_joueurs = dict(zip(df_joueurs["player_id"], df_joueurs["nom_complet"]))
         

@@ -3,15 +3,16 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .match_par_joueur import calculer_stats_joueur
+from sport import Sport
+from .match_par_joueur import PlayerStatsCalculator
 
 
 class AnalysePhysiologique:
     """Classe responsable de l'analyse et de la visualisation des données morphologiques des joueurs."""
-    def __init__(self, liste_joueurs: list[Any], sport: str) -> None:
+    
+    def __init__(self, liste_joueurs: list[Any], sport: Sport) -> None:
         self.liste_joueurs = liste_joueurs
         self.sport = sport
-
 
     def _extraire_tailles(self) -> list[float]:
         """Méthode interne pour chercher, nettoyer et convertir toutes les tailles.
@@ -46,7 +47,6 @@ class AnalysePhysiologique:
                 
                 if 0 < h < 3: 
                     h = h * 100
-
                 elif 50 < h < 100:
                     h = h * 2.54
                     
@@ -58,13 +58,12 @@ class AnalysePhysiologique:
                 
         return tailles
 
-
     def generer_graphique_taille(self) -> None:
         """Génère l'histogramme des tailles et le sauvegarde."""
         tailles = self._extraire_tailles()
 
         if not tailles:
-            print(f"\n❌ Aucune donnée de taille valide trouvée pour : {self.sport.capitalize()}")
+            print(f"\n❌ Aucune donnée de taille valide trouvée pour : {self.sport.name.capitalize()}")
             return
 
         plt.figure(figsize=(10, 6))
@@ -72,7 +71,7 @@ class AnalysePhysiologique:
         # Création de l'histogramme
         plt.hist(tailles, bins=15, color='#3498db', edgecolor='white', alpha=0.8)
         
-        plt.title(f"Distribution des tailles - {self.sport.capitalize()}", fontsize=14, 
+        plt.title(f"Distribution des tailles - {self.sport.name.capitalize()}", fontsize=14, 
                   fontweight='bold')
         plt.xlabel("Taille (cm)", fontweight='bold')
         plt.ylabel("Nombre de joueurs", fontweight='bold')
@@ -87,14 +86,13 @@ class AnalysePhysiologique:
         plt.tight_layout()
 
         # Sauvegarde
-        nom_fichier = f"distribution_taille_{self.sport}.png"
+        nom_fichier = f"distribution_taille_{self.sport.name.lower()}.png"
         plt.savefig(nom_fichier)
         plt.close()
         
         print(f"\n✅ Analyse terminée ! Taille moyenne : {moyenne:.1f} cm.")
         print(f"👉 Le graphique a été sauvegardé sous : '{nom_fichier}'")
 
-    
     def generer_heatmap_taille_victoire(self, matchs: list[Any]) -> None:
         """Croise la taille des joueurs avec leur Win Rate pour générer une Heatmap.
 
@@ -104,10 +102,12 @@ class AnalysePhysiologique:
             La liste des matchs pour calculer le Win Rate de chaque joueur.
         """
         print("\n⏳ Calcul des Win Rates pour tous les joueurs... " \
-        "Cela peut prendre quelques secondes.")
+              "Cela peut prendre quelques secondes.")
         
         tailles_valides = []
         win_rates_valides = []
+
+        calculateur = PlayerStatsCalculator(self.sport, matchs)
 
         for p in self.liste_joueurs:
             h_brut = getattr(p, "height", getattr(p, "taille", getattr(p, "size", 0)))
@@ -134,7 +134,7 @@ class AnalysePhysiologique:
                 nom_joueur = str(getattr(p, "prenom_nom", getattr(p, "name", "")))
                 if not nom_joueur: continue
                 
-                stats = calculer_stats_joueur(nom_joueur, self.sport, matchs)
+                stats = calculateur.obtenir_bilan(nom_joueur)
                 
                 if not isinstance(stats, str): 
                     if stats.get("matchs_joues", 0) >= 3:
@@ -146,7 +146,7 @@ class AnalysePhysiologique:
 
         if not tailles_valides:
             print("\n❌ Pas assez de données croisées (Taille + " \
-            "Minimum 3 matchs joués) pour générer la Heatmap.")
+                  "Minimum 3 matchs joués) pour générer la Heatmap.")
             return
 
         plt.figure(figsize=(10, 6))
@@ -158,14 +158,14 @@ class AnalysePhysiologique:
         cbar = plt.colorbar(heatmap)
         cbar.set_label('Concentration de joueurs', rotation = 270, labelpad = 15)
         
-        plt.title(f"Heatmap : Taille vs Win Rate - {self.sport.capitalize()}", 
-                  fontsize = 4, fontweight='bold')
+        plt.title(f"Heatmap : Taille vs Win Rate - {self.sport.name.capitalize()}", 
+                  fontsize = 14, fontweight='bold')
         plt.xlabel("Taille (cm)", fontweight='bold')
         plt.ylabel("Win Rate (%)", fontweight='bold')
         plt.grid(alpha = 0.3)
         
         plt.tight_layout()
-        nom_fichier = f"heatmap_taille_wr_{self.sport}.png"
+        nom_fichier = f"heatmap_taille_wr_{self.sport.name.lower()}.png"
         plt.savefig(nom_fichier)
         plt.close()
         
