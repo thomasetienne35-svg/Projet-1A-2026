@@ -86,6 +86,20 @@ Afin de répondre efficacement à ces enjeux de modélisation et de flexibilité
 
 # Modélisation et Diagrammes UML
 
+## Diagramme d'état
+
+![Diagramme d'état de l'application](Diagramme_état.png){width="100%" fig-align="center"}
+Pour éviter de surcharger le diagramme les fonctionnalités qui permettent de produire des graphiques n'ont pas été représentées dans le diagramme d'état.
+
+## Diagramme de classe
+
+![Diagramme de classe de l'application](Diagramme_classe.pdf){width="100%" fig-align="center"}
+Le choix a été fait de ne pas mettre tous les loaders spécifiques des sports (seulement celui du foot qui est le même que les autres) pour éviter de surcharger la diagramme.
+
+## Diagramme d'action
+
+![Diagramme d'action de l'application](Diagramme_action.pdf){width="100%" fig-align="center"}
+
 # Architecture et choix techniques
 
 ## Les outils utilisés
