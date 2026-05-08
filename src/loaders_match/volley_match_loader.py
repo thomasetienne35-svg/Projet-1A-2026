@@ -54,17 +54,17 @@ class VolleyMatchLoaderFemme:
             match.team_id_away = code_2
             match.home_team_name = pays_1
             match.away_team_name = pays_2
-            
+
             # --- Sauvegarde des spécificités Volley ---
             match.country_code_1 = code_1
             match.country_code_2 = code_2
             match.set_country_1 = df_match_volley_femme.loc[i, "set_country_1"]
             match.set_country_2 = df_match_volley_femme.loc[i, "set_country_2"]
-            
+
             # --- Standardisation du score pour MatchFormatter ---
             match.home_team_score = match.set_country_1
             match.away_team_score = match.set_country_2
-            
+
             match.date = df_match_volley_femme.loc[i, "date"]
             match.stage = df_match_volley_femme.loc[i, "stage"]
 
@@ -141,20 +141,20 @@ class VolleyMatchLoaderHomme:
             match.team_id_away = code_2
             match.home_team_name = pays_1
             match.away_team_name = pays_2
-            
+
             # --- Sauvegarde des spécificités Volley ---
             match.country_code_1 = code_1
             match.country_code_2 = code_2
             match.set_country_1 = df_match_volley_homme.loc[i, "set_country_1"]
             match.set_country_2 = df_match_volley_homme.loc[i, "set_country_2"]
-            
+
             # --- Standardisation du score pour MatchFormatter ---
             match.home_team_score = match.set_country_1
             match.away_team_score = match.set_country_2
-            
+
             match.date = df_match_volley_homme.loc[i, "date"]
             match.stage = df_match_volley_homme.loc[i, "stage"]
-            
+
             if code_1:
                 match.list_home_player = df_player_homme[
                     df_player_homme["country_code"] == code_1

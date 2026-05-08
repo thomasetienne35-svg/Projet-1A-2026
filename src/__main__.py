@@ -391,17 +391,23 @@ def main():
             # --- ACTION 6 :
             elif choix_action == "6":
                 print("\n--- MODULE DE MISE À JOUR DYNAMIQUE ---")
-                
+
                 # Demander le sous-type pour les sports qui en ont besoin (homme/femme)
                 sous_type = None
                 if nom_sport_choisi == "tennis":
                     print("\n1. ATP (Hommes)\n2. WTA (Femmes)")
-                    sous_type = "wta" if input("Catégorie (1 ou 2) : ") == "2" else "atp"
+                    sous_type = (
+                        "wta" if input("Catégorie (1 ou 2) : ") == "2" else "atp"
+                    )
                 elif nom_sport_choisi == "volley":
                     print("\n1. Hommes\n2. Femmes")
-                    sous_type = "femmes" if input("Catégorie (1 ou 2) : ") == "2" else "hommes"
+                    sous_type = (
+                        "femmes" if input("Catégorie (1 ou 2) : ") == "2" else "hommes"
+                    )
 
-                print("\nEntrez les chemins relatifs vers vos nouveaux fichiers CSV. (vous les avez au préalable téléchargé dans l'environnement.)")
+                print(
+                    "\nEntrez les chemins relatifs vers vos nouveaux fichiers CSV. (vous les avez au préalable téléchargé dans l'environnement.)"
+                )
                 print(
                     "Laissez vide (appuyez sur Entrée) si vous ne voulez pas mettre à jour l'un des deux."
                 )

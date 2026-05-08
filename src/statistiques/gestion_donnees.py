@@ -6,31 +6,31 @@ import pandas as pd
 # Chemins réels lus par les loaders
 CHEMINS_PAR_SPORT: dict[str, dict[str, str]] = {
     "football": {
-        "matchs":  "data/football_european_leagues_tdd/match.csv",
+        "matchs": "data/football_european_leagues_tdd/match.csv",
         "joueurs": "data/football_european_leagues_tdd/player.csv",
     },
     "basketball": {
-        "matchs":  "data/basketball/game.csv",
+        "matchs": "data/basketball/game.csv",
         "joueurs": "data/basketball/player.csv",
     },
     "lol": {
-        "matchs":  "data/league_of_legends_tdd/match.csv",
+        "matchs": "data/league_of_legends_tdd/match.csv",
         "joueurs": "data/league_of_legends_tdd/player.csv",
     },
     "tennis_atp": {
-        "matchs":  "data/tennis_tdd/atp_matches_2024.csv",
+        "matchs": "data/tennis_tdd/atp_matches_2024.csv",
         "joueurs": "data/tennis_tdd/atp_players_2024.csv",
     },
     "tennis_wta": {
-        "matchs":  "data/tennis_tdd/wta_matches_2024.csv",
+        "matchs": "data/tennis_tdd/wta_matches_2024.csv",
         "joueurs": "data/tennis_tdd/wta_players_2024.csv",
     },
     "volley_hommes": {
-        "matchs":  "data/volleyball_tdd/match_men.csv",
+        "matchs": "data/volleyball_tdd/match_men.csv",
         "joueurs": "data/volleyball_tdd/player_men.csv",
     },
     "volley_femmes": {
-        "matchs":  "data/volleyball_tdd/match_women.csv",
+        "matchs": "data/volleyball_tdd/match_women.csv",
         "joueurs": "data/volleyball_tdd/player_women.csv",
     },
 }
@@ -56,7 +56,11 @@ class DataUpdater:
         if sport == "tennis":
             cle = f"tennis_{sous_type}" if sous_type in ("atp", "wta") else "tennis_atp"
         elif sport == "volley":
-            cle = f"volley_{sous_type}" if sous_type in ("hommes", "femmes") else "volley_hommes"
+            cle = (
+                f"volley_{sous_type}"
+                if sous_type in ("hommes", "femmes")
+                else "volley_hommes"
+            )
         else:
             cle = sport
 
@@ -69,7 +73,9 @@ class DataUpdater:
     # Validation
     # ------------------------------------------------------------------
 
-    def valider_csv(self, chemin_utilisateur: str, type_fichier: str) -> tuple[bool, str]:
+    def valider_csv(
+        self, chemin_utilisateur: str, type_fichier: str
+    ) -> tuple[bool, str]:
         """Valide le format d'un CSV fourni par l'utilisateur.
 
         La validation compare les colonnes (noms + nombre) avec celles
@@ -96,14 +102,16 @@ class DataUpdater:
             return False, f"Fichier introuvable : {chemin_utilisateur}"
 
         # 3. Fichier de référence
-        chemin_ref = self.path_matches if type_fichier == "matchs" else self.path_players
+        chemin_ref = (
+            self.path_matches if type_fichier == "matchs" else self.path_players
+        )
         if not chemin_ref or not os.path.exists(chemin_ref):
             return False, f"Fichier de référence introuvable : {chemin_ref}"
 
         # 4. Lecture des en-têtes uniquement (nrows=0 = rapide)
         try:
             cols_user = list(pd.read_csv(chemin_utilisateur, nrows=0).columns)
-            cols_ref  = list(pd.read_csv(chemin_ref,          nrows=0).columns)
+            cols_ref = list(pd.read_csv(chemin_ref, nrows=0).columns)
         except Exception as e:
             return False, f"Erreur de lecture du CSV : {e}"
 
@@ -118,7 +126,7 @@ class DataUpdater:
 
         # 6. Noms des colonnes
         manquantes = set(cols_ref) - set(cols_user)
-        en_trop    = set(cols_user) - set(cols_ref)
+        en_trop = set(cols_user) - set(cols_ref)
         if manquantes or en_trop:
             msg = "Les noms de colonnes ne correspondent pas."
             if manquantes:
@@ -163,8 +171,12 @@ class DataUpdater:
                 print("⚠️  Corrigez votre fichier et relancez l'import.")
             else:
                 df_nouveaux = pd.read_csv(chemin_nouveaux_matchs)
-                df_nouveaux.to_csv(self.path_matches, mode="a", header=False, index=False)
-                print(f"✅ {len(df_nouveaux)} nouveau(x) match(s) ajouté(s) → {self.path_matches}")
+                df_nouveaux.to_csv(
+                    self.path_matches, mode="a", header=False, index=False
+                )
+                print(
+                    f"✅ {len(df_nouveaux)} nouveau(x) match(s) ajouté(s) → {self.path_matches}"
+                )
                 au_moins_un_succes = True
 
         # --- Joueurs ---
@@ -187,7 +199,7 @@ class DataUpdater:
         path_updates : str
             Chemin vers le CSV des mises à jour joueurs.
         """
-        df_actuel  = pd.read_csv(self.path_players)
+        df_actuel = pd.read_csv(self.path_players)
         df_updates = pd.read_csv(path_updates)
 
         # Colonne identifiant (première colonne dont le nom contient 'name' ou 'nom')
@@ -253,10 +265,14 @@ class DataUpdater:
             print("❌ Impossible d'identifier la colonne de noms.")
             return False
 
-        nom_recherche = input("\nNom (ou partie du nom) du joueur à modifier : ").strip()
+        nom_recherche = input(
+            "\nNom (ou partie du nom) du joueur à modifier : "
+        ).strip()
         masque = pd.Series(False, index=df.index)
         for col in colonnes_noms:
-            masque |= df[col].astype(str).str.contains(nom_recherche, case=False, na=False)
+            masque |= (
+                df[col].astype(str).str.contains(nom_recherche, case=False, na=False)
+            )
         resultats = df[masque]
 
         if resultats.empty:
@@ -315,7 +331,8 @@ class DataUpdater:
 
         df = pd.read_csv(chemin_csv)
         colonnes_noms = [
-            c for c in df.columns
+            c
+            for c in df.columns
             if ("name" in c.lower() or "nom" in c.lower() or "team" in c.lower())
             and "id" not in c.lower()
         ]
@@ -323,7 +340,9 @@ class DataUpdater:
             print("❌ Impossible d'identifier la colonne de noms.")
             return False
 
-        nom_recherche = input("\nNom (ou partie du nom) de l'équipe à modifier : ").strip()
+        nom_recherche = input(
+            "\nNom (ou partie du nom) de l'équipe à modifier : "
+        ).strip()
         noms_virtuels = df[colonnes_noms].astype(str).agg(" ".join, axis=1)
         resultats = df[noms_virtuels.str.contains(nom_recherche, case=False, na=False)]
 
