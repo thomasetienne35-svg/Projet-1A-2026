@@ -392,7 +392,7 @@ def main():
             elif choix_action == "6":
                 print("\n--- MODULE DE MISE À JOUR DYNAMIQUE ---")
                 
-                # CORRECTION 1 : Demander le sous-type pour les sports qui en ont besoin
+                # Demander le sous-type pour les sports qui en ont besoin (homme/femme)
                 sous_type = None
                 if nom_sport_choisi == "tennis":
                     print("\n1. ATP (Hommes)\n2. WTA (Femmes)")
@@ -412,13 +412,13 @@ def main():
                 if not csv_matchs and not csv_joueurs:
                     print("❌ Opération annulée, aucune donnée fournie.")
                 else:
-                    # CORRECTION 2 : On injecte le sous-type dans l'Updater
+                    # On injecte le sous-type dans l'Updater
                     updater = DataUpdater(sport_obj, sous_type=sous_type)
 
                     path_m = csv_matchs if csv_matchs else None
                     path_j = csv_joueurs if csv_joueurs else None
 
-                    # CORRECTION 3 : On capture le retour booléen pour savoir si on doit recharger
+                    # On capture le retour booléen pour savoir si on doit recharger
                     succes_maj = updater.mettre_a_jour_tout(path_m, path_j)
 
                     if succes_maj:
