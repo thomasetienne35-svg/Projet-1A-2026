@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 from src.statistiques.statistiques_physiologie import AnalysePhysiologique
 
 
@@ -22,17 +24,13 @@ def test_extraire_tailles_conversions() -> None:
 
 
 def test_generer_graphique_cree_fichier(tmp_path: Path) -> None:
-    """Vérifie que le code crée bien un fichier image .png.
-
-    Parameters
-    ----------
-    tmp_path : Path
-        Chemin vers un répertoire temporaire unique à cette exécution de test.
-    """
+    """Vérifie que le code crée bien un fichier image .png."""
     os.chdir(tmp_path)
 
     p = SimpleNamespace(height=180)
-    analyse = AnalysePhysiologique(liste_joueurs=[p], sport="tennis")
+
+    faux_sport = SimpleNamespace(name="tennis")
+    analyse = AnalysePhysiologique(liste_joueurs=[p], sport=faux_sport)
 
     analyse.generer_graphique_taille()
     nom_attendu = "distribution_taille_tennis.png"
@@ -40,14 +38,23 @@ def test_generer_graphique_cree_fichier(tmp_path: Path) -> None:
     assert os.path.exists(nom_attendu)
 
 
-def test_heatmap_pas_assez_de_donnees() -> None:
+def test_heatmap_pas_assez_de_donnees(capsys: pytest.CaptureFixture[str]) -> None:
     """Vérifie que le code prévient s'il n'y a pas assez de données."""
     p = SimpleNamespace(prenom_nom="Petit Joueur", height=170)
+
     m = SimpleNamespace(
-        list_home_player=["Petit Joueur"], home_team_score=1, away_team_score=0
+        list_home_player=["Petit Joueur"],
+        list_away_player=[],
+        home_team_score=1,
+        away_team_score=0,
+        team_blue="Vide",
+        winner="Vide",
     )
 
-    analyse = AnalysePhysiologique(liste_joueurs=[p], sport="foot")
+    faux_sport = SimpleNamespace(name="foot")
+    analyse = AnalysePhysiologique(liste_joueurs=[p], sport=faux_sport)
+
     analyse.generer_heatmap_taille_victoire(matchs=[m])
 
-    assert "Pas assez de données croisées (Taille + Minimum 3 matchs joués) pour générer la Heatmap"
+    capture = capsys.readouterr()
+    assert "Pas assez de données" in capture.out

@@ -7,6 +7,7 @@ class VolleyMatchLoaderFemme:
     """Chargeur spécifique pour les matchs de volley-ball féminin."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_match(self) -> list[Match]:
@@ -81,6 +82,7 @@ class VolleyMatchLoaderHomme:
     """Chargeur spécifique pour les matchs de volley-ball masculin."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_match(self) -> list[Match]:
@@ -154,6 +156,7 @@ class VolleyMatchLoader:
     """Charger simultanément les données homme et femme en utilisant les chargeurs spécialisés."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_match(self) -> list[Match]:

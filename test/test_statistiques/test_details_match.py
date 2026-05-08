@@ -1,3 +1,8 @@
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath("src"))
+
 from types import SimpleNamespace
 
 from src.statistiques.details_match import MatchFormatter

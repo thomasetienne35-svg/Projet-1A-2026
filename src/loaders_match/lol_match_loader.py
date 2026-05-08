@@ -9,6 +9,7 @@ class LolMatchLoader:
     """Chargeur spécifique à League of Legends (LoL) pour l'extraction et la structuration des données."""
 
     def __init__(self) -> None:
+        """Initialise la classe."""
         pass
 
     def load_all_match(self) -> list[Match]:

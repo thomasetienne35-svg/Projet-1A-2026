@@ -18,7 +18,7 @@ line-length = 88
 select = ["E", "F", "D", "I"]
 
 # Règles à ignorer (si jamais ruff est trop embêtant sur certaines règles)
-ignore = ["E501"]
+ignore = ["E501", "D100", "D104", "E722"]
 #E501 correspond à l'erreur de ligne trop longue, les lignes trop longues restantes correspondent 
 # à des docstrings
 
