@@ -35,7 +35,7 @@ number-sections: true
 
 \rule{\textwidth}{0.5mm}\\
 \vspace{0.8cm}
-{\huge\bfseries À REMPLIR}\\
+{\huge\bfseries Traitement et Visualisation de Données Sportives}\\
 \vspace{0.8cm}
 \rule{\textwidth}{0.5mm}\\
 
