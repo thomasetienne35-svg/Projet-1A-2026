@@ -298,13 +298,9 @@ def main():
                                 ]
                             except Exception:
                                 print("Choix invalide, calcul sur toutes les saisons.")
-
-                    res_j1 = calculer_stats_joueur(
-                        nom_j1, nom_sport_choisi, matchs_filtres
-                    )
-                    res_j2 = calculer_stats_joueur(
-                        nom_j2, nom_sport_choisi, matchs_filtres
-                    )
+                    calculateur_filtre = PlayerStatsCalculator(sport_obj, matchs_filtres)
+                    res_j1 = calculateur_filtre.obtenir_bilan(nom_j1)
+                    res_j2 = calculateur_filtre.obtenir_bilan(nom_j2)
 
                     if isinstance(res_j1, str):
                         print(f"\n❌ Erreur Joueur 1 : {res_j1}")

@@ -1,4 +1,4 @@
-from .sport import Sport
+from sport import Sport
 
 
 class Match:
