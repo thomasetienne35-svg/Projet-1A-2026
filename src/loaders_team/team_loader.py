@@ -10,6 +10,7 @@ from .volley_team_loader import VolleyTeamLoader
 
 class TeamLoader:
     """Chargement centralisée pour les équipes de tous les sports."""
+
     def load_all_teams(self, sport: Sport) -> list[Team]:
         """Chargement des équipes vers le chargeur spécifique au sport.
 

@@ -10,6 +10,7 @@ from .volley_player_loader import VolleyPlayerLoader
 
 class PlayerLoader:
     """Chargement centralisée pour les joueurs de tous les sports."""
+
     def __init__(self, sport: Sport) -> None:
         self.sport = sport
 

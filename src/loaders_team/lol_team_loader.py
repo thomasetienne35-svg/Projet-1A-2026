@@ -6,6 +6,7 @@ pd.options.display.max_columns = 100
 
 class LolTeamLoader:
     """Chargeur spécifique pour l'extraction et la structuration des équipes de LoL."""
+
     def __init__(self) -> None:
         pass
 

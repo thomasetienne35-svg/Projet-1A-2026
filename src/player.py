@@ -1,5 +1,6 @@
-class Player:  
-    """"Modèle de données représentant un joueur."""
+class Player:
+    """ "Modèle de données représentant un joueur."""
+
     def __init__(
         self, prenom_nom, nationalite, date_naissance, genre, taille, poids, team
     ) -> None:

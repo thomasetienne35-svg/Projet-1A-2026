@@ -6,6 +6,7 @@ pd.options.display.max_columns = 100
 
 class BasketballMatchLoader:
     """Chargeur spécifique au basketball pour l'extraction et la structuration des données."""
+
     def __init__(self) -> None:
         pass
 
@@ -45,15 +46,21 @@ class BasketballMatchLoader:
 
             match.pts_home = score_h
             match.pts_away = score_a
-           
-            joueur_home_lignes = df_basketball_joueurs[df_basketball_joueurs["team_id"] == id_home]
-            joueur_away_lignes = df_basketball_joueurs[df_basketball_joueurs["team_id"] == id_away]
-            
-            match.list_home_player = (joueur_home_lignes["first_name"] + " " + 
-                                      joueur_home_lignes["last_name"]).tolist()
-            match.list_away_player = (joueur_away_lignes["first_name"] + " " + 
-                                      joueur_away_lignes["last_name"]).tolist()
-            
+
+            joueur_home_lignes = df_basketball_joueurs[
+                df_basketball_joueurs["team_id"] == id_home
+            ]
+            joueur_away_lignes = df_basketball_joueurs[
+                df_basketball_joueurs["team_id"] == id_away
+            ]
+
+            match.list_home_player = (
+                joueur_home_lignes["first_name"] + " " + joueur_home_lignes["last_name"]
+            ).tolist()
+            match.list_away_player = (
+                joueur_away_lignes["first_name"] + " " + joueur_away_lignes["last_name"]
+            ).tolist()
+
             res.append(match)
             
         return res

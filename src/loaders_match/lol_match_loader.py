@@ -6,6 +6,7 @@ pd.options.display.max_columns = 100
 
 class LolMatchLoader:
     """Chargeur spécifique à League of Legends (LoL) pour l'extraction et la structuration des données."""
+
     def __init__(self) -> None:
         pass
 
@@ -21,7 +22,7 @@ class LolMatchLoader:
         df_lol_match = pd.read_csv("data/league_of_legends_tdd/match.csv")
         df_lol_team = pd.read_csv("data/league_of_legends_tdd/team.csv")
         df_lol_player = pd.read_csv("data/league_of_legends_tdd/player.csv")
-        
+
         dict_equipes = dict(zip(df_lol_team["team_abbreviation"], df_lol_team["team"]))
 
         for i in range(len(df_lol_match)):
@@ -52,14 +53,16 @@ class LolMatchLoader:
             match.assists_team_red = df_lol_match.loc[i, "assists_team_red"]
 
             if abbr_blue in dict_equipes:
-                match.list_home_player = df_lol_player[df_lol_player["team"] == 
-                                                       nom_complet_blue]["name"].tolist()
+                match.list_home_player = df_lol_player[
+                    df_lol_player["team"] == nom_complet_blue
+                ]["name"].tolist()
             else:
                 match.list_home_player = []
 
             if abbr_red in dict_equipes:
-                match.list_away_player = df_lol_player[df_lol_player["team"] == 
-                                                       nom_complet_red]["name"].tolist()
+                match.list_away_player = df_lol_player[
+                    df_lol_player["team"] == nom_complet_red
+                ]["name"].tolist()
             else:
                 match.list_away_player = []
 

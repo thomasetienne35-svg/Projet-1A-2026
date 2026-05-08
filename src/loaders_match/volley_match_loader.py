@@ -5,6 +5,7 @@ from match import Match
 
 class VolleyMatchLoaderFemme:
     """Chargeur spécifique pour les matchs de volley-ball féminin."""
+
     def __init__(self) -> None:
         pass
 
@@ -14,7 +15,7 @@ class VolleyMatchLoaderFemme:
         Returns:
         -------
         list[Match]
-            Une collection complète d'objets Match enrichis avec les scores (sets), 
+            Une collection complète d'objets Match enrichis avec les scores (sets),
             la date, l'étape du tournoi et les joueuses.
         """
         res = []
@@ -66,6 +67,7 @@ class VolleyMatchLoaderFemme:
 
 class VolleyMatchLoaderHomme:
     """Chargeur spécifique pour les matchs de volley-ball masculin."""
+
     def __init__(self) -> None:
         pass
 
@@ -75,7 +77,7 @@ class VolleyMatchLoaderHomme:
         Returns:
         -------
         list[Match]
-            Une collection complète d'objets Match enrichis avec les scores (sets), 
+            Une collection complète d'objets Match enrichis avec les scores (sets),
             la date, l'étape du tournoi et les joueurs.
         """
         res = []
@@ -126,6 +128,7 @@ class VolleyMatchLoaderHomme:
 
 class VolleyMatchLoader:
     """Charger simultanément les données homme et femme en utilisant les chargeurs spécialisés."""
+
     def __init__(self) -> None:
         pass
 

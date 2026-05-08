@@ -5,6 +5,7 @@ pd.options.display.max_columns = 100
 
 class TennisTeamLoader:
     """Pas de loader d'équipe."""
+
     def __init__(self) -> None:
         pass
 

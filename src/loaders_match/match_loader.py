@@ -10,6 +10,7 @@ from .volley_match_loader import VolleyMatchLoader
 
 class MatchLoader:
     """Chargement centralisée pour tous les sports."""
+
     def load_all_matches(self, sport: Sport) -> list[Match]:
         """Chargement des données vers le chargeur spécifique au sport.
 

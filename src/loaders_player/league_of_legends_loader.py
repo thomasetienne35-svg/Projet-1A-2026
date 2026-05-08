@@ -28,11 +28,11 @@ class LeagueOfLegendsLoader:
                 prenom_nom=df_lol.loc[i, "name"], 
                 nationalite=df_lol.loc[i, "country_of_birth"],
                 date_naissance=df_lol.loc[i, "birthdate"],
-                genre=None, 
-                taille=None, 
-                poids=None, 
-                team=df_lol.loc[i, "team"] 
-                )
-            
+                genre=None,
+                taille=None,
+                poids=None,
+                team=df_lol.loc[i, "team"],
+            )
+
             res.append(joueur)
         return res

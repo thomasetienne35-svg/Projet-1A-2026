@@ -5,6 +5,7 @@ import pandas as pd
 
 class ChampionshipPointsCalculator:
     """Calculateur de points et de statistiques de championnat."""
+
     def __init__(
         self,
         sport_name: str,
@@ -16,11 +17,12 @@ class ChampionshipPointsCalculator:
         self.liste_matchs_foot = liste_matchs_foot
         self.sport_name = sport_name.lower()
         self.matches_df = matches_df
- 
-    def get_team_points(self, nom_equipe: str, 
-        saison: str | None = None, genre: str | None = None) -> dict[str, Any] | str:
+
+    def get_team_points(
+        self, nom_equipe: str, saison: str | None = None, genre: str | None = None
+    ) -> dict[str, Any] | str:
         """Méthode principale, elle redirige vers la bonne méthode de calcul selon le sport.
- 
+
         Parameters
         ----------
         nom_equipe : str
@@ -28,7 +30,7 @@ class ChampionshipPointsCalculator:
         saison : str, optional
             La saison souhaitée au format "YYYY/YYYY" (ex: "2008/2009").
             Si None, toutes les saisons sont prises en compte.
- 
+
         Returns:
         -------
         dict[str, Any] | str
@@ -49,7 +51,6 @@ class ChampionshipPointsCalculator:
                 f"Statistiques non implémentées pour le sport : {self.sport_name}"
             )
 
- 
     def _calculate_football_points(
         self, nom_equipe: str, saison: str | None = None
     ) -> dict[str, Any] | str:
@@ -76,7 +77,7 @@ class ChampionshipPointsCalculator:
                 team_id = equipe.id
                 vrai_nom_equipe = str(equipe.name).strip()
                 break
- 
+
         if team_id is None:
             equipes_proches = [
                 eq for eq in self.liste_equipes_foot 
@@ -103,11 +104,11 @@ class ChampionshipPointsCalculator:
             ]
             if not matchs_filtres:
                 return f"Erreur : Aucun match trouvé pour la saison '{saison}'."
- 
+
         victoires_dom = victoires_ext = nuls = 0
         defaites_dom = defaites_ext = 0
         buts_marques = buts_encaisses = nb_matchs = 0
- 
+
         t_id = float(team_id)
 
         for match in matchs_filtres:
@@ -163,8 +164,7 @@ class ChampionshipPointsCalculator:
             "buts_encaisses": buts_encaisses,
             "difference_buts": buts_marques - buts_encaisses,
         }
- 
- 
+
     def _calculate_basketball_points(
         self, nom_equipe: str, saison: str | None = None
     ) -> dict[str, Any] | str:
@@ -191,7 +191,7 @@ class ChampionshipPointsCalculator:
                 team_id = equipe.id
                 vrai_nom_equipe = str(equipe.name).strip()
                 break
- 
+
         if team_id is None:
             equipes_proches = [
                 eq for eq in self.liste_equipes_foot 
@@ -227,10 +227,26 @@ class ChampionshipPointsCalculator:
 
         for match in matchs_filtres:
             try:
-                h_id = getattr(match, "team_id_home", getattr(match, "home_team_id", None))
-                a_id = getattr(match, "team_id_away", getattr(match, "away_team_id", None))
-                h_pts = getattr(match, "pts_home", getattr(match, "home_team_score", getattr(match, "home_team_goal", None)))
-                a_pts = getattr(match, "pts_away", getattr(match, "away_team_score", getattr(match, "away_team_goal", None)))
+                h_id = getattr(
+                    match, "team_id_home", getattr(match, "home_team_id", None)
+                )
+                a_id = getattr(
+                    match, "team_id_away", getattr(match, "away_team_id", None)
+                )
+                h_pts = getattr(
+                    match,
+                    "pts_home",
+                    getattr(
+                        match, "home_team_score", getattr(match, "home_team_goal", None)
+                    ),
+                )
+                a_pts = getattr(
+                    match,
+                    "pts_away",
+                    getattr(
+                        match, "away_team_score", getattr(match, "away_team_goal", None)
+                    ),
+                )
 
                 if None in (h_id, a_id, h_pts, a_pts):
                     continue
@@ -276,8 +292,7 @@ class ChampionshipPointsCalculator:
             "points_encaisses": points_encaisses,
             "difference_points": points_marques - points_encaisses,
         }
- 
- 
+
     def _calculate_tennis_points(
         self, nom_equipe: str, saison: str | None = None
     ) -> str:
@@ -295,10 +310,11 @@ class ChampionshipPointsCalculator:
         str
             Message explicatif indiquant l'absence de statistiques d'équipe.
         """
-        return "Le tennis est un sport individuel. Il n'y a donc pas de statistiques " \
-        "d'équipe disponibles pour ce sport."
- 
- 
+        return (
+            "Le tennis est un sport individuel. Il n'y a donc pas de statistiques "
+            "d'équipe disponibles pour ce sport."
+        )
+
     def _calculate_volley_points(
         self, nom_equipe: str, saison: str | None = None, genre: str | None = None
     ) -> dict[str, Any] | str:
@@ -354,7 +370,7 @@ class ChampionshipPointsCalculator:
             ]
             if not matchs_filtres:
                 return f"Erreur : Aucun match trouvé pour la saison/date '{saison}'."
- 
+
         victoires_total = defaites_total = 0
         sets_gagnes = sets_perdus = nb_matchs = 0
         stade_final = "Aucun match joué"
@@ -364,9 +380,11 @@ class ChampionshipPointsCalculator:
         nb_hommes = sum(1 for m in matchs_filtres if getattr(m, 'genre', None) == 'Homme')
         nb_femmes = sum(1 for m in matchs_filtres if getattr(m, 'genre', None) == 'Femme')
         nb_sans_genre = len(matchs_filtres) - nb_hommes - nb_femmes
-        
-        print(f"4. Répartition en mémoire -> Hommes: {nb_hommes} | Femmes: {nb_femmes} | Sans genre: {nb_sans_genre}")
-        print("="*45 + "\n")
+
+        print(
+            f"4. Répartition en mémoire -> Hommes: {nb_hommes} | Femmes: {nb_femmes} | Sans genre: {nb_sans_genre}"
+        )
+        print("=" * 45 + "\n")
 
         for match in matchs_filtres:
             try:
@@ -417,7 +435,6 @@ class ChampionshipPointsCalculator:
             "difference_sets": sets_gagnes - sets_perdus,
         }
 
-    
     def _calculate_lol_points(
         self, nom_equipe: str, saison: str | None = None
     ) -> dict[str, Any] | str:
@@ -470,7 +487,7 @@ class ChampionshipPointsCalculator:
                     continue 
 
                 nb_matchs += 1
-                
+
                 winner = str(getattr(match, "winner", "")).strip().lower()
                 won = False
                 
@@ -487,12 +504,15 @@ class ChampionshipPointsCalculator:
                     defaites += 1
 
                 side = "blue" if is_blue else "red"
-                total_kills += int(float(str(getattr(match, 
-                                                f"kills_team_{side}", 0)).strip()))
-                total_deaths += int(float(str(getattr(match, 
-                                                f"deaths_team_{side}", 0)).strip()))
-                total_assists += int(float(str(getattr(match, 
-                                                f"assists_team_{side}", 0)).strip()))
+                total_kills += int(
+                    float(str(getattr(match, f"kills_team_{side}", 0)).strip())
+                )
+                total_deaths += int(
+                    float(str(getattr(match, f"deaths_team_{side}", 0)).strip())
+                )
+                total_assists += int(
+                    float(str(getattr(match, f"assists_team_{side}", 0)).strip())
+                )
 
             except Exception:
                 continue
@@ -515,7 +535,6 @@ class ChampionshipPointsCalculator:
             "total_morts": total_deaths,
             "total_assists": total_assists,
         }
- 
 
     def get_available_seasons(self) -> list[str]:
         """Retourne la liste des saisons disponibles dans les données.

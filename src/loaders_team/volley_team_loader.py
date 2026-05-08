@@ -6,6 +6,7 @@ pd.options.display.max_columns = 100
 
 class VolleyTeamLoader:
     """Chargeur spécifique pour l'extraction et la structuration des équipes de volley."""
+
     def __innit__(self) -> None:
         pass
 

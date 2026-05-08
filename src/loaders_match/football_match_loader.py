@@ -6,6 +6,7 @@ pd.options.display.max_columns = 100
 
 class FootballMatchLoader:
     """Chargeur spécifique au football pour l'extraction et la structuration des données."""
+
     def __init__(self) -> None:
       
         chemin_match = "data/football_european_leagues_tdd/match.csv"
@@ -13,10 +14,12 @@ class FootballMatchLoader:
         
         self.df_football = pd.read_csv(chemin_match)
         df_joueur = pd.read_csv(chemin_joueur)
-        
+
         self.df_football.set_index("id", inplace=True)
- 
-        self.dict_joueurs = df_joueur.set_index("player_api_id")["player_name"].to_dict()
+
+        self.dict_joueurs = df_joueur.set_index("player_api_id")[
+            "player_name"
+        ].to_dict()
 
     def get_match(self, match_id: int) -> Match | None:
         """Récupère et structure les données d'un match spécifique à partir de son ID.
@@ -50,7 +53,7 @@ class FootballMatchLoader:
         match.home_team_goal = row["home_team_goal"]
         match.away_team_goal = row["away_team_goal"]
         match.season = row["season"]
-        
+
         colonnes_home = [f"home_player_{j}" for j in range(1, 12)]
         for col in colonnes_home:
             id_joueur = row[col]
