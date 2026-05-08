@@ -49,5 +49,4 @@ def test_heatmap_pas_assez_de_donnees() -> None:
     analyse = AnalysePhysiologique(liste_joueurs=[p], sport="foot")
     analyse.generer_heatmap_taille_victoire(matchs=[m])
     
-    assert "Pas assez de données croisées (Taille + Minimum 3 matchs joués) pour "
-    "générer la Heatmap"
+    assert "Pas assez de données croisées (Taille + Minimum 3 matchs joués) pour générer la Heatmap"

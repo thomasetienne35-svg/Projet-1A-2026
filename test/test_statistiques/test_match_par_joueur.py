@@ -52,7 +52,7 @@ def test_stats_tennis_et_lol() -> None:
     #lol
     match_lol = SimpleNamespace(
         list_home_player=["Fnatic Player"], list_away_player=["G2 Player"], 
-        team_blue_name="Fnatic", winner="Fnatic"
+        team_blue="Fnatic", winner="Fnatic"
     )
     
     stats_lol = calculer_stats_joueur("fnatic", "lol", [match_lol])
