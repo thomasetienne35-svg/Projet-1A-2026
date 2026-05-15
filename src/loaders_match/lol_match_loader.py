@@ -43,13 +43,11 @@ class LolMatchLoader:
 
             match.team_blue = str(nom_complet_blue).strip()
             match.team_red = str(nom_complet_red).strip()
-            match.home_team_name = match.team_blue  #Ici on renomme l'attribut correctement pour qu'il soit le même que les autres sports
-            match.away_team_name = match.team_red
             match.home_team_api_id = str(dict_ids.get(abbr_blue, ""))  # On associe l'id à un attribut de match
             match.away_team_api_id = str(dict_ids.get(abbr_red, ""))   
             match.winner = str(nom_winner).strip()
 
-            match.date = df_lol_match.loc[i, "date"]
+            match.date = df_lol_match.loc[i, "date"] #Ajout de diverse informations sur les matchs
             match.patch = df_lol_match.loc[i, "patch"]
 
             match.kills_team_blue = df_lol_match.loc[i, "kills_team_blue"]
@@ -60,11 +58,11 @@ class LolMatchLoader:
             match.deaths_team_red = df_lol_match.loc[i, "deaths_team_red"]
             match.assists_team_red = df_lol_match.loc[i, "assists_team_red"]
 
-            if abbr_blue in dict_equipes:
+            if abbr_blue in dict_equipes: #On assigne les équipes domiciles et extérieur aléatoirement en fonction de leur couleur (sur lol il y a pas de domicile ext)
                 match.list_home_player = df_lol_player[
                     df_lol_player["team"] == nom_complet_blue
                 ]["name"].tolist()
-            else:
+            else: #ça c'est une sécurité pour éviter de faire crash l'appli. Si on a pas l'équipe dans la base de donnée alors ça assigne rien
                 match.list_home_player = []
 
             if abbr_red in dict_equipes:
