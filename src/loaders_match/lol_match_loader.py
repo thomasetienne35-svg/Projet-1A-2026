@@ -26,6 +26,8 @@ class LolMatchLoader:
         df_lol_player = pd.read_csv("data/league_of_legends_tdd/player.csv")
 
         dict_equipes = dict(zip(df_lol_team["team_abbreviation"], df_lol_team["team"]))
+        dict_ids = dict(zip(df_lol_team["team_abbreviation"], df_lol_team.index + 1)) #La table des matchs de lol n'a pas d'id dans le csv
+        #Du coup on lui crée un id car dans le fichier main on utilise une comparaison d'id
 
         for i in range(len(df_lol_match)):
             match = Match(None, "lol", None, None)
@@ -41,6 +43,10 @@ class LolMatchLoader:
 
             match.team_blue = str(nom_complet_blue).strip()
             match.team_red = str(nom_complet_red).strip()
+            match.home_team_name = match.team_blue  #Ici on renomme l'attribut correctement pour qu'il soit le même que les autres sports
+            match.away_team_name = match.team_red
+            match.home_team_api_id = str(dict_ids.get(abbr_blue, ""))  # On associe l'id à un attribut de match
+            match.away_team_api_id = str(dict_ids.get(abbr_red, ""))   
             match.winner = str(nom_winner).strip()
 
             match.date = df_lol_match.loc[i, "date"]
