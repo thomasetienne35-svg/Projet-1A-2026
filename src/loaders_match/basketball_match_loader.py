@@ -20,12 +20,12 @@ class BasketballMatchLoader:
         list[Match]
             Une liste d'objets Match où chaque instance contient les informations.
         """
-        res = []
+        res = [] #Initialisation et lecture des fichiers CSV
         df_basketball = pd.read_csv("data/basketball/game.csv")
         df_basketball_joueurs = pd.read_csv("data/basketball/player.csv")
 
         for i in range(len(df_basketball)):
-            match = Match(None, "basketball", None, None)
+            match = Match(None, "basketball", None, None) #Initialisation de chaque match avant la boucle
 
             match.id = df_basketball.loc[i, "game_id"]
 
@@ -36,20 +36,20 @@ class BasketballMatchLoader:
             match.team_id_away = id_away
             match.season = df_basketball.loc[i, "season"]
 
-            try:
+            try: #Le try pour éviter d'avoir des erreurs et que l'appli plante s'il y a des scores bizarres
                 score_h = float(df_basketball.loc[i, "pts_home"])
                 score_a = float(df_basketball.loc[i, "pts_away"])
             except Exception:
                 score_h = 0.0
                 score_a = 0.0
 
-            match.home_team_score = score_h
+            match.home_team_score = score_h #Attribut général pour les matchs
             match.away_team_score = score_a
 
-            match.pts_home = score_h
+            match.pts_home = score_h #Attribut utile pour faire des stats qui sont caractéristiques du basket
             match.pts_away = score_a
 
-            joueur_home_lignes = df_basketball_joueurs[
+            joueur_home_lignes = df_basketball_joueurs[ #joueur home ligne est un dataframe du nombre de lignes égale au nombre de joueurs dans l'équipe domicile
                 df_basketball_joueurs["team_id"] == id_home
             ]
             joueur_away_lignes = df_basketball_joueurs[
@@ -57,12 +57,12 @@ class BasketballMatchLoader:
             ]
 
             match.list_home_player = (
-                joueur_home_lignes["first_name"] + " " + joueur_home_lignes["last_name"]
+                joueur_home_lignes["first_name"] + " " + joueur_home_lignes["last_name"] #Ici on prend la colonne first et last name du dataframe avec tous les joueurs on en fait une liste ensuite
             ).tolist()
             match.list_away_player = (
                 joueur_away_lignes["first_name"] + " " + joueur_away_lignes["last_name"]
             ).tolist()
 
-            res.append(match)
+            res.append(match) #On ajoute le match qu'on a fait la boucle à la liste finale qui contient tous les matchs
 
         return res

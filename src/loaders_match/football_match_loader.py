@@ -8,7 +8,7 @@ pd.options.display.max_columns = 100
 class FootballMatchLoader:
     """Chargeur spécifique au football pour l'extraction et la structuration des données."""
 
-    def __init__(self) -> None:
+    def __init__(self) -> None: #C'est mieux de charger la base dans le init même si on ne l'a pas fait dans le reste des loaders car si on charge les CSV dans loadallmatchs à chaque fois qu'on appelle la fonction ça recharge
         """Initialise la classe."""
         chemin_match = "data/football_european_leagues_tdd/match.csv"
         chemin_joueur = "data/football_european_leagues_tdd/player.csv"
@@ -16,7 +16,7 @@ class FootballMatchLoader:
         self.df_football = pd.read_csv(chemin_match)
         df_joueur = pd.read_csv(chemin_joueur)
 
-        self.df_football.set_index("id", inplace=True)
+        self.df_football.set_index("id")
 
         self.dict_joueurs = df_joueur.set_index("player_api_id")[
             "player_name"
